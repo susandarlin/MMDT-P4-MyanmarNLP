@@ -96,6 +96,8 @@
   async function loadFiles() {
     try {
       files = (await api("/api/files")).sort((a, b) => fileRank(a.name) - fileRank(b.name));
+      // <id>_predictions.csv is also shown as "predictions.csv", so hide a plain duplicate
+      if (files.some((f) => isPredictions(f.name))) files = files.filter((f) => f.name.toLowerCase() !== "predictions.csv");
     } catch (e) {
       $("#file-nav").innerHTML = `<div class="dd-empty">Could not load files</div>`;
       return;
@@ -165,7 +167,7 @@
         ${statCard("Annotated claims", s.claims, "claims.csv", ICON.claim)}
         ${statCard("Train / Test", `${s.train} <span class="meta" style="font-size:18px">/</span> ${s.test}`, "train_claims · test_claims", ICON.split)}
         ${statCard("Test accuracy", p && p.accuracy != null ? `${(p.accuracy * 100).toFixed(1)}%` : "—",
-          p && p.accuracy != null ? `${p.evaluated} claims vs claims.csv gold` : "run the pipeline first", ICON.acc)}
+          p && p.accuracy != null ? `${p.evaluated} claims vs claims.csv gold` : "no predictions yet", ICON.acc)}
       </div>
       <div class="grid two">
         <div class="card">
@@ -176,7 +178,7 @@
         <div class="card">
           <h3>Predictions</h3>
           <p class="sub">${p ? `${esc(displayName(p.file))} · ${p.rows} rows · mean confidence ${p.mean_confidence ?? "—"}` : "No predictions file yet"}</p>
-          ${p ? bars(p.labels, LABELS.filter((l) => l in p.labels)) : `<a class="btn primary" href="#/pipeline">Run pipeline</a>`}
+          ${p ? bars(p.labels, LABELS.filter((l) => l in p.labels)) : `<p class="sub">Run <code>python app.py</code> locally to generate predictions.</p>`}
         </div>
       </div>`;
     requestAnimationFrame(() => document.querySelectorAll(".bar-fill[data-w]").forEach((b) => (b.style.width = b.dataset.w + "%")));
@@ -461,7 +463,6 @@
     if (path === "data" || path === "data/") return files.length ? (location.hash = `#/data/${encodeURIComponent(files[0].name)}`) : renderOverview();
     if (path.startsWith("data/")) return renderTable(path.slice(5));
     if (path === "verify") return renderVerify();
-    if (path === "pipeline") return renderPipeline();
     return renderOverview();
   }
 
