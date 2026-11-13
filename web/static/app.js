@@ -329,7 +329,13 @@
             <span class="meta" style="margin-left:auto">Ctrl + Enter</span>
           </div>
           <div class="section-title">Try an example</div>
-          <div class="examples" id="examples"><span class="meta">Loading…</span></div>
+          <div class="ex-acc" id="ex-acc">
+            <button type="button" class="ex-toggle" id="ex-toggle" aria-controls="examples" aria-expanded="false" disabled>
+              <span id="ex-label">Loading…</span>
+              <svg class="caret" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+            </button>
+            <div class="examples ex-panel" id="examples" hidden></div>
+          </div>
         </div>
         <div class="card" id="result">
           <div class="placeholder"><div>
@@ -344,19 +350,33 @@
     ta.onkeydown = (e) => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) run(); };
     $("#go").onclick = run;
 
-    // examples: two per label from claims.csv
-    api("/api/files/claims.csv").then(({ columns, rows }) => {
-      const t = columns.indexOf("claim_text"), l = columns.indexOf("label");
-      if (t < 0) throw new Error();
-      const picks = [];
-      LABELS.forEach((lab) => rows.filter((r) => r[l] === lab).slice(0, 2).forEach((r) => picks.push(r)));
-      $("#examples").innerHTML = picks.map((r) =>
-        `<button class="example" data-t="${esc(r[t])}"><span>${esc(r[t])}</span>${l >= 0 ? badge(r[l]) : ""}</button>`).join("");
-      $("#examples").onclick = (e) => {
+    // examples: all test claims in an accordion, labelled from claims.csv gold labels
+    const toggle = $("#ex-toggle"), panel = $("#examples"), exLabel = $("#ex-label");
+    const openPanel = (open) => { panel.hidden = !open; toggle.setAttribute("aria-expanded", open); };
+    Promise.all([api("/api/files/test_claims.csv"), api("/api/files/claims.csv").catch(() => null)]).then(([test, gold]) => {
+      const t = test.columns.indexOf("claim_text");
+      if (t < 0 || !test.rows.length) throw new Error();
+      const labels = {};
+      if (gold) {
+        const gt = gold.columns.indexOf("claim_text"), gl = gold.columns.indexOf("label");
+        if (gt >= 0 && gl >= 0) gold.rows.forEach((r) => { if (!(r[gt] in labels)) labels[r[gt]] = r[gl]; });
+      }
+      const placeholder = `Select an example claim (${test.rows.length})`;
+      exLabel.textContent = placeholder;
+      panel.innerHTML = test.rows.map((r) =>
+        `<button type="button" class="example" data-t="${esc(r[t])}"><span>${esc(r[t])}</span>${labels[r[t]] ? badge(labels[r[t]]) : ""}</button>`).join("");
+      toggle.disabled = false;
+      toggle.onclick = () => openPanel(panel.hidden);
+      panel.onclick = (e) => {
         const b = e.target.closest(".example");
-        if (b) { ta.value = b.dataset.t; run(); }
+        if (!b) return;
+        panel.querySelectorAll(".example.on").forEach((x) => x.classList.remove("on"));
+        b.classList.add("on");
+        ta.value = b.dataset.t;
+        run();
       };
-    }).catch(() => ($("#examples").innerHTML = `<span class="meta">claims.csv not available</span>`));
+      $("#clear").addEventListener("click", () => panel.querySelectorAll(".example.on").forEach((x) => x.classList.remove("on")));
+    }).catch(() => (exLabel.textContent = "test_claims.csv not available"));
 
     async function run() {
       const claim = ta.value.trim();
