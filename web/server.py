@@ -27,9 +27,7 @@ import pandas as pd
 from flask import Flask, abort, jsonify, request, send_from_directory
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(BASE_DIR, "data")
-# DATA_DIR = os.path.join(ROOT, "data")
+DATA_DIR = os.path.join(ROOT, "data")
 STATIC_DIR = os.path.join(os.path.dirname(__file__), "static")
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
@@ -210,15 +208,11 @@ def verify():
 @web.post("/api/run")
 def run_pipeline():
     buf = io.StringIO()
-    old_verbose = mnlp_app.VERBOSE
     try:
-        mnlp_app.VERBOSE = True
         with redirect_stdout(buf):
             path = mnlp_app.studentverifier(data_dir=DATA_DIR, output_dir=DATA_DIR)
     except Exception as e:
         return jsonify({"error": str(e), "log": buf.getvalue()}), 500
-    finally:
-        mnlp_app.VERBOSE = old_verbose
     return jsonify({"file": os.path.basename(path), "log": buf.getvalue()})
 
 
