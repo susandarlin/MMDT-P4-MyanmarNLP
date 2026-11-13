@@ -5,7 +5,8 @@ import csv
 import logging
 
 import pandas as pd
-from flask import Flask, jsonify, send_file
+# from flask import Flask, jsonify, send_file
+from flask import Flask, jsonify, send_file, render_template, request
 
 from mnlp_engine.rag_verifier import MyanmarRAGClaimVerifier
 from mnlp_engine.tokenizer import tokenize
@@ -43,15 +44,17 @@ logger = logging.getLogger(__name__)
 # Flask Application (Required by Vercel)
 # ============================================================
 
-app = Flask(__name__)
+# app = Flask(__name__)
+app = Flask(__name__, template_folder="web")
 
 
 @app.route("/", methods=["GET"])
 def home():
-    return jsonify({
-        "status": "success",
-        "message": "Myanmar NLP Claim Verification API is running!"
-    })
+    return render_template("index.html")
+    # return jsonify({
+    #     "status": "success",
+    #     "message": "Myanmar NLP Claim Verification API is running!"
+    # })
 
 
 @app.route("/health", methods=["GET"])
