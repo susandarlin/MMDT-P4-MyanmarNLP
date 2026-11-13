@@ -45,7 +45,8 @@ logger = logging.getLogger(__name__)
 # ============================================================
 
 # app = Flask(__name__)
-app = Flask(__name__, template_folder="web")
+# app = Flask(__name__, template_folder="web")
+app = Flask(__name__, template_folder="web/templates", static_folder="web/static")
 
 
 @app.route("/", methods=["GET"])
