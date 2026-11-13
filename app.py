@@ -6,7 +6,7 @@ import logging
 
 import pandas as pd
 # from flask import Flask, jsonify, send_file
-from flask import Flask, jsonify, send_file, render_template, request
+from flask import Flask, jsonify, send_file, render_template, request, send_from_directory
 
 from mnlp_engine.rag_verifier import MyanmarRAGClaimVerifier
 from mnlp_engine.tokenizer import tokenize
@@ -46,12 +46,14 @@ logger = logging.getLogger(__name__)
 
 # app = Flask(__name__)
 # app = Flask(__name__, template_folder="web")
-app = Flask(__name__, template_folder="web/templates", static_folder="web/static")
+# app = Flask(__name__, template_folder="web/templates", static_folder="web/static")
+app = Flask(__name__, static_folder="web/static")
 
 
 @app.route("/", methods=["GET"])
 def home():
-    return render_template("index.html")
+    return send_from_directory(app.static_folder, "index.html")
+    # return render_template("index.html")
     # return jsonify({
     #     "status": "success",
     #     "message": "Myanmar NLP Claim Verification API is running!"
