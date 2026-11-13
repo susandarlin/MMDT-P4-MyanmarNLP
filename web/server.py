@@ -27,7 +27,9 @@ import pandas as pd
 from flask import Flask, abort, jsonify, request, send_from_directory
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-DATA_DIR = os.path.join(ROOT, "data")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(BASE_DIR, "data")
+# DATA_DIR = os.path.join(ROOT, "data")
 STATIC_DIR = os.path.join(os.path.dirname(__file__), "static")
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
