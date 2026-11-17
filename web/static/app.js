@@ -149,7 +149,7 @@
         ${statCard("Annotated claims", s.claims, "claims.csv", ICON.claim)}
         ${statCard("Train / Test", `${s.train} <span class="meta" style="font-size:18px">/</span> ${s.test}`, "train_claims · test_claims", ICON.split)}
         ${statCard("Test accuracy", p && p.accuracy != null ? `${(p.accuracy * 100).toFixed(1)}%` : "—",
-          p && p.accuracy != null ? `${p.evaluated} claims vs claims.csv gold` : "no predictions yet", ICON.acc)}
+          p && p.accuracy != null ? "" : "no predictions yet", ICON.acc)}
       </div>
       <div class="grid two">
         <div class="card">
@@ -159,7 +159,7 @@
         </div>
         <div class="card">
           <h3>Predictions</h3>
-          <p class="sub">${p ? `${esc(displayName(p.file))} · ${p.rows} rows · mean confidence ${p.mean_confidence ?? "—"}` : "No predictions file yet"}</p>
+          <p class="sub">${p ? `${esc(displayName(p.file))} · ${p.rows} rows` : "No predictions file yet"}</p>
           ${p ? bars(p.labels, LABELS.filter((l) => l in p.labels)) : `<p class="sub">Run <code>python app.py</code> locally to generate predictions.</p>`}
         </div>
       </div>`;
