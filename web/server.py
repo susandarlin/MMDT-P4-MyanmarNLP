@@ -11,7 +11,8 @@ Endpoints
     GET  /api/files/<name>       CSV contents as JSON (columns + rows)
     GET  /api/files/<name>/raw   download the CSV
     GET  /api/stats              dataset overview numbers
-    POST /api/verify             {"claim": "..."} -> stance, evidence, explanation
+    POST /api/verify             {"claim": "...", "pipeline": "A"|"B"} -> stance, evidence, explanation
+                                 A = traditional NLP (TF-IDF + Naive Bayes), B = RAG verifier (default)
     POST /api/run                run studentverifier() and regenerate predictions
 """
 
@@ -33,6 +34,7 @@ if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 
 import app as mnlp_app  # noqa: E402  (project entry point)
+from mnlp_engine.naive_bayes import MultinomialNaiveBayesClassifier  # noqa: E402
 from mnlp_engine.rag_verifier import MyanmarRAGClaimVerifier  # noqa: E402
 
 VALID_LABELS = {"SUPPORTS", "REFUTES", "NOT ENOUGH INFO"}
@@ -41,7 +43,7 @@ web = Flask(__name__, static_folder=STATIC_DIR, static_url_path="/static")
 web.json.ensure_ascii = False
 
 _lock = threading.Lock()
-_state = {"verifier": None, "signature": None, "titles": {}}
+_state = {"verifier": None, "nb": None, "signature": None, "titles": {}}
 
 
 # ---------------------------------------------------------------------------
@@ -84,12 +86,16 @@ def _get_verifier():
         if corpus is None or corpus.empty:
             raise FileNotFoundError("data/corpus.csv is missing or empty")
         verifier = MyanmarRAGClaimVerifier().fit(corpus)
+        nb = None
         train = _read("train_claims.csv")
         if train is not None and "label" in train:
             labelled = train[train["label"].isin(VALID_LABELS)]
             if len(labelled) >= 2:
                 verifier.tune(labelled["claim_text"], labelled["label"])
-        _state.update(verifier=verifier, signature=sig,
+                # Pipeline A: Naive Bayes on claim TF-IDF (vocabulary + IDF from the corpus)
+                X = verifier.retriever.vectorizer.transform(labelled["claim_text"].tolist())
+                nb = MultinomialNaiveBayesClassifier(alpha=1.0).fit(X, labelled["label"].values)
+        _state.update(verifier=verifier, nb=nb, signature=sig,
                       titles=dict(zip(corpus["doc_id"], corpus.get("title", corpus["doc_id"]))))
         return verifier, _state["titles"]
 
@@ -188,21 +194,58 @@ def stats():
 
 @web.post("/api/verify")
 def verify():
-    claim = (request.get_json(silent=True) or {}).get("claim", "").strip()
+    body = request.get_json(silent=True) or {}
+    claim = str(body.get("claim", "")).strip()
+    pipeline = str(body.get("pipeline", "B")).upper()
     if not claim:
         return jsonify({"error": "Please enter a Myanmar claim."}), 400
+    if pipeline not in ("A", "B"):
+        return jsonify({"error": "pipeline must be 'A' or 'B'."}), 400
     try:
         verifier, titles = _get_verifier()
     except FileNotFoundError as e:
         return jsonify({"error": str(e)}), 400
     k = 3
-    result = verifier.verify([claim], k=k)[0]
     hit = verifier.retriever.search([claim], k=k)[0]
+    if pipeline == "A":
+        result = _verify_traditional(claim, verifier, hit)
+        if result is None:
+            return jsonify({"error": "Pipeline A needs labelled claims in data/train_claims.csv."}), 400
+    else:
+        result = verifier.verify([claim], k=k)[0]
+        result["pipeline"] = "B"
     result["top_k"] = [{"doc_id": d, "title": titles.get(d, ""), "score": round(s, 4)}
                        for d, s in zip(hit["top_ids"], hit["top_scores"])]
     result["tau"] = round(float(verifier.retriever.tau), 3)
     result["confidence"] = float(result["confidence"])
     return jsonify(result)
+
+
+def _verify_traditional(claim, verifier, hit):
+    """Pipeline A: syllable tokens -> TF-IDF -> Multinomial Naive Bayes (claim text only)."""
+    nb = _state.get("nb")
+    if nb is None:
+        return None
+    x = verifier.retriever.vectorizer.transform([claim])
+    proba = nb.predict_proba(x)[0]
+    i = int(proba.argmax())
+    label = str(nb.classes_[i])
+    probs = {str(c): round(float(p), 4) for c, p in zip(nb.classes_, proba)}
+    ranked = "၊ ".join(f"{c} {p:.0%}" for c, p in sorted(probs.items(), key=lambda kv: -kv[1]))
+    return {
+        "pipeline": "A",
+        "predicted_label": label,
+        "retrieved_evidence_id": hit["best_id"],
+        "top_k_ids": hit["top_ids"],
+        "similarity": round(hit["best_score"], 4),
+        "confidence": round(float(proba[i]), 4),
+        "reason": "naive_bayes",
+        "probabilities": probs,
+        "evidence_sentences": [],
+        "explanation": (f"Naive Bayes သည် claim ၏ TF-IDF syllable features ကိုသာ အသုံးပြု၍ "
+                        f"label တစ်ခုစီ၏ ဖြစ်နိုင်ခြေကို တွက်ချက်သည် ({ranked})။ "
+                        f"အထောက်အထား စာတမ်းကို မဖတ်ဘဲ ဖြစ်နိုင်ခြေ အမြင့်ဆုံး {label} ကို ရွေးချယ်သည်။"),
+    }
 
 
 @web.post("/api/run")

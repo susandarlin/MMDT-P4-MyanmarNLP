@@ -61,20 +61,14 @@
   };
 
   // ---------- mobile menu ----------
-  const dd = $("#data-dd");
-  const setDropdown = (open) => { dd.classList.toggle("open", open); $("#data-btn").setAttribute("aria-expanded", open); };
   const closeMenu = () => {
     $("#menu").classList.remove("open");
     $("#menu-btn").setAttribute("aria-expanded", "false");
-    setDropdown(false);
   };
   $("#menu-btn").onclick = () => {
     const open = $("#menu").classList.toggle("open");
     $("#menu-btn").setAttribute("aria-expanded", open);
   };
-  $("#data-btn").onclick = (e) => { e.stopPropagation(); setDropdown(!dd.classList.contains("open")); };
-  document.addEventListener("click", (e) => { if (!dd.contains(e.target)) setDropdown(false); });
-  document.addEventListener("keydown", (e) => { if (e.key === "Escape") setDropdown(false); });
 
   // ---------- modal ----------
   const modal = $("#modal");
@@ -91,25 +85,13 @@
     modal.hidden = false;
   }
 
-  // ---------- "Data Files" dropdown in the top menu ----------
-  const FILE_ICON = `<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zm-1 7V3.5L18.5 9zM8 13h8v2H8zm0 4h8v2H8z"/></svg>`;
+  // ---------- CSV file list (shown as tabs on the Data Files page) ----------
   async function loadFiles() {
     try {
       files = (await api("/api/files")).sort((a, b) => fileRank(a.name) - fileRank(b.name));
       // <id>_predictions.csv is also shown as "predictions.csv", so hide a plain duplicate
       if (files.some((f) => isPredictions(f.name))) files = files.filter((f) => f.name.toLowerCase() !== "predictions.csv");
-    } catch (e) {
-      $("#file-nav").innerHTML = `<div class="dd-empty">Could not load files</div>`;
-      return;
-    }
-    $("#file-nav").innerHTML = files.length
-      ? files.map((f) => `
-        <a href="#/data/${encodeURIComponent(f.name)}" data-route="data/${esc(f.name)}" class="dd-item" title="${esc(displayName(f.name))}">
-          ${FILE_ICON}<span>${esc(displayName(f.name))}</span>
-          <span class="count">${f.rows ?? "?"} rows</span>
-        </a>`).join("")
-      : `<div class="dd-empty">No CSV files in data/</div>`;
-    markActive();
+    } catch { files = []; }
   }
 
   function markActive() {
@@ -118,7 +100,7 @@
       const r = a.dataset.route;
       a.classList.toggle("active", r === "data" ? route.startsWith("data/") : r === route);
     });
-    document.querySelectorAll(".dd-item, .tab").forEach((a) => a.classList.toggle("active", a.dataset.route === route));
+    document.querySelectorAll(".tab").forEach((a) => a.classList.toggle("active", a.dataset.route === route));
   }
 
   // ---------- views ----------
@@ -313,13 +295,26 @@
   }
 
   // ----- verify -----
+  const PIPELINES = {
+    A: { name: "Pipeline A · Traditional NLP",
+         desc: "Syllable tokens → TF-IDF → Multinomial Naive Bayes trained on train_claims. Decides from the claim text only, without reading the evidence." },
+    B: { name: "Pipeline B · RAG",
+         desc: "Retrieves Top-3 documents by TF-IDF cosine, picks the best evidence sentences, and checks numbers, names and negation against the claim." },
+  };
+  let pipeline = "B";
+
   async function renderVerify() {
     setHeader("", "Verify a Claim");
     view.innerHTML = `
       <div class="verify-grid">
         <div class="card">
-          <h3>Select a test claim</h3>
-          <p class="sub">The claim is tokenized into syllables, matched against the corpus with TF-IDF cosine similarity, and checked against the best evidence.</p>
+          <h3>Choose a pipeline</h3>
+          <div class="chips" id="pipe" role="radiogroup" aria-label="Pipeline">
+            ${Object.entries(PIPELINES).map(([k, p]) => `
+              <button type="button" class="chip${k === pipeline ? " on" : ""}" data-p="${k}" role="radio" aria-checked="${k === pipeline}">${esc(p.name)}</button>`).join("")}
+          </div>
+          <p class="sub" id="pipe-desc" style="margin-top:10px">${esc(PIPELINES[pipeline].desc)}</p>
+          <div class="section-title">Select a test claim</div>
           <div class="ex-acc" id="ex-acc">
             <button type="button" class="ex-toggle" id="ex-toggle" aria-controls="examples" aria-expanded="false" disabled>
               <span id="ex-label">Loading…</span>
@@ -346,6 +341,19 @@
     let selected = "";
     const emptyResult = $("#result").innerHTML;
     $("#go").onclick = run;
+
+    // pipeline selector: switching clears the previous result
+    $("#pipe").onclick = (e) => {
+      const b = e.target.closest(".chip");
+      if (!b || b.dataset.p === pipeline) return;
+      pipeline = b.dataset.p;
+      $("#pipe").querySelectorAll(".chip").forEach((c) => {
+        c.classList.toggle("on", c === b);
+        c.setAttribute("aria-checked", c === b);
+      });
+      $("#pipe-desc").textContent = PIPELINES[pipeline].desc;
+      $("#result").innerHTML = emptyResult;
+    };
 
     // input: all test claims in a dropdown list, labelled from claims.csv gold labels
     const toggle = $("#ex-toggle"), panel = $("#examples"), exLabel = $("#ex-label");
@@ -385,7 +393,7 @@
       btn.innerHTML = `<span class="spinner"></span>Verifying…`;
       try {
         const r = await api("/api/verify", {
-          method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ claim }),
+          method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ claim, pipeline }),
         });
         showResult(r);
       } catch (e) {
@@ -401,21 +409,31 @@
       const pct = Math.round(r.confidence * 100);
       const ringColor = { SUPPORTS: "var(--sup)", REFUTES: "var(--ref)", NEI: "var(--nei)" }[cls];
       const maxScore = Math.max(...r.top_k.map((d) => d.score), 0.0001);
+      const isA = r.pipeline === "A";
+      const probs = isA && r.probabilities ? LABELS.filter((l) => l in r.probabilities).map((l) => `
+        <div class="bar-row">
+          <div class="name">${badge(l)}</div>
+          <div class="bar-track"><div class="bar-fill ${LABEL_CLASS[l]}" style="width:${r.probabilities[l] * 100}%"></div></div>
+          <div class="num">${Math.round(r.probabilities[l] * 100)}%</div>
+        </div>`).join("") : "";
       $("#result").innerHTML = `
         <div class="verdict">
           <div class="ring" style="--p:${pct};--ring-c:${ringColor}"><span>${pct}%</span></div>
           <div>
-            <div class="meta">Predicted stance</div>
+            <div class="meta">${esc(PIPELINES[r.pipeline]?.name || "")} · Predicted stance</div>
             <div class="big ${cls}">${esc(r.predicted_label)}</div>
-            <div class="meta">rule fired: <span class="pill">${esc(r.reason)}</span> · best cosine ${r.similarity.toFixed(3)} · τ = ${r.tau}</div>
+            <div class="meta">${isA
+              ? `model: <span class="pill">Multinomial Naive Bayes</span> · claim text only`
+              : `rule fired: <span class="pill">${esc(r.reason)}</span> · best cosine ${r.similarity.toFixed(3)} · τ = ${r.tau}`}</div>
           </div>
         </div>
-        <div class="section-title">Grounded explanation</div>
+        ${probs ? `<div class="section-title">Class probabilities</div>${probs}` : ""}
+        <div class="section-title">${isA ? "Explanation" : "Grounded explanation"}</div>
         <div class="mm">${esc(r.explanation)}</div>
         ${r.evidence_sentences?.length ? `
           <div class="section-title">Evidence sentences · ${esc(r.retrieved_evidence_id)}</div>
           ${r.evidence_sentences.map((s) => `<div class="evidence mm">${esc(s)}</div>`).join("")}` : ""}
-        <div class="section-title">Top-${r.top_k.length} retrieved documents</div>
+        <div class="section-title">Top-${r.top_k.length} retrieved documents${isA ? " · not used by Naive Bayes" : ""}</div>
         ${r.top_k.map((d, i) => `
           <div class="doc-hit">
             <span class="pill">${esc(d.doc_id)}</span>

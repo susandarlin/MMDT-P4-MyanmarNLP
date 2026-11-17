@@ -73,24 +73,6 @@ code { font-family: var(--mono); font-size: .9em; background: var(--surface-2); 
 }
 .menu-link:hover { color: var(--text); }
 .menu-link.active { color: var(--accent); border-bottom-color: var(--accent); }
-.menu-link .caret { width: 18px; height: 18px; transition: transform .15s; }
-.dropdown { position: relative; height: 100%; }
-.dropdown.open .caret { transform: rotate(180deg); }
-.dropdown-panel {
-  display: none; position: absolute; top: calc(100% + 6px); left: 0; min-width: 260px;
-  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-  box-shadow: 0 12px 32px rgba(16, 24, 40, .12); padding: 6px;
-}
-.dropdown.open .dropdown-panel { display: block; }
-.dd-item {
-  display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px;
-  color: var(--text); text-decoration: none; font-size: 14px;
-}
-.dd-item:hover { background: var(--surface-2); }
-.dd-item.active { background: var(--accent-soft); color: var(--accent); }
-.dd-item svg { color: var(--muted); }
-.dd-item .count { margin-left: auto; font-size: 12px; color: var(--muted); }
-.dd-empty { padding: 10px 12px; color: var(--muted); font-size: 14px; }
 
 .nav-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
 .icon-btn {
@@ -311,8 +293,6 @@ mark { background: #fde68a; color: inherit; border-radius: 3px; padding: 0 1px; 
   .menu.open { display: flex; }
   .menu-link { height: auto; padding: 12px 8px; border-bottom: none; border-radius: 8px; width: 100%; justify-content: flex-start; }
   .menu-link.active { background: var(--accent-soft); }
-  .dropdown { height: auto; }
-  .dropdown-panel { position: static; box-shadow: none; border: none; padding: 0 0 0 12px; min-width: 0; }
   .container { padding: 20px 16px 40px; }
   .bar-row { grid-template-columns: 110px 1fr 36px; }
   .example { flex-wrap: wrap; }
