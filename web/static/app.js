@@ -318,23 +318,21 @@
     view.innerHTML = `
       <div class="verify-grid">
         <div class="card">
-          <h3>Enter a Myanmar claim</h3>
+          <h3>Select a test claim</h3>
           <p class="sub">The claim is tokenized into syllables, matched against the corpus with TF-IDF cosine similarity, and checked against the best evidence.</p>
-          <textarea class="input" id="claim" placeholder="ဥပမာ - သုတ္တန်ပိဋကတွင် နိကာယ်ငါးရပ် ပါဝင်သည်။"></textarea>
-          <div style="display:flex;gap:10px;margin-top:12px;align-items:center">
-            <button class="btn primary" id="go">
-              <svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>Verify claim
-            </button>
-            <button class="btn" id="clear">Clear</button>
-            <span class="meta" style="margin-left:auto">Ctrl + Enter</span>
-          </div>
-          <div class="section-title">Try an example</div>
           <div class="ex-acc" id="ex-acc">
             <button type="button" class="ex-toggle" id="ex-toggle" aria-controls="examples" aria-expanded="false" disabled>
               <span id="ex-label">Loading…</span>
               <svg class="caret" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
             </button>
             <div class="examples ex-panel" id="examples" hidden></div>
+          </div>
+          <div class="section-title">Selected claim</div>
+          <div class="evidence mm" id="claim"><span class="meta">No claim selected</span></div>
+          <div style="display:flex;gap:10px;margin-top:12px;align-items:center">
+            <button class="btn primary" id="go" disabled>
+              <svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>Verify claim
+            </button>
           </div>
         </div>
         <div class="card" id="result">
@@ -345,12 +343,11 @@
         </div>
       </div>`;
 
-    const ta = $("#claim");
-    $("#clear").onclick = () => { ta.value = ""; ta.focus(); };
-    ta.onkeydown = (e) => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) run(); };
+    let selected = "";
+    const emptyResult = $("#result").innerHTML;
     $("#go").onclick = run;
 
-    // examples: all test claims in an accordion, labelled from claims.csv gold labels
+    // input: all test claims in a dropdown list, labelled from claims.csv gold labels
     const toggle = $("#ex-toggle"), panel = $("#examples"), exLabel = $("#ex-label");
     const openPanel = (open) => { panel.hidden = !open; toggle.setAttribute("aria-expanded", open); };
     Promise.all([api("/api/files/test_claims.csv"), api("/api/files/claims.csv").catch(() => null)]).then(([test, gold]) => {
@@ -372,15 +369,17 @@
         if (!b) return;
         panel.querySelectorAll(".example.on").forEach((x) => x.classList.remove("on"));
         b.classList.add("on");
-        ta.value = b.dataset.t;
-        run();
+        selected = b.dataset.t;
+        $("#claim").textContent = selected;
+        $("#go").disabled = false;
+        $("#result").innerHTML = emptyResult;
+        openPanel(false);
       };
-      $("#clear").addEventListener("click", () => panel.querySelectorAll(".example.on").forEach((x) => x.classList.remove("on")));
     }).catch(() => (exLabel.textContent = "test_claims.csv not available"));
 
     async function run() {
-      const claim = ta.value.trim();
-      if (!claim) return toast("Please enter a claim first");
+      const claim = selected.trim();
+      if (!claim) return toast("Please select a claim first");
       const btn = $("#go");
       btn.disabled = true;
       btn.innerHTML = `<span class="spinner"></span>Verifying…`;
