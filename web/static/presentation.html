@@ -158,36 +158,62 @@
     .callout .ico { background: var(--accent); color: #fff; }
     .meta { color: var(--muted); font-size: 14px; }
 
-    /* ---------- slide 1: hero ---------- */
+    /* ---------- slide 1: hero + question ---------- */
     .hero { text-align: center; padding: 20px 0; }
     .hero .badge-ico {
       width: 88px; height: 88px; margin: 6px auto 22px; border-radius: 26px; display: grid; place-items: center; font-size: 44px; color: #fff;
       background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: 0 18px 40px rgba(79, 70, 229, .35);
     }
-    .hero h1 { font-family: var(--mm); font-size: clamp(38px, 6.4vw, 76px); line-height: 1.5; font-weight: 700;
+    .hero h1 { font-family: var(--mm); font-size: clamp(36px, 5vw, 64px); line-height: 1.5; font-weight: 700;
       background: linear-gradient(120deg, var(--text) 30%, var(--accent)); -webkit-background-clip: text; background-clip: text; color: transparent; }
     .hero .lead { margin: 10px auto 30px; text-align: center; }
+    .label .en { font-family: Inter, sans-serif; font-weight: 700; }
     .hero .labels { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
 
-    /* ---------- slide 2: poll ---------- */
-    .poll { max-width: 820px; margin: 0 auto; text-align: center; }
-    .poll .card { padding: 34px; }
-    .poll .claim { font-size: clamp(22px, 2.8vw, 32px); }
-    .votes { display: flex; gap: 14px; justify-content: center; margin-top: 26px; flex-wrap: wrap; }
+    .hero-split { display: flex; flex-direction: column; align-items: center; gap: 30px; padding: 4px 0; }
+    .hero-split .badge-ico { width: 72px; height: 72px; font-size: 36px; border-radius: 22px; margin: 4px auto 14px; }
+    .hero-split h1 { font-size: clamp(34px, 4.6vw, 58px); }
+    .hero-split .lead { margin: 0 auto 14px; }
+    .hero-split .poll { width: 100%; max-width: 640px; }
+
+    .poll { position: relative; text-align: center; }
+    .poll::before { content: ""; position: absolute; inset: 10% -4% -6% 8%; border-radius: 28px; z-index: 0;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2)); opacity: .18; filter: blur(28px); }
+    .poll .card { position: relative; z-index: 1; padding: 30px 28px; border-top: 4px solid var(--accent); }
+    .poll .kicker { margin-bottom: 18px; }
+    .poll .claim { font-size: clamp(19px, 2vw, 25px); }
+    .votes { display: flex; gap: 14px; justify-content: center; margin-top: 24px; flex-wrap: wrap; }
     .vote {
-      min-width: 150px; padding: 14px 22px; border-radius: 14px; border: 2px solid var(--border); background: var(--surface);
-      font: 600 18px var(--mm); color: var(--text); cursor: pointer; transition: transform .15s, border-color .15s, background .15s;
+      min-width: 130px; padding: 12px 20px; border-radius: 14px; border: 2px solid var(--border); background: var(--surface);
+      font: 600 17px var(--mm); color: var(--text); cursor: pointer; transition: transform .15s, border-color .15s, background .15s;
     }
     .vote:hover { transform: translateY(-2px); }
     .vote.yes.on { border-color: var(--sup); background: var(--sup-bg); color: var(--sup); }
     .vote.no.on { border-color: var(--ref); background: var(--ref-bg); color: var(--ref); }
-    .poll .hint { font-family: var(--mm); color: var(--muted); margin-top: 22px; }
+    .poll .hint { font-family: var(--mm); font-size: 14px; color: var(--muted); margin: 20px 0 0; }
+    .slide.active .poll .card { animation: poll-in .7s .15s cubic-bezier(.2, .8, .2, 1) both; }
+    @keyframes poll-in { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) { .slide.active .poll .card { animation: none; } }
 
-    /* ---------- slide 3: feed ---------- */
-    .post .head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-    .post .head b { font-family: var(--mm); }
-    .post .claim { font-size: 18px; min-height: 5.6em; }
-    .post .q { margin-top: 14px; font-family: var(--mm); font-weight: 600; color: var(--accent); }
+    /* ---------- slide 2: feed ---------- */
+    .feed { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); gap: 56px; align-items: center; margin-top: 18px; }
+    .feed-posts { display: grid; gap: 22px; }
+    .fpost { display: flex; align-items: center; gap: 28px; padding: 24px 32px; border-radius: 14px; background: var(--surface-2);
+      transition: transform .25s ease; }
+    .fpost:hover { transform: translateX(4px); }
+    .fpost-ico { width: 84px; height: 84px; border-radius: 50%; display: grid; place-items: center; flex: none; font-size: 40px;
+      background: #1e2a4a; color: #f4b942; }
+    .fpost-src { display: block; font: 600 15px Inter, var(--mm); color: var(--muted); }
+    .fpost-claim { font-family: var(--mm); font-size: clamp(18px, 1.9vw, 23px); font-weight: 700; line-height: 1.9; }
+    .feed-qs { list-style: none; margin: 0; padding: 0; display: grid; gap: 22px; }
+    .feed-qs li { display: flex; align-items: center; gap: 22px; font-family: var(--mm); font-size: clamp(18px, 1.9vw, 23px); line-height: 1.7; }
+    .feed-qs li::before { content: ""; width: 22px; height: 22px; border-radius: 50%; flex: none; background: var(--dot); }
+    .feed-qs .sup { --dot: #2f9466; } .feed-qs .ref { --dot: #d65a40; } .feed-qs .nei { --dot: #6b7487; }
+    .feed-note { margin: 34px 0 0; font-family: var(--mm); font-style: italic; font-size: 18px; line-height: 1.8; color: #b5761a; }
+    :root[data-theme="dark"] .fpost-ico { background: #2a3760; }
+    :root[data-theme="dark"] .feed-note { color: #e0a54a; }
+    @media (max-width: 900px) { .feed { grid-template-columns: minmax(0, 1fr); gap: 32px; } }
+    @media (max-width: 640px) { .fpost { padding: 16px; gap: 16px; } .fpost-ico { width: 60px; height: 60px; font-size: 28px; } }
 
     /* ---------- slide 5: steps ---------- */
     .steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; position: relative; }
@@ -209,10 +235,12 @@
       box-shadow: 0 16px 36px rgba(79, 70, 229, .3);
     }
     .task .outputs { display: grid; gap: 12px; }
-    .out { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; align-items: start; padding: 16px 18px; }
-    .out .ex { grid-column: 2; font-family: var(--mm); font-size: 14px; color: var(--muted); }
-    .out .lbl { font-family: var(--mm); font-weight: 700; }
-    .out.sup .lbl { color: var(--sup); } .out.ref .lbl { color: var(--ref); } .out.nei .lbl { color: var(--nei); }
+    .out { display: grid; grid-template-columns: 210px 1fr; gap: 18px; align-items: center; padding: 14px 18px; }
+    .out .badge { padding: 8px 14px; border-radius: 8px; font: 800 17px Inter, sans-serif; letter-spacing: .02em; text-transform: uppercase; white-space: nowrap; }
+    .out.sup .badge { background: var(--sup-bg); color: var(--sup); }
+    .out.ref .badge { background: var(--ref-bg); color: var(--ref); }
+    .out.nei .badge { background: var(--nei-bg); color: var(--nei); }
+    .out .lbl { font-family: var(--mm); font-size: 17px; color: var(--text); }
     .tag { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
 
     /* ---------- slide 7: data ---------- */
@@ -308,6 +336,31 @@
     .hard .fix { margin-top: auto; display: flex; gap: 10px; align-items: flex-start; font-family: var(--mm); font-size: 14.5px; line-height: 1.8; padding: 12px 14px; border-radius: 12px; background: var(--sup-bg); color: var(--text); }
     .hard .fix svg { color: var(--sup); font-size: 18px; margin-top: 5px; }
 
+    /* ---------- problem → goal (illustrated) ---------- */
+    .pg { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 18px; align-items: stretch; margin-top: 18px; }
+    .pg-card { display: flex; flex-direction: column; padding: 0; overflow: hidden; transition: transform .3s ease, box-shadow .3s ease; }
+    .pg-card:hover { transform: translateY(-4px); box-shadow: 0 2px 4px rgba(15, 23, 42, .05), 0 18px 40px rgba(15, 23, 42, .12); }
+    .pg-art { padding: 14px; background: linear-gradient(180deg, var(--accent-soft), transparent); }
+    .pg-card.prob .pg-art { background: linear-gradient(180deg, var(--ref-bg), transparent); }
+    .pg-art img { display: block; width: 100%; max-width: 100%; height: auto; aspect-ratio: 1276 / 804; object-fit: contain;
+      border-radius: 14px; background: #fff; box-shadow: 0 1px 2px rgba(15, 23, 42, .06), 0 8px 22px rgba(15, 23, 42, .08);
+      transition: transform .5s ease; }
+    .pg-card:hover .pg-art img { transform: scale(1.02); }
+    .slide.active .pg-art img { animation: pg-in .7s cubic-bezier(.2, .8, .2, 1) both; }
+    .slide.active .pg-card.goal .pg-art img { animation-delay: .15s; }
+    @keyframes pg-in { from { opacity: 0; transform: translateY(10px) scale(.98); } to { opacity: 1; transform: none; } }
+    .pg-body { padding: 16px 22px 22px; flex: 1; }
+    .pg-tag { display: inline-flex; align-items: center; gap: 8px; font: 700 13px var(--mm); margin-bottom: 4px; padding: 2px 12px; border-radius: 999px; }
+    .pg-tag svg { font-size: 16px; }
+    .pg-card.prob .pg-tag { color: var(--ref); background: var(--ref-bg); } .pg-card.goal .pg-tag { color: var(--sup); background: var(--sup-bg); }
+    .pg-body p { font-family: var(--mm); font-size: clamp(15px, 1.35vw, 17px); line-height: 2; margin: 6px 0 0; color: var(--text); }
+    .pg-body p b { color: var(--accent); font-weight: 700; }
+    .pg-arrow { display: grid; place-items: center; }
+    .pg-arrow span { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-size: 26px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: 0 12px 28px rgba(79, 70, 229, .3); }
+    @media (prefers-reduced-motion: reduce) { .slide.active .pg-art img { animation: none; } .pg-card, .pg-art img { transition: none; } }
+    @media (max-width: 900px) { .pg { grid-template-columns: minmax(0, 1fr); } .pg-arrow span { transform: rotate(90deg); } }
+
     /* ---------- bottom nav ---------- */
     .navbar {
       position: fixed; inset: auto 0 0 0; height: 64px; z-index: 20;
@@ -375,7 +428,7 @@
   <header class="topbar">
     <a class="brand" href="/" title="Back to MNLP">
       <span class="brand-mark"><svg viewBox="0 0 24 24"><path d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5zm-2 16-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9z"/></svg></span>
-      <span>MNLP</span>
+      <h2>Myanmar NLP Claim Verification & Evidence Retrieval</h2>
     </a>
     <div class="spacer"></div>
     <a class="tb-btn demo-btn" href="/#/overview" title="Open the live demo (Home)">
@@ -395,57 +448,109 @@
 
   <main class="deck" id="deck">
 
-    <!-- 1 · Title -->
+    <!-- 1 · Title + question -->
     <section class="slide" aria-label="Title">
-      <div class="frame hero">
-        <span class="kicker">Project 4 · Myanmar NLP</span>
-        <div class="badge-ico"><i data-i="search"></i></div>
-        <h1>ဒီသတင်း အမှန်လား?</h1>
-        <p class="lead">မြန်မာစာ အဆိုကို အထောက်အထားဖြင့် စစ်ဆေးပေးသော စနစ်</p>
-        <div class="labels">
-          <span class="label sup">ထောက်ခံသည်</span>
-          <span class="label ref">ဆန့်ကျင်သည်</span>
-          <span class="label nei">အချက်အလက် မလုံလောက်</span>
+      <div class="frame hero hero-split">
+        <div class="hero-main">
+          <!-- <span class="kicker">MNLP</span> -->
+          <div class="badge-ico"><i data-i="search"></i></div>
+          <h1>ဒီသတင်း အမှန်လား?</h1>
         </div>
-      </div>
-    </section>
-
-    <!-- 2 · Question -->
-    <section class="slide" aria-label="A question">
-      <div class="frame poll">
-        <span class="kicker"><i data-i="help"></i> မေးခွန်း တစ်ခု</span>
-        <div class="card">
-          <div class="claim">“ထောပတ်သီးကို နေ့စဉ်စားလျှင် အသက် ဆယ်နှစ် ပိုရှည်စေသည်။”</div>
-          <div class="votes">
-            <button class="vote yes" type="button">အမှန် ✋</button>
-            <button class="vote no" type="button">အမှား ✋</button>
+        <div class="poll">
+          <div class="card">
+            <span class="kicker"><i data-i="help"></i> မေးခွန်း တစ်ခု</span>
+            <div class="claim">“ထောပတ်သီးကို နေ့စဉ်စားလျှင် အသက် ဆယ်နှစ် ပိုရှည်စေသည်။”</div>
+            <div class="votes">
+              <button class="vote yes" type="button">အမှန် ✋</button>
+              <button class="vote no" type="button">အမှား ✋</button>
+            </div>
           </div>
         </div>
-        <p class="hint">ခဏ စဉ်းစားပါ — အဖြေကို demo တွင် စနစ်က ပြပါမည်</p>
+        <div class="hero-foot">
+          <p class="lead">မြန်မာစာ အဆိုကို အထောက်အထားဖြင့် စစ်ဆေးပေးသော စနစ်</p>
+          <div class="labels">
+            <span class="label sup"><b class="en">SUPPORTS</b> (ထောက်ခံသည်)</span>
+            <span class="label ref"><b class="en">REFUTES</b> (ဆန့်ကျင်သည်)</span>
+            <span class="label nei"><b class="en">NOT ENOUGH INFO</b> (အချက်အလက် မလုံလောက်)</span>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- 3 · Newsfeed -->
+    <!-- 2 · Newsfeed -->
     <section class="slide" aria-label="Morning newsfeed">
       <div class="frame">
         <span class="kicker"><i data-i="feed"></i> Story</span>
         <h2 class="title">မနက်ခင်း newsfeed</h2>
-        <p class="lead">post သုံးခုလုံး ယုံကြည်ရလောက်အောင် ရေးထားသည်။ ဘယ်ဟာ အမှန်၊ ဘယ်ဟာ အမှား၊ ဘယ်ဟာကို အထောက်အထား မရှိသေးလဲ?</p>
-        <div class="grid g3">
-          <article class="card post">
-            <div class="head"><span class="ico"><i data-i="heart"></i></span><b>ကျန်းမာရေး page</b></div>
-            <div class="claim">ထောပတ်သီးကို နေ့စဉ်စားလျှင် အသက် ဆယ်နှစ် ပိုရှည်စေသည်။</div>
-            <div class="q">ဘယ်ဟာကို အထောက်အထား မရှိသေးလဲ?</div>
+        <div class="feed">
+          <div class="feed-posts">
+            <article class="fpost">
+              <span class="fpost-ico"><i data-i="heart"></i></span>
+              <div><span class="fpost-src mm">ကျန်းမာရေး page</span><div class="fpost-claim">လက်ဖက်ကို မြန်မာနိုင်ငံ ရှမ်းပြည်နယ်တွင် အဓိက စိုက်ပျိုးသည်။</div></div>
+            </article>
+            <article class="fpost">
+              <span class="fpost-ico"><i data-i="help"></i></span>
+              <div><span class="fpost-src">Quiz page</span><div class="fpost-claim">ဆွန်ဇု၏ စစ်ပညာကျမ်းတွင် အခန်း ၃၀ ပါဝင်သည်။</div></div>
+            </article>
+            <article class="fpost">
+              <span class="fpost-ico"><i data-i="book"></i></span>
+              <div><span class="fpost-src mm">ဓမ္မ page</span><div class="fpost-claim">သုတ္တန်ပိဋကတွင် နိကာယ်ငါးရပ် ပါဝင်သည်။</div></div>
+            </article>
+          </div>
+          <div class="feed-side">
+            <ul class="feed-qs">
+              <li class="sup">ဘယ်ဟာ အမှန်လဲ?</li>
+              <li class="ref">ဘယ်ဟာ အမှားလဲ?</li>
+              <li class="nei">ဘယ်ဟာကို အထောက်အထား မရှိသေးလဲ?</li>
+            </ul>
+            <p class="feed-note">post သုံးခုလုံး ယုံကြည်ရလောက်အောင် ရေးထားသည်။</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 14 · Problem -->
+    <section class="slide" aria-label="The problem">
+      <div class="frame">
+        <span class="kicker">ပြဿနာ</span>
+        <h2 class="title">ဘာကြောင့် စစ်ဆေးရ ခက်သလဲ</h2>
+        <div class="grid g3" style="margin-top:22px">
+          <div class="card"><span class="ico ref"><i data-i="share"></i></span><h3>မျှဝေမှု များ၊ စစ်ဆေးမှု နည်း</h3><p>မြန်မာ သတင်းနှင့် post များကို အများအပြား မျှဝေကြသော်လည်း စစ်ဆေးသူ နည်းသည်။</p></div>
+          <div class="card"><span class="ico nei"><i data-i="translate"></i></span><h3>မြန်မာစာ = low-resource</h3><p>စကားလုံးကြား space မရှိ၊ Zawgyi / Unicode နှစ်မျိုး၊ fact-check dataset မရှိသလောက်။</p></div>
+          <div class="card"><span class="ico"><i data-i="robot"></i></span><h3>AI က လုပ်ကြံ ပြောတတ်သည်</h3><p>မြန်မာစာ နည်းနည်းသာ သင်ထားသဖြင့် မသိလျှင် ချောမွေ့သော အဖြေကို ထွင်ပြောတတ်သည် (hallucination)။</p></div>
+        </div>
+        <div class="callout"><span class="ico"><i data-i="shield"></i></span>
+          <div>လိုအပ်သည်မှာ — <b>အထောက်အထားကို ပြနိုင်ပြီး မသိလျှင် ‘မသိပါ’ ဟု ဝန်ခံရဲသော စနစ်</b></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 · Problem → Goal -->
+    <section class="slide" aria-label="Problem and goal">
+      <div class="frame">
+        <span class="kicker"><i data-i="shield"></i> ပြဿနာ → ရည်မှန်းချက်</span>
+        <h2 class="title">လက်ဖြင့် စစ်ရန် မနိုင် — စနစ်က စစ်ပေးမည်</h2>
+        <div class="pg">
+          <article class="card pg-card prob">
+            <div class="pg-art">
+              <img src="img/problem-claims.webp" alt="Overwhelming pile of unchecked claims and documents" width="1200" height="804" loading="eager" decoding="async">
+            </div>
+            <div class="pg-body">
+              <div class="pg-tag"><i data-i="close"></i> ပြဿနာ</div>
+              <p>နေ့စဉ်နှင့်အမျှ ထွက်ပေါ်နေသော အဆိုပြုချက် (Claims) များစွာထဲမှ မှားယွင်းသော သတင်းအချက်အလက်များကို လူကိုယ်တိုင် လိုက်လံစစ်ဆေးရန် <b>အချိန်နှင့် လုပ်အား မလုံလောက်ခြင်း</b>။</p>
+            </div>
           </article>
-          <article class="card post">
-            <div class="head"><span class="ico"><i data-i="help"></i></span><b>Quiz page</b></div>
-            <div class="claim">ဆွန်ဇု၏ စစ်ပညာကျမ်းတွင် အခန်း ၃၀ ပါဝင်သည်။</div>
-            <div class="q">ဘယ်ဟာ အမှားလဲ?</div>
-          </article>
-          <article class="card post">
-            <div class="head"><span class="ico"><i data-i="book"></i></span><b>ဓမ္မ page</b></div>
-            <div class="claim">သုတ္တန်ပိဋကတွင် နိကာယ်ငါးရပ် ပါဝင်သည်။</div>
-            <div class="q">ဘယ်ဟာ အမှန်လဲ?</div>
+
+          <div class="pg-arrow" aria-hidden="true"><span><i data-i="arrow"></i></span></div>
+
+          <article class="card pg-card goal">
+            <div class="pg-art">
+              <img src="img/goal-verifier.webp" alt="A claim going through a verification machine, labelled Correct, Incorrect or NEI" width="1276" height="804" loading="eager" decoding="async">
+            </div>
+            <div class="pg-body">
+              <div class="pg-tag"><i data-i="check"></i> ရည်မှန်းချက်</div>
+              <p>AI အသုံးပြု၍ အဆိုပြုချက်တစ်ခုသည် <b>မှန်လား၊ မှားလား သို့မဟုတ် မသိဘူးလား</b> ဆိုသည်ကို အလိုအလျောက် ခွဲခြားပေးနိုင်သော စနစ် (Verification &amp; Evidence Retrieval System) ကို တည်ဆောက်ရန်။</p>
+            </div>
           </article>
         </div>
       </div>
@@ -465,46 +570,40 @@
       </div>
     </section>
 
-    <!-- 5 · How it works -->
-    <section class="slide" aria-label="How it works">
-      <div class="frame">
-        <span class="kicker"><i data-i="shield"></i> စနစ်၏ အလုပ်လုပ်ပုံ</span>
-        <!-- <h2 class="title">ဂရုစိုက်တတ်သော စာကြည့်တိုက်မှူး တစ်ယောက်လို</h2> -->
-        <h2 class="title">မေးခွန်း မေးလျှင် ချက်ချင်း မဖြေ — အဆင့် ၄ ဆင့်ဖြင့် စစ်ပြီးမှ ဖြေသည်။</h2>
-        <div class="steps">
-          <div class="card step"><span class="num">၁</span><span class="ico"><i data-i="search"></i></span><h3>ရှာသည်</h3><p>မြန်မာ စာတမ်း ၃၅ ခုထဲမှ သက်ဆိုင်သော စာပိုဒ်ကို ရှာသည်</p></div>
-          <div class="card step"><span class="num">၂</span><span class="ico"><i data-i="compare"></i></span><h3>နှိုင်းယှဉ်သည်</h3><p>ကိန်းဂဏန်း၊ အမည်၊ ငြင်းဆိုချက် (မ … ဘူး) ကို တိုက်စစ်သည်</p></div>
-          <div class="card step"><span class="num">၃</span><span class="ico"><i data-i="gavel"></i></span><h3>ဆုံးဖြတ်သည်</h3><p>ထောက်ခံသည် / ဆန့်ကျင်သည် / အချက်အလက် မလုံလောက်</p></div>
-          <div class="card step"><span class="num">၄</span><span class="ico"><i data-i="quote"></i></span><h3>ကိုးကားသည်</h3><p>အထောက်အထားကို ကိုးကား၍ မြန်မာလို ရှင်းပြသည်</p></div>
-        </div>
-        <div class="callout"><span class="ico"><i data-i="shield"></i></span>
-          <div><b>Generative LLM မသုံးပါ</b> — အထောက်အထားတွင် မပါသော အချက်ကို ထွင်ပြော၍ မရ။ အထောက်အထား အားနည်းလျှင် ‘မလုံလောက်’ ဟု ဖြေသည်။</div>
-        </div>
-      </div>
-    </section>
-
     <!-- 6 · Task -->
     <section class="slide" aria-label="The task">
       <div class="frame">
         <span class="kicker">Task · Fact-checking ဆိုသည်မှာ</span>
-        <h2 class="title">အဖြေ ၃ မျိုးက ဘာကို ဆိုလိုသလဲ</h2>
+        <h2 class="title">Fact Check ဆိုသည်မှာ</h2>
         <div class="task" style="margin-top:22px">
           <div class="inputs">
             <div class="card">
               <div class="tag">Input · Claim</div>
-              <div style="display:flex;gap:14px;align-items:center;margin-top:10px"><span class="ico"><i data-i="chat"></i></span><p style="font-family:var(--mm);margin:0">အချက်အလက် တစ်ခုကို ပြောသော မြန်မာ စာကြောင်း</p></div>
+              <div style="display:flex;gap:14px;align-items:center;margin-top:10px"><span class="ico"><i data-i="chat"></i></span><p style="font-family:var(--mm);margin:0">စစ်ဆေးချင်သော စာကြောင်း</p></div>
             </div>
             <div class="card">
               <div class="tag">Input · Corpus</div>
-              <div style="display:flex;gap:14px;align-items:center;margin-top:10px"><span class="ico"><i data-i="book"></i></span><p style="font-family:var(--mm);margin:0">မြန်မာ စာတမ်း ၃၅ ခု — အချက်အလက် ရှာသော တစ်ခုတည်းသော နေရာ</p></div>
+              <div style="display:flex;gap:14px;align-items:center;margin-top:10px"><span class="ico"><i data-i="book"></i></span><p style="font-family:var(--mm);margin:0">အထောက်အထား စာတမ်းများ စုစည်းရာနေရာ</p></div>
             </div>
           </div>
           <div class="engine">စနစ်</div>
           <div class="outputs">
-            <div class="card out sup"><span class="ico sup"><i data-i="check"></i></span><div><div class="tag">Supports</div><div class="lbl">ထောက်ခံသည် — အထောက်အထားက claim ကို အတည်ပြုသည်</div></div><div class="ex">ဥပမာ — သုတ္တန်ပိဋကတွင် နိကာယ်ငါးရပ်</div></div>
-            <div class="card out ref"><span class="ico ref"><i data-i="close"></i></span><div><div class="tag">Refutes</div><div class="lbl">ဆန့်ကျင်သည် — အထောက်အထားက claim ကို ဆန့်ကျင်သည်</div></div><div class="ex">ဥပမာ — အခန်း ၃၀ ↔ စာတမ်းတွင် ၁၃</div></div>
-            <div class="card out nei"><span class="ico nei"><i data-i="help"></i></span><div><div class="tag">Not enough info</div><div class="lbl">အချက်အလက် မလုံလောက် — corpus တွင် အထောက်အထား မရှိ</div></div><div class="ex">ဥပမာ — ထောပတ်သီး → အသက် ၁၀ နှစ်</div></div>
+            <div class="card out sup"><span class="badge">Supports</span><div class="lbl">အထောက်အထားက claim ကို ထောက်ခံတယ်</div></div>
+            <div class="card out ref"><span class="badge">Refutes</span><div class="lbl">အထောက်အထားက claim နဲ့ ဆန့်ကျင်တယ်</div></div>
+            <div class="card out nei"><span class="badge">Not enough info</span><div class="lbl">သက်ဆိုင်တဲ့ အထောက်အထား မတွေ့ဘူး</div></div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9 · Roadmap -->
+    <section class="slide" aria-label="Roadmap">
+      <div class="frame">
+        <span class="kicker">Roadmap</span>
+        <div class="road" style="margin-top:22px">
+          <div class="card"><span class="ico"><i data-i="play"></i></span><div class="n" style="margin-top:14px">STEP 01</div><h3>Demo</h3><div class="sub">တိုက်ရိုက် စမ်းသပ်</div><p>claim ရိုက်ထည့် → label နှင့် အထောက်အထား ပြသည်</p></div>
+          <div class="card"><span class="ico"><i data-i="font"></i></span><div class="n" style="margin-top:14px">STEP 02</div><h3>Pipeline A</h3><div class="sub">စကားလုံးသာ</div><p>claim ထဲမှ စကားလုံးများကို ရေတွက်ပြီး ခန့်မှန်းသည် (Naive Bayes)</p></div>
+          <div class="card"><span class="ico"><i data-i="search"></i></span><div class="n" style="margin-top:14px">STEP 03</div><h3>Pipeline B</h3><div class="sub">အထောက်အထားဖြင့်</div><p>corpus ထဲမှ အထောက်အထား ရှာ၍ နှိုင်းယှဉ်သည် (RAG)</p></div>
         </div>
       </div>
     </section>
@@ -548,7 +647,7 @@
             <div class="df-count">စာတမ်း ၃၅ ခု</div>
           </div>
           <div class="df-body">
-            <p class="df-lead">ယုံကြည်ရသော မြန်မာ စာတမ်းများကို စုထားသော စာအုပ် တစ်အုပ်။</p>
+            <p class="df-lead">ယုံကြည်ရသော မြန်မာ စာတမ်းများကို စုထားသော စာအုပ်</p>
             <ul class="df-pts"><li><i data-i="check"></i><span>စနစ်က အဖြေကို ဒီစာအုပ်ထဲကနေ<b>သာ</b> ရှာသည်</span></li><li><i data-i="check"></i><span>စာတမ်း တစ်ခုစီတွင် နံပါတ် (doc_id) ပါသည်</span></li></ul>
             <div class="sec-t" style="margin:22px 0 8px">ဥပမာ — ဖိုင်ထဲမှ တစ်ကြောင်း</div>
             <div class="card df-table"><table><thead><tr><th>doc_id</th><th>title</th><th>text</th></tr></thead><tbody><tr><td>DOC_001</td><td>ပါဠိတော်မြန်မာပြန်ကျမ်းများ၏ ကျမ်းဦးမှတ်ဖွယ်</td><td>ပိဋကတ်သုံးပုံတွင် ဝိနည်းပိဋက၊ သုတ္တန်ပိဋက … ပါဝင်သည်။</td></tr></tbody></table></div>
@@ -556,6 +655,7 @@
         </div>
       </div>
     </section>
+
     <section class="slide" aria-label="claims.csv">
       <div class="frame">
         <span class="kicker"><i data-i="doc"></i> Data file · 2 / 4</span>
@@ -567,7 +667,7 @@
             <div class="df-count">အဆို ၆၂ ခု</div>
           </div>
           <div class="df-body">
-            <p class="df-lead">စစ်ဆေးရမည့် အဆို (claim) အားလုံးနှင့် ၎င်းတို့၏ မှန်ကန်သော အဖြေ။</p>
+            <p class="df-lead">စစ်ဆေးရမည့် အဆို (claim) အားလုံးနှင့် အဖြေ။</p>
             <ul class="df-pts"><li><i data-i="check"></i><span>အဆိုတိုင်းတွင် အဖြေ (<b>label</b>) ပါသည် — SUPPORTS / REFUTES / NOT ENOUGH INFO</span></li><li><i data-i="check"></i><span>အဖြေ ရှိသော စာတမ်း (<b>evidence_id</b>) ကိုလည်း ဖော်ပြထားသည်</span></li></ul>
             <div class="sec-t" style="margin:22px 0 8px">ဥပမာ — ဖိုင်ထဲမှ တစ်ကြောင်း</div>
             <div class="card df-table"><table><thead><tr><th>claim_id</th><th>claim_text</th><th>evidence_id</th><th>label</th></tr></thead><tbody><tr><td>CLM_001</td><td>သုတ္တန်ပိဋကတွင် နိကာယ်ငါးရပ် ပါဝင်သည်။</td><td>DOC_001</td><td><span class="label sup sm">SUPPORTS</span></td></tr></tbody></table></div>
@@ -575,6 +675,7 @@
         </div>
       </div>
     </section>
+
     <section class="slide" aria-label="train_claims.csv">
       <div class="frame">
         <span class="kicker"><i data-i="doc"></i> Data file · 3 / 4</span>
@@ -594,6 +695,7 @@
         </div>
       </div>
     </section>
+
     <section class="slide" aria-label="test_claims.csv">
       <div class="frame">
         <span class="kicker"><i data-i="doc"></i> Data file · 4 / 4</span>
@@ -614,82 +716,30 @@
       </div>
     </section>
 
-    <!-- 9 · Roadmap -->
-    <section class="slide" aria-label="Roadmap">
+    <!-- 15 · Why Myanmar is hard -->
+    <section class="slide" aria-label="Why Myanmar is hard">
       <div class="frame">
-        <span class="kicker">Roadmap</span>
-        <div class="road" style="margin-top:22px">
-          <div class="card"><span class="ico"><i data-i="play"></i></span><div class="n" style="margin-top:14px">STEP 01</div><h3>Demo</h3><div class="sub">တိုက်ရိုက် စမ်းသပ်</div><p>claim ရိုက်ထည့် → label နှင့် အထောက်အထား ပြသည်</p></div>
-          <div class="card"><span class="ico"><i data-i="font"></i></span><div class="n" style="margin-top:14px">STEP 02</div><h3>Pipeline A</h3><div class="sub">စကားလုံးသာ</div><p>claim ထဲမှ စကားလုံးများကို ရေတွက်ပြီး ခန့်မှန်းသည် (Naive Bayes)</p></div>
-          <div class="card"><span class="ico"><i data-i="search"></i></span><div class="n" style="margin-top:14px">STEP 03</div><h3>Pipeline B</h3><div class="sub">အထောက်အထားဖြင့်</div><p>corpus ထဲမှ အထောက်အထား ရှာ၍ နှိုင်းယှဉ်သည် (RAG)</p></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 9 · Case: SUPPORTS -->
-    <section class="slide" aria-label="Case: supports">
-      <div class="frame">
-        <span class="kicker"><i data-i="play"></i> Demo · 1 / 3</span>
-        <h2 class="title">ဓမ္မ page — အထောက်အထား တွေ့လို့ ထောက်ခံသည်</h2>
-        <div class="case" style="margin-top:20px">
+        <span class="kicker">ဘာကြောင့် ခက်သလဲ</span>
+        <h2 class="title">မြန်မာစာက ကွန်ပျူတာအတွက် ဘာကြောင့် ခက်သလဲ</h2>
+        <div class="grid g3 hard" style="margin-top:22px">
           <div class="card">
-            <div class="src"><span class="ico"><i data-i="book"></i></span><b>ဓမ္မ page</b></div>
-            <div class="claim">သုတ္တန်ပိဋကတွင် <mark class="ok">နိကာယ်ငါးရပ်</mark> ပါဝင်သည်။</div>
+            <span class="ico"><i data-i="space"></i></span><h3>space မရှိ</h3>
+            <div class="demo">ကျမ်းတွင်အခန်း၁၃ခန်းပါဝင်သည်<div class="meta" style="margin:4px 0">↓</div>
+              <div class="seg"><span>ကျမ်း</span><span>တွင်</span><span>အ</span><span>ခန်း</span><span>၁၃</span><span>ခန်း</span><span>ပါ</span><span>ဝင်</span><span>သည်</span></div></div>
+            <div class="fix"><i data-i="check"></i><span>sylbreak regex ဖြင့် ဝဏ္ဏ ခွဲသည်</span></div>
           </div>
-          <div class="card verdict">
-            <div class="sec-t" style="margin:0">ရှာတွေ့သော အထောက်အထား</div>
-            <div class="doc"><span class="pill">DOC_001</span>ပါဠိတော်မြန်မာပြန်ကျမ်းများ၏ ကျမ်းဦးမှတ်ဖွယ်</div>
-            <div class="quote">“… သုတ္တန်ပိဋကကို ဒီဃနိကာယ်၊ မဇ္ဈိမနိကာယ်၊ … ခုဒ္ဒကနိကာယ် ဟူ၍ <mark class="ok">နိကာယ်ငါးရပ်</mark> ခွဲခြားထားသည်။”</div>
-            <div class="sec-t" style="margin:6px 0 0">စနစ်၏ ဆုံးဖြတ်ချက်</div>
-            <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><span class="label sup">ထောက်ခံသည်</span>
-              <div class="conf sup" style="flex:1;min-width:180px"><div class="track"><div class="fill" data-w="99"></div></div><span>confidence 0.99</span></div></div>
-            <div class="why sup">claim ၏ အချက်အလက် 100% သည် အထောက်အထားနှင့် ကိုက်ညီသဖြင့် ထောက်ခံသည်။</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 10 · Case: REFUTES -->
-    <section class="slide" aria-label="Case: refutes">
-      <div class="frame">
-        <span class="kicker"><i data-i="play"></i> Demo · 2 / 3</span>
-        <h2 class="title">Quiz page — ကိန်းဂဏန်း မှားနေခြင်း</h2>
-        <div class="case" style="margin-top:20px">
           <div class="card">
-            <div class="src"><span class="ico"><i data-i="help"></i></span><b>Quiz page</b></div>
-            <div class="claim">ဆွန်ဇု၏ စစ်ပညာကျမ်းတွင် အခန်း <mark>၃၀</mark> ပါဝင်သည်။</div>
+            <span class="ico"><i data-i="swap"></i></span><h3>Zawgyi vs Unicode</h3>
+            <div class="demo">မြန်မာ — ကြည့်ရ တူ၊ code မတူ
+              <code>Unicode: 1019 103C 1014 …</code><code>Zawgyi:&nbsp; 103B 1019 1014 …</code>
+              <div class="meta" style="margin-top:6px">Zawgyi တွင် ရရစ်ကို ဗျည်း ရှေ့တွင် သိမ်းသည်</div></div>
+            <div class="fix"><i data-i="check"></i><span>Zawgyi ကို Unicode သို့ ပြောင်း၊ NFC</span></div>
           </div>
-          <div class="card verdict">
-            <div class="sec-t" style="margin:0">ရှာတွေ့သော အထောက်အထား</div>
-            <div class="doc"><span class="pill">DOC_026</span>ဆွန်ဇု၏ စစ်ပညာကျမ်း</div>
-            <div class="quote">“စစ်ပညာကျမ်း (The Art of War) ကို … ဆွန်ဇု ရေးသားခဲ့သည်ဟု ဆိုကြသည်။ ကျမ်းတွင် အခန်း <mark class="ok">၁၃</mark> ခန်း ပါဝင်သည်။”</div>
-            <div class="sec-t" style="margin:6px 0 0">စနစ်၏ ဆုံးဖြတ်ချက်</div>
-            <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><span class="label ref">ဆန့်ကျင်သည်</span>
-              <div class="conf ref" style="flex:1;min-width:180px"><div class="track"><div class="fill" data-w="90"></div></div><span>confidence 0.90</span></div></div>
-            <div class="why ref">claim ပါ ‘၃၀’ သည် အထောက်အထားပါ ‘၁၃’ နှင့် မကိုက်ညီသဖြင့် ဆန့်ကျင်သည်။</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 11 · Case: NEI -->
-    <section class="slide" aria-label="Case: not enough info">
-      <div class="frame">
-        <span class="kicker"><i data-i="play"></i> Demo · 3 / 3</span>
-        <h2 class="title">ကျန်းမာရေး page — မသိလျှင် ‘မသိပါ’ ဟု ဖြေခြင်း</h2>
-        <div class="case" style="margin-top:20px">
           <div class="card">
-            <div class="src"><span class="ico"><i data-i="heart"></i></span><b>ကျန်းမာရေး page</b></div>
-            <div class="claim">ထောပတ်သီးကို နေ့စဉ်စားလျှင် <mark>အသက် ဆယ်နှစ် ပိုရှည်</mark>စေသည်။</div>
-          </div>
-          <div class="card verdict">
-            <div class="sec-t" style="margin:0">ရှာတွေ့သော အထောက်အထား</div>
-            <div class="doc"><span class="pill">DOC_021</span>ထောပတ်သီးပင် စိုက်ပျိုးခြင်းဆိုင်ရာ နည်းလမ်းကောင်းများ</div>
-            <div class="quote">ထောပတ်သီး ‘စိုက်ပျိုးနည်း’ အကြောင်းသာ ပါသည်။ အသက်ရှည်ခြင်း အကြောင်း မပါ။ ဆင်တူမှု 0.24 သည် သတ်မှတ်ချက် τ = 0.24 ကို မကျော်။</div>
-            <div class="sec-t" style="margin:6px 0 0">စနစ်၏ ဆုံးဖြတ်ချက်</div>
-            <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><span class="label nei">အချက်အလက် မလုံလောက်</span>
-              <div class="conf nei" style="flex:1;min-width:180px"><div class="track"><div class="fill" data-w="24"></div></div><span>ဆင်တူမှု 0.24 · τ 0.24</span></div></div>
-            <div class="why nei">corpus တွင် ဤ claim အတွက် အထောက်အထား မတွေ့ရပါ — ခန့်မှန်း မဖြေပါ။</div>
+            <span class="ico"><i data-i="eye"></i></span><h3>ပုံစံတူ စာလုံးများ</h3>
+            <div class="demo">ဝ (wa) ↔ ၀ (သုည)<br>ရ (ra) ↔ ၇ (ခုနစ်)<br>၀န် → ဝန်
+              <div class="meta" style="margin-top:6px">ေ ကို ဗျည်း ရှေ့တွင် ရိုက်ခြင်း</div></div>
+            <div class="fix"><i data-i="check"></i><span>၀→ဝ၊ ရိုက်သည့် အစီအစဉ် ပြင်၊ မမြင်ရသော char ဖယ်</span></div>
           </div>
         </div>
       </div>
@@ -767,47 +817,20 @@
       </div>
     </section>
 
-    <!-- 14 · Problem -->
-    <section class="slide" aria-label="The problem">
+    <!-- 5 · How it works -->
+    <section class="slide" aria-label="How it works">
       <div class="frame">
-        <span class="kicker">ပြဿနာ</span>
-        <h2 class="title">ဘာကြောင့် စစ်ဆေးရ ခက်သလဲ</h2>
-        <div class="grid g3" style="margin-top:22px">
-          <div class="card"><span class="ico ref"><i data-i="share"></i></span><h3>မျှဝေမှု များ၊ စစ်ဆေးမှု နည်း</h3><p>မြန်မာ သတင်းနှင့် post များကို အများအပြား မျှဝေကြသော်လည်း စစ်ဆေးသူ နည်းသည်။</p></div>
-          <div class="card"><span class="ico nei"><i data-i="translate"></i></span><h3>မြန်မာစာ = low-resource</h3><p>စကားလုံးကြား space မရှိ၊ Zawgyi / Unicode နှစ်မျိုး၊ fact-check dataset မရှိသလောက်။</p></div>
-          <div class="card"><span class="ico"><i data-i="robot"></i></span><h3>AI က လုပ်ကြံ ပြောတတ်သည်</h3><p>မြန်မာစာ နည်းနည်းသာ သင်ထားသဖြင့် မသိလျှင် ချောမွေ့သော အဖြေကို ထွင်ပြောတတ်သည် (hallucination)။</p></div>
+        <span class="kicker"><i data-i="shield"></i> စနစ်၏ အလုပ်လုပ်ပုံ</span>
+        <!-- <h2 class="title">ဂရုစိုက်တတ်သော စာကြည့်တိုက်မှူး တစ်ယောက်လို</h2> -->
+        <h2 class="title">မေးခွန်း မေးလျှင် ချက်ချင်း မဖြေ — အဆင့် ၄ ဆင့်ဖြင့် စစ်ပြီးမှ ဖြေသည်။</h2>
+        <div class="steps">
+          <div class="card step"><span class="num">၁</span><span class="ico"><i data-i="search"></i></span><h3>ရှာသည်</h3><p>မြန်မာ စာတမ်း ၃၅ ခုထဲမှ သက်ဆိုင်သော စာပိုဒ်ကို ရှာသည်</p></div>
+          <div class="card step"><span class="num">၂</span><span class="ico"><i data-i="compare"></i></span><h3>နှိုင်းယှဉ်သည်</h3><p>ကိန်းဂဏန်း၊ အမည်၊ ငြင်းဆိုချက် (မ … ဘူး) ကို တိုက်စစ်သည်</p></div>
+          <div class="card step"><span class="num">၃</span><span class="ico"><i data-i="gavel"></i></span><h3>ဆုံးဖြတ်သည်</h3><p>ထောက်ခံသည် / ဆန့်ကျင်သည် / အချက်အလက် မလုံလောက်</p></div>
+          <div class="card step"><span class="num">၄</span><span class="ico"><i data-i="quote"></i></span><h3>ကိုးကားသည်</h3><p>အထောက်အထားကို ကိုးကား၍ မြန်မာလို ရှင်းပြသည်</p></div>
         </div>
         <div class="callout"><span class="ico"><i data-i="shield"></i></span>
-          <div>လိုအပ်သည်မှာ — <b>အထောက်အထားကို ပြနိုင်ပြီး မသိလျှင် ‘မသိပါ’ ဟု ဝန်ခံရဲသော စနစ်</b></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 15 · Why Myanmar is hard -->
-    <section class="slide" aria-label="Why Myanmar is hard">
-      <div class="frame">
-        <span class="kicker">ဘာကြောင့် ခက်သလဲ</span>
-        <h2 class="title">မြန်မာစာက ကွန်ပျူတာအတွက် ဘာကြောင့် ခက်သလဲ</h2>
-        <div class="grid g3 hard" style="margin-top:22px">
-          <div class="card">
-            <span class="ico"><i data-i="space"></i></span><h3>space မရှိ</h3>
-            <div class="demo">ကျမ်းတွင်အခန်း၁၃ခန်းပါဝင်သည်<div class="meta" style="margin:4px 0">↓</div>
-              <div class="seg"><span>ကျမ်း</span><span>တွင်</span><span>အ</span><span>ခန်း</span><span>၁၃</span><span>ခန်း</span><span>ပါ</span><span>ဝင်</span><span>သည်</span></div></div>
-            <div class="fix"><i data-i="check"></i><span>sylbreak regex ဖြင့် ဝဏ္ဏ ခွဲသည်</span></div>
-          </div>
-          <div class="card">
-            <span class="ico"><i data-i="swap"></i></span><h3>Zawgyi vs Unicode</h3>
-            <div class="demo">မြန်မာ — ကြည့်ရ တူ၊ code မတူ
-              <code>Unicode: 1019 103C 1014 …</code><code>Zawgyi:&nbsp; 103B 1019 1014 …</code>
-              <div class="meta" style="margin-top:6px">Zawgyi တွင် ရရစ်ကို ဗျည်း ရှေ့တွင် သိမ်းသည်</div></div>
-            <div class="fix"><i data-i="check"></i><span>Zawgyi ကို Unicode သို့ ပြောင်း၊ NFC</span></div>
-          </div>
-          <div class="card">
-            <span class="ico"><i data-i="eye"></i></span><h3>ပုံစံတူ စာလုံးများ</h3>
-            <div class="demo">ဝ (wa) ↔ ၀ (သုည)<br>ရ (ra) ↔ ၇ (ခုနစ်)<br>၀န် → ဝန်
-              <div class="meta" style="margin-top:6px">ေ ကို ဗျည်း ရှေ့တွင် ရိုက်ခြင်း</div></div>
-            <div class="fix"><i data-i="check"></i><span>၀→ဝ၊ ရိုက်သည့် အစီအစဉ် ပြင်၊ မမြင်ရသော char ဖယ်</span></div>
-          </div>
+          <div><b>Generative LLM မသုံးပါ</b> — အထောက်အထားတွင် မပါသော အချက်ကို ထွင်ပြော၍ မရ။ အထောက်အထား အားနည်းလျှင် ‘မလုံလောက်’ ဟု ဖြေသည်။</div>
         </div>
       </div>
     </section>
@@ -826,7 +849,7 @@
     <button class="nav-btn" id="next" aria-label="Next slide"><svg viewBox="0 0 24 24"><path d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></button>
   </nav>
 
-  <script id="notes-data" type="application/json">["[0:00–0:15] မင်္ဂလာပါ။ ကျွန်ုပ်က Ohnmar Nyunt၊ MMDT034 ပါ။ ဒီနေ့ မြန်မာစာ အဆိုတွေကို အထောက်အထားနဲ့ စစ်ဆေးပေးတဲ့ စနစ်အကြောင်း ပြောပါမယ်။ ဒါပေမယ့် မစခင် အရင် မေးခွန်း တစ်ခု မေးပါရစေ။", "[0:15–0:45] ဒီ post ကို ကြည့်ပါ။ ‘ဆွန်ဇု၏ စစ်ပညာကျမ်းတွင် အခန်း ၃၀ ပါဝင်သည်’ တဲ့။ အမှန်လို့ ထင်ရင် လက်ထောင်ပါ … အမှားလို့ ထင်ရင် လက်ထောင်ပါ … (ခဏ စောင့်) စိတ်ဝင်စားစရာ ကောင်းတယ်နော်။ ကျွန်ုပ်တို့ အများစုက ဘယ်စာအုပ်ကိုမှ မဖွင့်ကြည့်ဘဲ ခံစားချက်နဲ့ ဖြေလိုက်ကြတာပါ။ အဖြေကို demo မှာ စနစ်က ပြပါလိမ့်မယ်။ (ဒီ post ပုံစံက ဥပမာအဖြစ် ဖန်တီးထားတာပါ — claim ကတော့ test set ထဲက CLM_TEST_008 ပါ။)", "[~0:50] ဇာတ်ကောင်တစ်ယောက်ကို စဉ်းစားကြည့်ပါ — ‘သီတာ’ ဆိုတဲ့ တက္ကသိုလ်ကျောင်းသူလေးပါ။ (ဥပမာ ဇာတ်ကောင်ပါ)။ မနက်ခင်း Facebook ဖွင့်လိုက်တော့ post သုံးခု တွေ့တယ်။ ပထမ — ထောပတ်သီး နေ့တိုင်းစားရင် အသက် ဆယ်နှစ် ပိုရှည်တယ်တဲ့။ ဒုတိယ — quiz page တစ်ခုက ဆွန်ဇုရဲ့ စစ်ပညာကျမ်းမှာ အခန်း ၃၀ ပါတယ်တဲ့။ တတိယ — ဓမ္မ page တစ်ခုက သုတ္တန်ပိဋကမှာ နိကာယ်ငါးရပ် ပါတယ်တဲ့။ သုံးခုစလုံး ယုံကြည်ရလောက်အောင် ရေးထားတယ်။ ဘယ်ဟာ အမှန်လဲ၊ ဘယ်ဟာ အမှားလဲ၊ ဘယ်ဟာကို ဘယ်သူမှ မသိသေးလဲ — သီတာ ဘယ်လို ခွဲခြားမလဲ?", "[~0:50] ဒီစနစ်က ဘယ်သူတွေအတွက် အသုံးဝင်မလဲ။ သတင်းထောက်နဲ့ fact-checker တွေအတွက် — viral ဖြစ်နေတဲ့ post ကို ယုံကြည်ရတဲ့ source နဲ့ မြန်မြန် တိုက်စစ်နိုင်တယ်။ ကျောင်းသားနဲ့ ဆရာတွေအတွက် — assignment ထဲက အချက်အလက်ကို စာအုပ်နဲ့ တိုက်စစ်နိုင်တယ်။ ဓမ္မစာပေ လေ့လာသူတွေအတွက် — ကျွန်ုပ်ရဲ့ corpus မှာ ဘာသာရေး စာတမ်း ၁၃ ခု ပါလို့ ပိဋကတ် အချက်အလက်တွေကို မူရင်းနဲ့ တိုက်နိုင်တယ်။ နောက်ဆုံး — chatbot တွေ အဖြေ မထုတ်ခင် အထောက်အထား ရှိမရှိ စစ်ပေးတဲ့ အကာအကွယ် (guardrail) အဖြစ်လည်း သုံးနိုင်ပါတယ်။", "[~0:50] ဒါကြောင့် ကျွန်ုပ်ရဲ့ စနစ်ကို ဂရုစိုက်တတ်တဲ့ စာကြည့်တိုက်မှူး တစ်ယောက်လို တည်ဆောက်ခဲ့ပါတယ်။ သူ့ကို မေးခွန်း မေးရင် ချက်ချင်း မဖြေပါဘူး။ ပထမ — စာကြည့်တိုက်ထဲက သက်ဆိုင်ရာ စာအုပ်ကို ရှာတယ်။ ကျွန်ုပ်ရဲ့ စာကြည့်တိုက်က မြန်မာ စာတမ်း ၃၅ ခုပါ။ ဒုတိယ — အဆိုနဲ့ အထောက်အထား စာကြောင်းကို ကိန်းဂဏန်း၊ အမည်၊ ငြင်းဆိုချက် စတာတွေနဲ့ နှိုင်းယှဉ်တယ်။ တတိယ — ဆုံးဖြတ်တယ်။ စတုတ္ထ — ဘယ်စာအုပ်က ဘာပြောထားလဲ ဆိုတာကို မြန်မာလို ကိုးကားပြီး ရှင်းပြတယ်။ အရေးကြီးတာက ဒီစနစ်မှာ စာထွင်ရေးတဲ့ LLM မပါဘူး။ ဒါကြောင့် အထောက်အထားမှာ မပါတဲ့ အချက်ကို ထွင်မပြောနိုင်ပါဘူး။", "[0:45–1:45] Fact-checking ဆိုတာ ဘာလဲ။ ကျွန်ုပ်တို့ task မှာ input နှစ်ခု ရှိပါတယ်။ claim ဆိုတာ အချက်အလက် တစ်ခုကို ပြောထားတဲ့ မြန်မာ စာကြောင်း တစ်ကြောင်းပါ။ corpus ဆိုတာ ယုံကြည်ရတဲ့ မြန်မာ စာတမ်း ၃၅ ခု — စနစ် အချက်အလက် ရှာတဲ့ တစ်ခုတည်းသော နေရာပါ။ output က တံဆိပ် သုံးမျိုးထဲက တစ်ခုပါ။ SUPPORTS — အထောက်အထားက claim ကို အတည်ပြုတယ်၊ ဥပမာ သုတ္တန်ပိဋကမှာ နိကာယ်ငါးရပ် ပါတယ်။ REFUTES — အထောက်အထားက claim ကို ဆန့်ကျင်တယ်၊ ဥပမာ အခန်း ၃၀ လို့ ပြောပေမယ့် စာတမ်းက ၁၃ လို့ ပြောတယ်။ NOT ENOUGH INFO — corpus ထဲမှာ အထောက်အထား မရှိဘူး၊ ဥပမာ ထောပတ်သီး စားရင် အသက် ဆယ်နှစ် ရှည်တယ်ဆိုတာ။ အရေးကြီးတာက ‘မှားတယ်’ နဲ့ ‘မသိဘူး’ ကို ခွဲခြားတာပါ။", "[~0:45] နောက်ကွယ်မှာ ဘာတွေ ရှိသလဲ။ စာကြည့်တိုက်က မြန်မာ e-library တွေကနေ ကျွန်ုပ် ကိုယ်တိုင် စုစည်းထားတဲ့ စာတမ်း ၃၅ ခုပါ။ ဘာသာရေး စာတမ်း ၁၃ ခုက အများဆုံးဖြစ်ပြီး ကျန်တာတွေက စိုက်ပျိုးရေး ၆၊ စာပေ ၄၊ နည်းပညာ ၄၊ သမိုင်း ၃၊ ထင်ရှားသူများ ၃၊ ဘဏ္ဍာရေးနဲ့ သိပ္ပံ တစ်ခုစီ ပါ။ စာမေးပွဲအတွက် အဆို ၆၂ ခု ပြင်ဆင်ပြီး ၄၉ ခုကို လေ့ကျင့်ဖို့၊ ၁၃ ခုကို စနစ် တစ်ခါမှ မမြင်ဖူးတဲ့ စာမေးပွဲအဖြစ် ဖယ်ထားတယ်။ python app.py တစ်ကြောင်းတည်းနဲ့ studentverifier() က data/*.csv ကို ဖတ်ပြီး ခန့်မှန်းချက် CSV ကို ထုတ်ပေးပါတယ်။", "ပထမ ဖိုင်က corpus.csv ပါ။ ဒါကို စာအုပ် တစ်အုပ်လို့ မှတ်ပါ။ ယုံကြည်ရတဲ့ မြန်မာ စာတမ်း ၃၅ ခု ပါတယ်။ စနစ်က အဖြေကို ဒီစာအုပ်ထဲကနေပဲ ရှာပါတယ် — အပြင်က ဘာမှ မယူပါဘူး။", "ဒုတိယ ဖိုင်က claims.csv — မေးခွန်းနဲ့ အဖြေပါ။ စစ်ဆေးရမယ့် အဆို ၆၂ ခု ပါပြီး တစ်ခုချင်းစီမှာ မှန်ကန်တဲ့ အဖြေ (label) နဲ့ အဖြေရှိတဲ့ စာတမ်း (evidence_id) ပါတယ်။", "တတိယ ဖိုင်က train_claims.csv — လေ့ကျင့်ခန်းပါ။ claims ၆၂ ခုထဲက ၄၉ ခုကို အဖြေနဲ့တကွ ပေးထားပြီး စနစ်က ဒါတွေကို ကြည့်ပြီး သင်ယူပါတယ်။", "နောက်ဆုံး ဖိုင်က test_claims.csv — စာမေးပွဲပါ။ ကျန်တဲ့ ၁၃ ခုမှာ အဖြေ မပါပါဘူး။ စနစ် တစ်ခါမှ မမြင်ဖူးတဲ့ မေးခွန်းတွေ ဖြစ်လို့ စနစ်ရဲ့ တကယ့် အမှတ်ကို ဒီကနေ သိရပါတယ်။", "[3:30–4:00] ဒီအချိန်မှာ fact-checking ဆိုတာ ဘာလဲ၊ မြန်မာစာ ဘာကြောင့် ခက်လဲ၊ label သုံးမျိုးက ဘာကို ဆိုလိုလဲ ဆိုတာ သိသွားပါပြီ။ ကျန်တဲ့ အချိန်မှာ သုံးဆင့် သွားပါမယ်။ ပထမ — demo၊ claim ကို ရိုက်ထည့်ပြီး label နဲ့ အထောက်အထားကို တိုက်ရိုက် ပြပါမယ်။ ဒုတိယ — Pipeline A၊ claim ထဲက စကားလုံးတွေကိုသာ ကြည့်တဲ့ Naive Bayes။ တတိယ — Pipeline B၊ အထောက်အထား ရှာပြီး နှိုင်းယှဉ်တဲ့ RAG။", "[~0:40] post သုံးခုကို စနစ်ထဲ ထည့်ကြည့်ရအောင်။ ဓမ္မ page ကနေ စမယ်။ ‘သုတ္တန်ပိဋကတွင် နိကာယ်ငါးရပ် ပါဝင်သည်’။ စနစ်က DOC_001 — ပါဠိတော်မြန်မာပြန် ကျမ်းဦးမှတ်ဖွယ် — ကို ရှာတွေ့တယ်။ အဲဒီမှာ နိကာယ်ငါးရပ်ကို နာမည်တစ်ခုချင်း ဖော်ပြထားတယ်။ claim ရဲ့ ဝဏ္ဏ ၁၀၀% က အထောက်အထားထဲမှာ ပါတဲ့အတွက် ‘ထောက်ခံသည်’ လို့ confidence 0.99 နဲ့ ဖြေပြီး စာကြောင်းကို ကိုးကားပြပါတယ်။", "[~0:40] ဒုတိယ post — ‘ဆွန်ဇု၏ စစ်ပညာကျမ်းတွင် အခန်း ၃၀ ပါဝင်သည်’။ စနစ်က DOC_026 ကို ဆင်တူမှု 0.38 နဲ့ ပထမနေရာမှာ ရှာတွေ့တယ်။ ကျန်တဲ့ စာတမ်းတွေက 0.09 လောက်ပဲ ရှိတယ်။ အထောက်အထားမှာ အခန်း ၁၃ ခန်းလို့ ပါတယ်။ စကားလုံးတွေ အကုန်နီးပါး တူပေမယ့် ကိန်းဂဏန်း မတူဘူး — ၃၀ နဲ့ ၁၃။ ဒါကြောင့် ‘ဆန့်ကျင်သည်’ လို့ ဖြေပြီး ဘာကြောင့်လဲဆိုတာ ကိန်းဂဏန်းနှစ်ခုကို ထုတ်ပြ ရှင်းပြပါတယ်။", "[~0:45] နောက်ဆုံး — viral ဖြစ်နေတဲ့ ကျန်းမာရေး post ပါ။ ‘ထောပတ်သီးကို နေ့စဉ်စားလျှင် အသက် ဆယ်နှစ် ပိုရှည်စေသည်’။ အနီးဆုံး စာတမ်းက DOC_021 ဖြစ်ပေမယ့် အဲဒါက ထောပတ်သီး စိုက်ပျိုးနည်း အကြောင်းပါ။ ဆင်တူမှုက သတ်မှတ်ချက် τ 0.24 ကို မကျော်ဘူး။ ဒါကြောင့် စနစ်က ခန့်မှန်း မဖြေဘဲ ‘အချက်အလက် မလုံလောက်’ လို့ ရိုးသားစွာ ဖြေပါတယ်။ AI chatbot တစ်ခုဆိုရင် ဒီနေရာမှာ ယုံရလောက်တဲ့ အဖြေကို ထွင်ပြောနိုင်ပါတယ်။ ဒါ hallucination ကို ကာကွယ်ပုံပါ။", "[~1:00] Pipeline A က ရိုးရာ စာရင်းအင်း classifier ပါ။ မြန်မာ စာသားကို ဝဏ္ဏ ခွဲပြီး TF-IDF matrix — claim ၄၉ ခု × term ၂,၈၁၂ ခု — ပြောင်းတယ်။ Multinomial Naive Bayes က Laplace α = 1 နဲ့ ဖြစ်နိုင်ခြေ အမြင့်ဆုံး label ကို ရွေးတယ်။ ပြဿနာက — A က claim ကိုပဲ ကြည့်တယ်။ အောက်က claim နှစ်ခုကို ကြည့်ပါ — တစ်ခုက အမှန်၊ တစ်ခုက အမှား။ ကွာတာ ကိန်းဂဏန်း တစ်ခုပဲ။ စကားလုံးတွေ တူနေတော့ Naive Bayes က ခွဲမရဘူး။ စကားလုံးတွေက ခေါင်းစဉ်ကို ပြတယ်၊ အမှန်ကို မပြဘူး။ ရလဒ် — test ၁၃ ခုမှာ တစ်ခုမှ မမှန်ပါ။", "[~1:10] Pipeline B က အထောက်အထား ထည့်သုံးပါတယ်။ claim ကို စာတမ်းတွေနဲ့ vector space တစ်ခုတည်းမှာ TF-IDF vector ပြောင်းတယ်။ cosine similarity နဲ့ စာတမ်း ၃၅ ခုလုံးကို နှိုင်းယှဉ်ပြီး Top-3 ကို ယူတယ်။ hook ထဲက ဆွန်ဇု claim အတွက် DOC_026 က 0.38 နဲ့ ထင်ထင်ရှားရှား ပထမ ရတယ်။ ကျန်တာတွေက 0.09 ပဲ။ ပြီးရင် RAG reasoning က စည်းမျဉ်း ၅ ခုကို အစဉ်လိုက် စစ်တယ် — ပထမဆုံး ကိုက်တဲ့ စည်းမျဉ်းက အနိုင်ရတယ်။ ဆင်တူမှု τ 0.24 ထက် နိမ့်ရင် NOT ENOUGH INFO၊ ကိန်းဂဏန်း မတူရင် REFUTES၊ အမည် မတူရင် REFUTES၊ မဟုတ် ပါရင် ပြောင်းပြန်၊ claim ဝဏ္ဏ ၈၅% ကျော် ပါရင် SUPPORTS ပါ။ test ၁၃ ခုမှာ ၁၂ ခု မှန်ပါတယ်။", "[~0:50] သီတာ ဘာကြောင့် အခက်တွေ့သလဲ။ ပထမ — မြန်မာ post တွေ မျှဝေမှု များပေမယ့် စစ်ဆေးပေးသူ နည်းပါတယ်။ ဒုတိယ — ကွန်ပျူတာအတွက် မြန်မာစာက ခက်ပါတယ်။ စကားလုံးကြား space မရှိဘူး၊ Zawgyi နဲ့ Unicode နှစ်မျိုး ရှိတယ်၊ fact-check dataset လည်း မရှိသလောက်ပါ။ တတိယ — AI chatbot ကို မေးမယ်ဆိုရင်လည်း မြန်မာစာ နည်းနည်းပဲ သင်ထားလို့ မသိတဲ့အခါ ချောမွေ့ပြီး ယုံရလောက်တဲ့ အဖြေကို လုပ်ကြံပြောတတ်ပါတယ်။ ဒါကို hallucination လို့ ခေါ်ပါတယ်။ ဒါကြောင့် ကျွန်ုပ်တို့ လိုတာက အထောက်အထားကို ပြနိုင်ပြီး မသိရင် မသိဘူးလို့ ဝန်ခံရဲတဲ့ စစ်ဆေးသူ တစ်ယောက်ပါ။", "[1:45–2:45] ဒီ task က အင်္ဂလိပ်စာမှာထက် မြန်မာစာမှာ ဘာကြောင့် ပိုခက်သလဲ။ ပထမ — စကားလုံးကြား space မရှိပါဘူး။ အင်္ဂလိပ်မှာ space နဲ့ စကားလုံး ခွဲလို့ရပေမယ့် မြန်မာမှာ ‘ကျမ်းတွင်အခန်း၁၃ခန်းပါဝင်သည်’ က တစ်ဆက်တည်းပါ။ ဒါကြောင့် sylbreak regex နဲ့ ဝဏ္ဏ ခွဲရပါတယ်။ ဒုတိယ — Zawgyi နဲ့ Unicode။ ‘မြန်မာ’ ဆိုတဲ့ စကားလုံးက မျက်စိနဲ့ ကြည့်ရင် တူပေမယ့် ကွန်ပျူတာ အတွက် code တွေ မတူပါဘူး။ Zawgyi မှာ ရရစ် ကို ဗျည်း ရှေ့မှာ ရိုက်ပါတယ်။ ဒါကြောင့် စာတမ်းနဲ့ claim က ကိုက်ညီမှု မရှိနိုင်ပါဘူး။ တတိယ — ပုံစံတူ စာလုံးတွေ။ ဝ (wa) နဲ့ ၀ (သုည) က တူတူပဲ၊ ရ နဲ့ ၇ လည်း ဆင်တယ်။ ေ ကို ဗျည်း ရှေ့မှာ ရိုက်တာမျိုးလည်း ရှိတယ်။ ကျွန်ုပ်ရဲ့ preprocessor က ဒါတွေကို ပထမဆုံး ပြင်ပါတယ်။"]</script>
+  <script id="notes-data" type="application/json">["[0:00–0:15] မင်္ဂလာပါ။ ကျွန်ုပ်က Ohnmar Nyunt၊ MMDT034 ပါ။ ဒီနေ့ မြန်မာစာ အဆိုတွေကို အထောက်အထားနဲ့ စစ်ဆေးပေးတဲ့ စနစ်အကြောင်း ပြောပါမယ်။ ဒါပေမယ့် မစခင် အရင် မေးခွန်း တစ်ခု မေးပါရစေ။ [0:15–0:45] ဒီ post ကို ကြည့်ပါ။ ‘ဆွန်ဇု၏ စစ်ပညာကျမ်းတွင် အခန်း ၃၀ ပါဝင်သည်’ တဲ့။ အမှန်လို့ ထင်ရင် လက်ထောင်ပါ … အမှားလို့ ထင်ရင် လက်ထောင်ပါ … (ခဏ စောင့်) စိတ်ဝင်စားစရာ ကောင်းတယ်နော်။ ကျွန်ုပ်တို့ အများစုက ဘယ်စာအုပ်ကိုမှ မဖွင့်ကြည့်ဘဲ ခံစားချက်နဲ့ ဖြေလိုက်ကြတာပါ။ အဖြေကို demo မှာ စနစ်က ပြပါလိမ့်မယ်။ (ဒီ post ပုံစံက ဥပမာအဖြစ် ဖန်တီးထားတာပါ — claim ကတော့ test set ထဲက CLM_TEST_008 ပါ။)", "[~0:50] ဇာတ်ကောင်တစ်ယောက်ကို စဉ်းစားကြည့်ပါ — ‘သီတာ’ ဆိုတဲ့ တက္ကသိုလ်ကျောင်းသူလေးပါ။ (ဥပမာ ဇာတ်ကောင်ပါ)။ မနက်ခင်း Facebook ဖွင့်လိုက်တော့ post သုံးခု တွေ့တယ်။ ပထမ — ထောပတ်သီး နေ့တိုင်းစားရင် အသက် ဆယ်နှစ် ပိုရှည်တယ်တဲ့။ ဒုတိယ — quiz page တစ်ခုက ဆွန်ဇုရဲ့ စစ်ပညာကျမ်းမှာ အခန်း ၃၀ ပါတယ်တဲ့။ တတိယ — ဓမ္မ page တစ်ခုက သုတ္တန်ပိဋကမှာ နိကာယ်ငါးရပ် ပါတယ်တဲ့။ သုံးခုစလုံး ယုံကြည်ရလောက်အောင် ရေးထားတယ်။ ဘယ်ဟာ အမှန်လဲ၊ ဘယ်ဟာ အမှားလဲ၊ ဘယ်ဟာကို ဘယ်သူမှ မသိသေးလဲ — သီတာ ဘယ်လို ခွဲခြားမလဲ?", "[~0:50] သီတာ ဘာကြောင့် အခက်တွေ့သလဲ။ ပထမ — မြန်မာ post တွေ မျှဝေမှု များပေမယ့် စစ်ဆေးပေးသူ နည်းပါတယ်။ ဒုတိယ — ကွန်ပျူတာအတွက် မြန်မာစာက ခက်ပါတယ်။ စကားလုံးကြား space မရှိဘူး၊ Zawgyi နဲ့ Unicode နှစ်မျိုး ရှိတယ်၊ fact-check dataset လည်း မရှိသလောက်ပါ။ တတိယ — AI chatbot ကို မေးမယ်ဆိုရင်လည်း မြန်မာစာ နည်းနည်းပဲ သင်ထားလို့ မသိတဲ့အခါ ချောမွေ့ပြီး ယုံရလောက်တဲ့ အဖြေကို လုပ်ကြံပြောတတ်ပါတယ်။ ဒါကို hallucination လို့ ခေါ်ပါတယ်။ ဒါကြောင့် ကျွန်ုပ်တို့ လိုတာက အထောက်အထားကို ပြနိုင်ပြီး မသိရင် မသိဘူးလို့ ဝန်ခံရဲတဲ့ စစ်ဆေးသူ တစ်ယောက်ပါ။", "[~0:40] သီတာလို လူတစ်ယောက်ချင်းစီအတွက် ပြဿနာက ရိုးရိုးလေးပါ — နေ့တိုင်း အဆိုတွေ အများကြီး ထွက်လာပေမယ့် တစ်ခုချင်း စာအုပ်ဖွင့်ပြီး လိုက်စစ်ဖို့ အချိန်နဲ့ လုပ်အား မလုံလောက်ပါဘူး။ ဒါကြောင့် ကျွန်ုပ်ရဲ့ ရည်မှန်းချက်က — အဆိုတစ်ခုကို ထည့်လိုက်တာနဲ့ စာတမ်းစုထဲက အထောက်အထားကို ရှာပြီး မှန်တယ်၊ မှားတယ်၊ ဒါမှမဟုတ် အချက်အလက် မလုံလောက်ဘူး ဆိုတာကို အလိုအလျောက် ခွဲခြားပေးတဲ့ Verification & Evidence Retrieval စနစ် တစ်ခု တည်ဆောက်ဖို့ပါ။", "[~0:50] ဒီစနစ်က ဘယ်သူတွေအတွက် အသုံးဝင်မလဲ။ သတင်းထောက်နဲ့ fact-checker တွေအတွက် — viral ဖြစ်နေတဲ့ post ကို ယုံကြည်ရတဲ့ source နဲ့ မြန်မြန် တိုက်စစ်နိုင်တယ်။ ကျောင်းသားနဲ့ ဆရာတွေအတွက် — assignment ထဲက အချက်အလက်ကို စာအုပ်နဲ့ တိုက်စစ်နိုင်တယ်။ ဓမ္မစာပေ လေ့လာသူတွေအတွက် — ကျွန်ုပ်ရဲ့ corpus မှာ ဘာသာရေး စာတမ်း ၁၃ ခု ပါလို့ ပိဋကတ် အချက်အလက်တွေကို မူရင်းနဲ့ တိုက်နိုင်တယ်။ နောက်ဆုံး — chatbot တွေ အဖြေ မထုတ်ခင် အထောက်အထား ရှိမရှိ စစ်ပေးတဲ့ အကာအကွယ် (guardrail) အဖြစ်လည်း သုံးနိုင်ပါတယ်။", "[0:45–1:45] Fact-checking ဆိုတာ ဘာလဲ။ ကျွန်ုပ်တို့ task မှာ input နှစ်ခု ရှိပါတယ်။ claim ဆိုတာ အချက်အလက် တစ်ခုကို ပြောထားတဲ့ မြန်မာ စာကြောင်း တစ်ကြောင်းပါ။ corpus ဆိုတာ ယုံကြည်ရတဲ့ မြန်မာ စာတမ်း ၃၅ ခု — စနစ် အချက်အလက် ရှာတဲ့ တစ်ခုတည်းသော နေရာပါ။ output က တံဆိပ် သုံးမျိုးထဲက တစ်ခုပါ။ SUPPORTS — အထောက်အထားက claim ကို အတည်ပြုတယ်၊ ဥပမာ သုတ္တန်ပိဋကမှာ နိကာယ်ငါးရပ် ပါတယ်။ REFUTES — အထောက်အထားက claim ကို ဆန့်ကျင်တယ်၊ ဥပမာ အခန်း ၃၀ လို့ ပြောပေမယ့် စာတမ်းက ၁၃ လို့ ပြောတယ်။ NOT ENOUGH INFO — corpus ထဲမှာ အထောက်အထား မရှိဘူး၊ ဥပမာ ထောပတ်သီး စားရင် အသက် ဆယ်နှစ် ရှည်တယ်ဆိုတာ။ အရေးကြီးတာက ‘မှားတယ်’ နဲ့ ‘မသိဘူး’ ကို ခွဲခြားတာပါ။", "[3:30–4:00] ဒီအချိန်မှာ fact-checking ဆိုတာ ဘာလဲ၊ မြန်မာစာ ဘာကြောင့် ခက်လဲ၊ label သုံးမျိုးက ဘာကို ဆိုလိုလဲ ဆိုတာ သိသွားပါပြီ။ ကျန်တဲ့ အချိန်မှာ သုံးဆင့် သွားပါမယ်။ ပထမ — demo၊ claim ကို ရိုက်ထည့်ပြီး label နဲ့ အထောက်အထားကို တိုက်ရိုက် ပြပါမယ်။ ဒုတိယ — Pipeline A၊ claim ထဲက စကားလုံးတွေကိုသာ ကြည့်တဲ့ Naive Bayes။ တတိယ — Pipeline B၊ အထောက်အထား ရှာပြီး နှိုင်းယှဉ်တဲ့ RAG။", "[~0:45] နောက်ကွယ်မှာ ဘာတွေ ရှိသလဲ။ စာကြည့်တိုက်က မြန်မာ e-library တွေကနေ ကျွန်ုပ် ကိုယ်တိုင် စုစည်းထားတဲ့ စာတမ်း ၃၅ ခုပါ။ ဘာသာရေး စာတမ်း ၁၃ ခုက အများဆုံးဖြစ်ပြီး ကျန်တာတွေက စိုက်ပျိုးရေး ၆၊ စာပေ ၄၊ နည်းပညာ ၄၊ သမိုင်း ၃၊ ထင်ရှားသူများ ၃၊ ဘဏ္ဍာရေးနဲ့ သိပ္ပံ တစ်ခုစီ ပါ။ စာမေးပွဲအတွက် အဆို ၆၂ ခု ပြင်ဆင်ပြီး ၄၉ ခုကို လေ့ကျင့်ဖို့၊ ၁၃ ခုကို စနစ် တစ်ခါမှ မမြင်ဖူးတဲ့ စာမေးပွဲအဖြစ် ဖယ်ထားတယ်။ python app.py တစ်ကြောင်းတည်းနဲ့ studentverifier() က data/*.csv ကို ဖတ်ပြီး ခန့်မှန်းချက် CSV ကို ထုတ်ပေးပါတယ်။", "ပထမ ဖိုင်က corpus.csv ပါ။ ဒါကို စာအုပ် တစ်အုပ်လို့ မှတ်ပါ။ ယုံကြည်ရတဲ့ မြန်မာ စာတမ်း ၃၅ ခု ပါတယ်။ စနစ်က အဖြေကို ဒီစာအုပ်ထဲကနေပဲ ရှာပါတယ် — အပြင်က ဘာမှ မယူပါဘူး။", "ဒုတိယ ဖိုင်က claims.csv — မေးခွန်းနဲ့ အဖြေပါ။ စစ်ဆေးရမယ့် အဆို ၆၂ ခု ပါပြီး တစ်ခုချင်းစီမှာ မှန်ကန်တဲ့ အဖြေ (label) နဲ့ အဖြေရှိတဲ့ စာတမ်း (evidence_id) ပါတယ်။", "တတိယ ဖိုင်က train_claims.csv — လေ့ကျင့်ခန်းပါ။ claims ၆၂ ခုထဲက ၄၉ ခုကို အဖြေနဲ့တကွ ပေးထားပြီး စနစ်က ဒါတွေကို ကြည့်ပြီး သင်ယူပါတယ်။", "နောက်ဆုံး ဖိုင်က test_claims.csv — စာမေးပွဲပါ။ ကျန်တဲ့ ၁၃ ခုမှာ အဖြေ မပါပါဘူး။ စနစ် တစ်ခါမှ မမြင်ဖူးတဲ့ မေးခွန်းတွေ ဖြစ်လို့ စနစ်ရဲ့ တကယ့် အမှတ်ကို ဒီကနေ သိရပါတယ်။", "[1:45–2:45] ဒီ task က အင်္ဂလိပ်စာမှာထက် မြန်မာစာမှာ ဘာကြောင့် ပိုခက်သလဲ။ ပထမ — စကားလုံးကြား space မရှိပါဘူး။ အင်္ဂလိပ်မှာ space နဲ့ စကားလုံး ခွဲလို့ရပေမယ့် မြန်မာမှာ ‘ကျမ်းတွင်အခန်း၁၃ခန်းပါဝင်သည်’ က တစ်ဆက်တည်းပါ။ ဒါကြောင့် sylbreak regex နဲ့ ဝဏ္ဏ ခွဲရပါတယ်။ ဒုတိယ — Zawgyi နဲ့ Unicode။ ‘မြန်မာ’ ဆိုတဲ့ စကားလုံးက မျက်စိနဲ့ ကြည့်ရင် တူပေမယ့် ကွန်ပျူတာ အတွက် code တွေ မတူပါဘူး။ Zawgyi မှာ ရရစ် ကို ဗျည်း ရှေ့မှာ ရိုက်ပါတယ်။ ဒါကြောင့် စာတမ်းနဲ့ claim က ကိုက်ညီမှု မရှိနိုင်ပါဘူး။ တတိယ — ပုံစံတူ စာလုံးတွေ။ ဝ (wa) နဲ့ ၀ (သုည) က တူတူပဲ၊ ရ နဲ့ ၇ လည်း ဆင်တယ်။ ေ ကို ဗျည်း ရှေ့မှာ ရိုက်တာမျိုးလည်း ရှိတယ်။ ကျွန်ုပ်ရဲ့ preprocessor က ဒါတွေကို ပထမဆုံး ပြင်ပါတယ်။", "[~1:00] Pipeline A က ရိုးရာ စာရင်းအင်း classifier ပါ။ မြန်မာ စာသားကို ဝဏ္ဏ ခွဲပြီး TF-IDF matrix — claim ၄၉ ခု × term ၂,၈၁၂ ခု — ပြောင်းတယ်။ Multinomial Naive Bayes က Laplace α = 1 နဲ့ ဖြစ်နိုင်ခြေ အမြင့်ဆုံး label ကို ရွေးတယ်။ ပြဿနာက — A က claim ကိုပဲ ကြည့်တယ်။ အောက်က claim နှစ်ခုကို ကြည့်ပါ — တစ်ခုက အမှန်၊ တစ်ခုက အမှား။ ကွာတာ ကိန်းဂဏန်း တစ်ခုပဲ။ စကားလုံးတွေ တူနေတော့ Naive Bayes က ခွဲမရဘူး။ စကားလုံးတွေက ခေါင်းစဉ်ကို ပြတယ်၊ အမှန်ကို မပြဘူး။ ရလဒ် — test ၁၃ ခုမှာ တစ်ခုမှ မမှန်ပါ။", "[~1:10] Pipeline B က အထောက်အထား ထည့်သုံးပါတယ်။ claim ကို စာတမ်းတွေနဲ့ vector space တစ်ခုတည်းမှာ TF-IDF vector ပြောင်းတယ်။ cosine similarity နဲ့ စာတမ်း ၃၅ ခုလုံးကို နှိုင်းယှဉ်ပြီး Top-3 ကို ယူတယ်။ hook ထဲက ဆွန်ဇု claim အတွက် DOC_026 က 0.38 နဲ့ ထင်ထင်ရှားရှား ပထမ ရတယ်။ ကျန်တာတွေက 0.09 ပဲ။ ပြီးရင် RAG reasoning က စည်းမျဉ်း ၅ ခုကို အစဉ်လိုက် စစ်တယ် — ပထမဆုံး ကိုက်တဲ့ စည်းမျဉ်းက အနိုင်ရတယ်။ ဆင်တူမှု τ 0.24 ထက် နိမ့်ရင် NOT ENOUGH INFO၊ ကိန်းဂဏန်း မတူရင် REFUTES၊ အမည် မတူရင် REFUTES၊ မဟုတ် ပါရင် ပြောင်းပြန်၊ claim ဝဏ္ဏ ၈၅% ကျော် ပါရင် SUPPORTS ပါ။ test ၁၃ ခုမှာ ၁၂ ခု မှန်ပါတယ်။", "[~0:50] ဒါကြောင့် ကျွန်ုပ်ရဲ့ စနစ်ကို ဂရုစိုက်တတ်တဲ့ စာကြည့်တိုက်မှူး တစ်ယောက်လို တည်ဆောက်ခဲ့ပါတယ်။ သူ့ကို မေးခွန်း မေးရင် ချက်ချင်း မဖြေပါဘူး။ ပထမ — စာကြည့်တိုက်ထဲက သက်ဆိုင်ရာ စာအုပ်ကို ရှာတယ်။ ကျွန်ုပ်ရဲ့ စာကြည့်တိုက်က မြန်မာ စာတမ်း ၃၅ ခုပါ။ ဒုတိယ — အဆိုနဲ့ အထောက်အထား စာကြောင်းကို ကိန်းဂဏန်း၊ အမည်၊ ငြင်းဆိုချက် စတာတွေနဲ့ နှိုင်းယှဉ်တယ်။ တတိယ — ဆုံးဖြတ်တယ်။ စတုတ္ထ — ဘယ်စာအုပ်က ဘာပြောထားလဲ ဆိုတာကို မြန်မာလို ကိုးကားပြီး ရှင်းပြတယ်။ အရေးကြီးတာက ဒီစနစ်မှာ စာထွင်ရေးတဲ့ LLM မပါဘူး။ ဒါကြောင့် အထောက်အထားမှာ မပါတဲ့ အချက်ကို ထွင်မပြောနိုင်ပါဘူး။"]</script>
   <script>
   (() => {
     "use strict";
@@ -949,7 +972,7 @@
       x0 = y0 = null;
     });
 
-    // slide 2 poll
+    // slide 1 poll
     $$(".vote").forEach((b) => (b.onclick = () => $$(".vote").forEach((v) => v.classList.toggle("on", v === b))));
 
     window.addEventListener("hashchange", () => go((parseInt(location.hash.slice(1), 10) || 1) - 1, false));
