@@ -308,7 +308,7 @@
     .flow { display: flex; gap: 0; align-items: stretch; margin: 6px 0 22px; overflow-x: auto; padding-bottom: 4px; }
     .flow .node { flex: 1; min-width: 120px; padding: 14px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow); }
     .flow .node b { display: block; font-size: 13.5px; line-height: 1.4; }
-    .flow .node span { display: block; font-family: var(--mm); font-size: 13.5px; color: var(--muted); margin-top: 4px; }
+    .flow .node > span { display: block; font-family: var(--mm); font-size: 13.5px; color: var(--muted); margin-top: 4px; }
     .flow .arrow { display: grid; place-items: center; color: var(--accent); font-size: 20px; padding: 0 4px; flex: none; }
     .vs { display: grid; gap: 12px; }
     .vs .row { display: flex; align-items: center; gap: 14px; justify-content: space-between; padding: 14px 18px; border-radius: 12px; background: var(--surface-2); }
@@ -360,6 +360,279 @@
       background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: 0 12px 28px rgba(79, 70, 229, .3); }
     @media (prefers-reduced-motion: reduce) { .slide.active .pg-art img { animation: none; } .pg-card, .pg-art img { transition: none; } }
     @media (max-width: 900px) { .pg { grid-template-columns: minmax(0, 1fr); } .pg-arrow span { transform: rotate(90deg); } }
+
+    .tau { font-family: "Cambria Math", Cambria, "Times New Roman", serif; font-style: italic; font-weight: inherit; text-transform: none; letter-spacing: 0; }
+    /* ---------- RAG deep-dive (Part 2) ---------- */
+    .rg-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px 24px; margin-bottom: 18px; }
+    .rg-head > div:first-child { flex: 1; min-width: 0; }
+    .rg-head > .rg-stage, .rg-head > .rg-rag { flex: none; margin-top: 4px; }
+    .rg-head .lead { margin-bottom: 0; max-width: none; }
+    .rg-stage { display: inline-flex; gap: 4px; padding: 4px; border-radius: 999px; background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow); }
+    .rg-stage > span { font: 700 11px Inter, sans-serif; letter-spacing: .08em; text-transform: uppercase; padding: 6px 12px; border-radius: 999px; color: var(--muted); white-space: nowrap; }
+    .rg-stage > span.on { color: #fff; background: linear-gradient(135deg, var(--accent), var(--accent-2)); }
+    .rg-rag { display: inline-flex; gap: 8px; }
+    .rg-rag span { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font: 800 14px Inter, sans-serif; color: var(--muted); background: var(--surface); border: 1px solid var(--border); }
+    .rg-rag span.on { color: #fff; border-color: transparent; background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: 0 8px 20px rgba(79, 70, 229, .3); }
+    .rg-grad { background: linear-gradient(120deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+    .rg-code { background: #0f172a; color: #e2e8f0; border-radius: var(--radius); padding: 18px 20px; font: 13px/1.75 var(--mono); white-space: pre; overflow-x: auto; box-shadow: var(--shadow); margin: 0; }
+    .rg-code .c { color: #94a3b8; }
+    .rg-code .k { color: #a5b4fc; }
+    .rg-code .f { color: #7dd3fc; }
+    .rg-code .r { color: #fca5a5; } .rg-code .s { color: #6ee7b7; } .rg-code .n { color: #fde68a; }
+    .rg-code .file { display: block; color: #94a3b8; font-size: 11.5px; letter-spacing: .04em; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid rgba(148, 163, 184, .2); }
+    :root[data-theme="dark"] .rg-code { background: #070a12; border: 1px solid var(--border); }
+
+    .rg-mini { font: 700 11px Inter, var(--mm); letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+    .rg-mm { font-family: var(--mm); line-height: 1.9; }
+
+    /* 1 · intro */
+    .rg-intro { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 48px; align-items: center; }
+    .rg-intro h1 { font-size: clamp(38px, 5.4vw, 66px); line-height: 1.12; font-weight: 800; letter-spacing: -.025em; margin: 8px 0 0; }
+    .rg-intro h1 .rg-grad { display: inline-block; }
+    .rg-letters { display: grid; gap: 16px; }
+    .rg-letter { display: flex; align-items: center; gap: 18px; padding: 16px 20px; }
+    .rg-letter .big { width: 64px; height: 64px; flex: none; border-radius: 20px; display: grid; place-items: center; color: #fff; font: 800 30px Inter, sans-serif;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: 0 12px 28px rgba(79, 70, 229, .28); }
+    .rg-letter b { display: block; font-family: var(--mm); font-size: 17px; line-height: 1.8; }
+    .rg-letter div > span { display: block; font-family: var(--mm); color: var(--muted); font-size: 14.5px; line-height: 1.8; }
+    .slide.active .rg-letter { animation: rg-up .6s cubic-bezier(.2, .8, .2, 1) both; }
+    .slide.active .rg-letter:nth-child(2) { animation-delay: .1s; } .slide.active .rg-letter:nth-child(3) { animation-delay: .2s; }
+    @keyframes rg-up { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+    /* 2 · four steps */
+    .rg-steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; margin-top: 8px; }
+    .rg-step { position: relative; padding: 20px; }
+    .rg-step .top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .rg-step .no { width: 30px; height: 30px; border-radius: 10px; display: grid; place-items: center; font: 800 14px Inter; background: var(--accent-soft); color: var(--accent); }
+    .rg-step .task { font: 700 10.5px Inter; letter-spacing: .12em; color: var(--muted); padding: 3px 8px; border-radius: 6px; background: var(--surface-2); }
+    .rg-step h3 { font: 700 19px Inter, var(--mm); margin: 0 0 4px; line-height: 1.5; }
+    .rg-step p { margin: 0; }
+    .rg-step:not(:last-child)::after { content: ""; position: absolute; top: 50%; right: -15px; width: 12px; height: 12px; z-index: 2;
+      border-top: 2px solid var(--accent); border-right: 2px solid var(--accent); transform: translateY(-50%) rotate(45deg); }
+    .rg-step.hot { background: linear-gradient(135deg, var(--accent), var(--accent-2)); border-color: transparent; color: #fff; }
+    .rg-step.hot p, .rg-step.hot .task { color: rgba(255, 255, 255, .85); }
+    .rg-step.hot .task { background: rgba(255, 255, 255, .18); }
+    .rg-step.hot .no { background: rgba(255, 255, 255, .22); color: #fff; }
+    .rg-example { display: flex; align-items: center; gap: 18px; margin-top: 26px; padding: 20px 24px; }
+    .rg-example .claim { font-size: clamp(19px, 2vw, 24px); }
+
+    /* section dividers */
+    .rg-sec { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 44px; align-items: center; }
+    .rg-sec.solo { grid-template-columns: minmax(0, 1fr); }
+    .rg-sec .num { font: 800 clamp(64px, 9vw, 120px) Inter, sans-serif; line-height: 1; letter-spacing: -.04em; }
+    .rg-sec h2 { font: 800 clamp(36px, 5vw, 60px) Inter, sans-serif; letter-spacing: -.02em; margin: 6px 0 10px; }
+    .rg-sec .lead { margin-bottom: 18px; }
+    .rg-sec .rg-rag { margin-bottom: 22px; }
+    .rg-shot { padding: 10px; }
+    .rg-shot img { display: block; width: 100%; height: auto; border-radius: 12px; background: #fff; }
+    .rg-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; counter-reset: rgl; }
+    .rg-list li { counter-increment: rgl; display: flex; align-items: center; gap: 14px; padding: 14px 18px; font-family: var(--mm); font-size: 16.5px; line-height: 1.8; }
+    .rg-list li::before { content: counter(rgl); width: 32px; height: 32px; flex: none; border-radius: 10px; display: grid; place-items: center;
+      font: 800 14px Inter; color: #fff; background: linear-gradient(135deg, var(--accent), var(--accent-2)); }
+    .rg-formula { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 30px; }
+    .rg-formula .chip { padding: 10px 18px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow); font: 600 14.5px Inter; }
+    .rg-formula .op { font: 700 20px Inter; color: var(--accent); }
+    .rg-formula .chip.out { color: #fff; border-color: transparent; background: linear-gradient(135deg, var(--accent), var(--accent-2)); }
+
+    /* 4 · cosine */
+    .rg-two { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 18px; align-items: stretch; }
+    .rg-stack { display: grid; gap: 14px; align-content: start; }
+    .rg-vec { display: flex; flex-direction: column; }
+    .rg-vec svg { width: 100%; height: auto; flex: 1; fill: none; }
+    .rg-vec .ax { stroke: var(--border); stroke-width: 1.5; }
+    .rg-vec .v1 { stroke: var(--accent); } .rg-vec .v2 { stroke: var(--sup); } .rg-vec .v3 { stroke: var(--muted); }
+    .rg-vec .v1, .rg-vec .v2, .rg-vec .v3 { stroke-width: 3; stroke-linecap: round; }
+    .rg-vec .h1 { fill: var(--accent); } .rg-vec .h2 { fill: var(--sup); } .rg-vec .h3 { fill: var(--muted); }
+    .rg-vec text { font: 600 13px Inter, sans-serif; }
+    .rg-vec .t1 { fill: var(--accent); } .rg-vec .t2 { fill: var(--sup); } .rg-vec .t3 { fill: var(--muted); }
+    .rg-vec .arc { stroke: var(--accent-2); stroke-width: 1.5; stroke-dasharray: 4 4; }
+    .rg-vec .o { fill: var(--text); }
+    .slide.active .rg-vec .v1, .slide.active .rg-vec .v2, .slide.active .rg-vec .v3 { stroke-dasharray: 400; animation: rg-draw 1s ease both; }
+    .slide.active .rg-vec .v2 { animation-delay: .15s; } .slide.active .rg-vec .v3 { animation-delay: .3s; }
+    @keyframes rg-draw { from { stroke-dashoffset: 400; } to { stroke-dashoffset: 0; } }
+    .rg-eq { background: var(--accent-soft); border-color: transparent; box-shadow: none; }
+    .rg-eq .math { font: 600 clamp(15px, 1.5vw, 19px) var(--mono); color: var(--text); margin: 6px 0 10px; overflow-x: auto; white-space: nowrap; }
+    .rg-eq p { font-size: 14.5px; }
+    .rg-note { display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; }
+    .rg-note .ico { width: 40px; height: 40px; font-size: 20px; border-radius: 12px; }
+    .rg-note p { font-size: 15px; }
+
+    /* 5 · top-k */
+    .rg-chart .sec-t { margin-bottom: 18px; }
+    .rg-hbars { display: grid; gap: 16px; }
+    .rg-hbar { display: grid; grid-template-columns: 82px 1fr 52px; gap: 12px; align-items: center; }
+    .rg-hbar .track { height: 30px; border-radius: 10px; background: var(--surface-2); overflow: hidden; }
+    .rg-hbar .rg-fill { height: 100%; width: 0; border-radius: 10px; background: color-mix(in srgb, var(--muted) 45%, transparent); transition: width 1s cubic-bezier(.2, .8, .2, 1); }
+    .rg-hbar.top .rg-fill { background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
+    .rg-hbar b { font: 700 14px var(--mono); text-align: right; }
+    .rg-hbar.top b { color: var(--accent); }
+    .rg-ok { display: flex; gap: 10px; align-items: center; margin-top: 18px; padding: 12px 14px; border-radius: 12px; background: var(--sup-bg); color: var(--sup); font: 600 15px var(--mm); line-height: 1.8; }
+    .rg-ok svg { font-size: 20px; }
+    .rg-docs { display: grid; gap: 10px; }
+    .rg-doc { display: grid; grid-template-columns: 34px 1fr; gap: 14px; align-items: start; padding: 14px 16px; }
+    .rg-doc .rk { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; font: 800 15px Inter; background: var(--surface-2); color: var(--muted); }
+    .rg-doc.win { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft), var(--shadow); }
+    .rg-doc.win .rk { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; }
+    .rg-doc .id { font: 600 12px var(--mono); color: var(--muted); }
+    .rg-doc p { color: var(--text); font-size: 15px; line-height: 1.85; }
+    .rg-doc mark { background: var(--accent-soft); color: var(--accent); }
+
+    /* 6 · threshold */
+    .rg-why { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-bottom: 18px; }
+    .rg-why .card { display: flex; gap: 14px; align-items: flex-start; padding: 18px; }
+    .rg-why .ico { width: 42px; height: 42px; font-size: 21px; border-radius: 12px; }
+    .rg-why p { font-size: 15px; }
+    .rg-line { position: relative; padding: 0; overflow: hidden; }
+    .rg-zones { position: relative; height: 230px; display: grid; grid-template-columns: 48% 52%; }
+    .rg-zones .z { padding: 14px 18px; font: 700 11.5px Inter, var(--mm); letter-spacing: .1em; text-transform: uppercase; }
+    .rg-zones .z.nei { background: var(--nei-bg); color: var(--nei); }
+    .rg-zones .z.ev { background: var(--accent-soft); color: var(--accent); }
+    .rg-tau { position: absolute; top: 0; bottom: 0; left: 48%; border-left: 2px dashed var(--accent); }
+    .rg-tau > span { position: absolute; top: 44px; left: 8px; font: 700 13px var(--mono); color: var(--accent); white-space: nowrap; }
+    .rg-axis { position: absolute; left: 0; right: 0; top: 150px; height: 2px; background: var(--text); opacity: .7; }
+    .rg-pt { position: absolute; top: 150px; transform: translate(-50%, -50%); }
+    .rg-pt i { display: block; width: 18px; height: 18px; border-radius: 50%; border: 3px solid var(--surface); box-shadow: 0 0 0 1px var(--border), 0 4px 10px rgba(15, 23, 42, .2); }
+    .rg-pt.p1 i { background: var(--nei); } .rg-pt.p2 i { background: var(--accent); } .rg-pt.p3 i { background: var(--ref); }
+    .rg-pt .up, .rg-pt .dn { position: absolute; left: 50%; transform: translateX(-50%); text-align: center; white-space: nowrap; }
+    .rg-pt .up { bottom: 26px; font: 600 13px/1.7 var(--mm); }
+    .rg-pt .dn { top: 24px; font: 600 12px/1.5 var(--mono); color: var(--muted); }
+    .rg-pt .dn b { display: block; font-size: 14px; color: var(--text); }
+    .rg-pt.p1 .up { color: var(--nei); } .rg-pt.p2 .up { color: var(--accent); } .rg-pt.p3 .up { color: var(--ref); }
+    .slide.active .rg-pt { animation: rg-pop .5s cubic-bezier(.2, .8, .2, 1) both; }
+    .slide.active .rg-pt.p2 { animation-delay: .15s; } .slide.active .rg-pt.p3 { animation-delay: .3s; }
+    @keyframes rg-pop { from { opacity: 0; transform: translate(-50%, -30%); } to { opacity: 1; transform: translate(-50%, -50%); } }
+    .rg-ticks { display: flex; justify-content: space-between; padding: 8px 2px 10px; font: 500 12px var(--mono); color: var(--muted); }
+
+    /* 7 · metrics */
+    .rg-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+    .rg-stat .k { font: 800 13px Inter; letter-spacing: .1em; color: var(--accent); }
+    .rg-stat .v { font: 800 clamp(40px, 4.6vw, 58px) Inter, sans-serif; letter-spacing: -.02em; line-height: 1.15; margin: 4px 0 2px; }
+    .rg-stat .s { font: 500 13px var(--mm); color: var(--muted); }
+    .rg-stat p { margin-top: 10px; color: var(--text); font-size: 15px; }
+    .rg-stat.lead-card { background: linear-gradient(135deg, var(--accent), var(--accent-2)); border-color: transparent; color: #fff; }
+    .rg-stat.lead-card .k, .rg-stat.lead-card .s, .rg-stat.lead-card p { color: rgba(255, 255, 255, .9); }
+    .rg-mrr { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 18px; margin-top: 18px; align-items: stretch; }
+    .rg-ranks { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+    .rg-ranks div { text-align: center; }
+    .rg-ranks small { display: block; font: 500 13px var(--mm); color: var(--muted); margin-bottom: 6px; }
+    .rg-ranks b { display: block; padding: 12px 0; border-radius: 12px; font: 800 20px Inter; background: var(--surface-2); }
+    .rg-ranks div:first-child b { color: #fff; background: linear-gradient(135deg, var(--accent), var(--accent-2)); }
+    .rg-mrr .rg-code { display: flex; align-items: center; justify-content: center; white-space: normal; font-size: clamp(16px, 1.4vw, 20px); font-weight: 600; line-height: 1.6; text-align: center; }
+
+    /* 9 · augmentation */
+    .rg-aug { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1.4fr); gap: 18px; align-items: stretch; margin-top: 6px; }
+    .rg-aug .plus { align-self: center; width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; color: #fff; font: 700 28px Inter;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: 0 12px 28px rgba(79, 70, 229, .3); }
+    .rg-aug .card { padding: 24px; }
+    .rg-aug .claim { font-size: clamp(18px, 1.9vw, 22px); }
+    .rg-sent { font-family: var(--mm); font-size: 17px; line-height: 1.95; padding: 12px 16px; border-radius: 12px; background: var(--surface-2); }
+    .rg-sent + .rg-sent { margin-top: 10px; }
+    .rg-sent.key { background: var(--sup-bg); }
+    .rg-aug .card.c { background: var(--ref-bg); border-color: transparent; }
+
+    /* 11 · rules */
+    .rg-rules { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+    .rg-table { padding: 0; overflow: hidden; }
+    .rg-table table { width: 100%; border-collapse: collapse; }
+    .rg-table th { text-align: left; font: 700 12px Inter, var(--mm); letter-spacing: .04em; color: var(--accent); background: var(--accent-soft); padding: 11px 14px; }
+    .rg-table td { font-family: var(--mm); font-size: 14.5px; line-height: 1.8; padding: 10px 14px; border-top: 1px solid var(--border); vertical-align: middle; }
+    .rg-table td.n { width: 44px; }
+    .rg-table td.n span { width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; font: 700 12.5px Inter; background: var(--surface-2); }
+    .rg-table tr.hit td { background: var(--accent-soft); }
+    .rg-table tr.hit td.n span { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; }
+    .rg-table .label.sm { font-size: 11px; }
+
+    /* 12 · explanation */
+    .rg-expl { display: grid; gap: 12px; }
+    .rg-row { display: grid; grid-template-columns: 52px 200px 1fr; gap: 18px; align-items: center; padding: 16px 20px; }
+    .rg-row .ico { width: 44px; height: 44px; font-size: 22px; border-radius: 13px; }
+    .rg-row b { display: block; font: 700 16px var(--mm); line-height: 1.7; }
+    .rg-row small { display: block; font: 500 13px var(--mm); color: var(--muted); line-height: 1.7; }
+    .rg-row .say { font-family: var(--mm); font-size: 16.5px; line-height: 1.95; }
+    .rg-row.final { background: var(--ref-bg); border-color: transparent; }
+    .rg-row.final .say { font: 800 20px Inter, var(--mm); color: var(--ref); }
+    .slide.active .rg-row { animation: rg-up .5s cubic-bezier(.2, .8, .2, 1) both; }
+    .slide.active .rg-row:nth-child(2) { animation-delay: .08s; } .slide.active .rg-row:nth-child(3) { animation-delay: .16s; } .slide.active .rg-row:nth-child(4) { animation-delay: .24s; }
+
+    /* 13 · NB vs RAG */
+    .rg-cmp { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.25fr); gap: 18px; align-items: start; }
+    .rg-cols { display: flex; justify-content: space-around; align-items: flex-end; gap: 18px; height: 170px; padding: 0 6px; border-bottom: 2px solid var(--border); }
+    .rg-grp { display: flex; align-items: flex-end; gap: 8px; height: 100%; }
+    .rg-col { width: 44px; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; }
+    .rg-col b { font: 700 12.5px var(--mono); margin-bottom: 4px; }
+    .rg-col .rg-fill { width: 100%; height: 0; border-radius: 8px 8px 0 0; background: color-mix(in srgb, var(--muted) 45%, transparent); transition: height 1s cubic-bezier(.2, .8, .2, 1); }
+    .rg-col.rag .rg-fill { background: linear-gradient(180deg, var(--accent-2), var(--accent)); }
+    .rg-col.rag b { color: var(--accent); }
+    .rg-xl { display: flex; justify-content: space-around; font: 600 13px Inter; color: var(--muted); padding-top: 8px; }
+    .rg-legend { display: flex; gap: 16px; justify-content: center; margin-top: 10px; font: 500 12.5px Inter; color: var(--muted); }
+    .rg-legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; background: color-mix(in srgb, var(--muted) 45%, transparent); }
+    .rg-legend span.rag::before { background: var(--accent); }
+    .rg-cm { width: 100%; border-collapse: separate; border-spacing: 4px; margin-top: 4px; }
+    .rg-cm th { font: 700 11px Inter; color: var(--muted); letter-spacing: .04em; padding: 4px; text-align: center; }
+    .rg-cm th:first-child { text-align: left; }
+    .rg-cm td { text-align: center; padding: 8px 0; border-radius: 8px; background: var(--surface-2); font: 600 14px var(--mono); color: var(--muted); }
+    .rg-cm td.d { background: var(--sup-bg); color: var(--sup); font-weight: 800; }
+    .rg-cm td.x { background: var(--ref-bg); color: var(--ref); font-weight: 800; }
+    .rg-vs td.b, .rg-vs th.b { background: var(--accent-soft); }
+    .rg-vs th.b { color: #fff; background: linear-gradient(135deg, var(--accent), var(--accent-2)); }
+    .rg-vs th.a { color: var(--muted); background: var(--surface-2); }
+    .rg-vs td:first-child { font-weight: 700; color: var(--text); }
+    .rg-vs tr:last-child td { font: 800 15px Inter, var(--mm); }
+    .rg-vs tr:last-child td.b { color: var(--accent); }
+    .rg-vs tr:last-child td.a { color: var(--ref); }
+
+    /* 14 · limitations */
+    .rg-fails { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .rg-fail { display: flex; flex-direction: column; gap: 14px; padding: 24px; }
+    .rg-flip { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; }
+    .rg-flip svg { color: var(--muted); }
+    .rg-fail .claim { font-size: clamp(17px, 1.7vw, 20px); }
+    .rg-fail .why { font-family: var(--mm); color: var(--muted); line-height: 1.95; margin: 0; }
+    .rg-lesson { margin-top: auto; display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; border-radius: 12px; background: var(--accent-soft); font: 600 15.5px var(--mm); line-height: 1.85; color: var(--text); }
+    .rg-lesson svg { color: var(--accent); font-size: 20px; margin-top: 5px; }
+
+    /* 15–16 · quiz */
+    .rg-quiz { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px; }
+    .rg-q { grid-column: span 2; padding: 18px; display: flex; flex-direction: column; }
+    .rg-q:nth-child(4) { grid-column: 2 / span 2; }
+    .rg-q .qh { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+    .rg-q .qn { flex: none; padding: 2px 10px; border-radius: 9px; font: 800 14px Inter; color: #fff; background: linear-gradient(135deg, var(--accent), var(--accent-2)); line-height: 1.9; }
+    .rg-q .qt { font: 700 15.5px var(--mm); line-height: 1.85; }
+    .rg-opts { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+    .rg-opts li { display: flex; gap: 10px; align-items: flex-start; padding: 6px 10px; border-radius: 10px; border: 1px solid transparent; font: 14px/1.8 var(--mm); color: var(--muted); }
+    .rg-opts li b { font: 700 13px Inter; color: var(--accent); line-height: 1.9; }
+    .rg-quiz.ask .rg-opts li { cursor: pointer; background: var(--surface-2); transition: border-color .15s, background .15s, color .15s; }
+    .rg-quiz.ask .rg-opts li:hover { border-color: var(--accent); color: var(--text); }
+    .rg-quiz.ask .rg-opts li.picked { border-color: var(--accent); background: var(--accent-soft); color: var(--text); }
+    .rg-opts li.right { background: var(--sup-bg); border-color: var(--sup); color: var(--text); font-weight: 600; }
+    .rg-opts li.right b { color: var(--sup); }
+    .rg-opts li.right::after { content: "✓"; margin-left: auto; color: var(--sup); font: 800 15px Inter; line-height: 1.9; }
+    .rg-because { margin-top: auto; padding-top: 12px; font: 13.5px/1.85 var(--mm); color: var(--text); }
+    .rg-because > span { display: block; padding: 8px 12px; border-radius: 10px; background: var(--accent-soft); }
+
+    @media (max-width: 980px) {
+      .rg-intro, .rg-sec, .rg-two, .rg-rules, .rg-cmp, .rg-mrr { grid-template-columns: minmax(0, 1fr); }
+      .rg-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .rg-step::after { display: none; }
+      .rg-quiz { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .rg-q, .rg-q:nth-child(4) { grid-column: auto; }
+      .rg-aug { grid-template-columns: minmax(0, 1fr); }
+      .rg-aug .plus { justify-self: center; }
+    }
+    @media (max-width: 640px) {
+      .rg-steps, .rg-stats, .rg-why, .rg-fails, .rg-quiz { grid-template-columns: minmax(0, 1fr); }
+      .rg-head { flex-wrap: wrap; }
+      .rg-row { grid-template-columns: 44px 1fr; }
+      .rg-row .say { grid-column: 1 / -1; }
+      .rg-stage > span { padding: 5px 8px; font-size: 10px; }
+      .rg-zones .z { font-size: 10px; padding: 10px; }
+      .rg-pt .up { font-size: 11px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .slide.active .rg-letter, .slide.active .rg-row, .slide.active .rg-pt, .slide.active .rg-vec .v1, .slide.active .rg-vec .v2, .slide.active .rg-vec .v3 { animation: none; }
+      .rg-hbar .rg-fill, .rg-col .rg-fill { transition: none; }
+    }
 
     /* ---------- bottom nav ---------- */
     .navbar {
@@ -608,6 +881,438 @@
       </div>
     </section>
 
+    <!-- RAG 1 · Overview -->
+    <section class="slide" aria-label="RAG overview">
+      <div class="frame rg-intro">
+        <div>
+          <span class="kicker"><i data-i="search"></i>Pipeline B</span>
+          <h1>RAG for Myanmar<br><span class="rg-grad">claim verification</span></h1>
+        </div>
+        <div class="rg-letters">
+          <div class="card rg-letter"><span class="big">R</span><div><b>ရှာဖွေခြင်း (Retrieval)</b><span>TF-IDF + cosine, Top-3</span></div></div>
+          <div class="card rg-letter"><span class="big">A</span><div><b>ဖြည့်စွက်ခြင်း (Augmentation)</b><span>claim + evidence စာကြောင်းများ</span></div></div>
+          <div class="card rg-letter"><span class="big">G</span><div><b>ထုတ်ပေးခြင်း (Generation)</b><span>stance rule များ + မြန်မာ ရှင်းလင်းချက်</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RAG 2 · Evidence-based decision -->
+    <section class="slide" aria-label="RAG · Evidence-based decision">
+      <div class="frame">
+        <!-- <span class="kicker"><i data-i="gavel"></i> Librarian + Judge</span> -->
+        <h2 class="title">Evidence အပေါ် အခြေခံတဲ့ ဆုံးဖြတ်ချက်</h2>
+        <p class="lead" style="max-width:none">စာကြည့်တိုက်မှူးက သက်ဆိုင်တဲ့စာအုပ်ကို ရှာပေးပြီး တရားသူကြီးက နှိုင်းယှဉ်ကာ ဆုံးဖြတ်ပါတယ်</p>
+        <div class="rg-steps">
+          <div class="card rg-step"><div class="top"></div><h3>Vector</h3><p>စာသားကို ဂဏန်းတန်း ပြောင်း</p></div>
+          <div class="card rg-step"><div class="top"></div><h3>Cosine Similarity</h3><p>ဘယ်လောက် ဆင်လဲ တိုင်း</p></div>
+          <div class="card rg-step"><div class="top"></div><h3>Top-K + <span class="tau">τ</span></h3><p>အဆင်ဆုံး document ရွေး</p></div>
+          <div class="card rg-step hot"><div class="top"></div><h3>RAG အဖြေ</h3><p>ယှဉ်ပြီး ဆုံးဖြတ်၊ ရှင်းပြ</p></div>
+        </div>
+        <div class="card rg-example">
+          <span class="ico"><i data-i="quote"></i></span>
+          <div><div class="rg-mini">Example claim</div><div class="claim">မင်္ဂလသုတ်တွင် မင်္ဂလာ ၂၈ ပါးကို ဟောကြားထားသည်။</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RAG 3 · 01 Retrieval -->
+    <section class="slide" aria-label="RAG · 01 Retrieval">
+      <div class="frame rg-sec">
+        <div>
+          <div class="rg-rag"><span class="on">R</span><span>A</span><span>G</span></div>
+          <div class="num rg-grad">01</div><br>
+          <h2>Retrieval</h2><br>
+          <p class="lead">Claim နဲ့ သက်ဆိုင်တဲ့ document ကို corpus ထဲမှာ ရှာပါတယ်။</p>
+          <div class="card rg-shot"><img src="img/rag-retrieval.png" alt="A claim scanning the 35-document corpus and lighting up the most relevant documents" width="1302" height="357" loading="lazy" decoding="async"></div>
+        </div>
+        <ol class="rg-list">
+          <li class="card">မြန်မာစာ normalization</li>
+          <li class="card">Syllable ခွဲခြင်း</li>
+          <li class="card">TF-IDF vector များ</li>
+          <li class="card">Cosine + Top-K</li>
+          <li class="card">Threshold <span class="tau">τ</span></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- RAG 4 · Cosine similarity -->
+    <section class="slide" aria-label="RAG · Cosine similarity">
+      <div class="frame">
+        <div class="rg-head">
+          <div>
+            <h2 class="title">Cosine Similarity</h2>
+            <h3 class="title">ဆင်တူတဲ့ စာသားတွေက ဦးတည်ရာ တူပါတယ်</h3>
+          </div>
+          <div class="rg-stage"><span>Vector</span><span class="on">Cosine</span><span>Top-K + <span class="tau">τ</span></span><span>RAG</span></div>
+        </div>
+        <div class="rg-two">
+          <div class="card rg-vec">
+            <div class="rg-mini">စာသား ၁ ခု = မြှား ၁ စင်း</div>
+            <svg viewBox="0 0 440 250" role="img" aria-label="Claim vector is close to DOC_003 (0.389) and far from DOC_004 (0.091)">
+              <defs>
+                <marker id="rgh1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="h1" d="M0 0 10 5 0 10z"/></marker>
+                <marker id="rgh2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="h2" d="M0 0 10 5 0 10z"/></marker>
+                <marker id="rgh3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="h3" d="M0 0 10 5 0 10z"/></marker>
+              </defs>
+              <line class="ax" x1="30" y1="225" x2="425" y2="225"/>
+              <line class="ax" x1="30" y1="225" x2="30" y2="15"/>
+              <path class="arc" d="M 114.3 154.3 A 110 110 0 0 1 127.1 173.4"/>
+              <line class="v1" x1="30" y1="225" x2="252" y2="39" marker-end="url(#rgh1)"/>
+              <line class="v2" x1="30" y1="225" x2="286" y2="89" marker-end="url(#rgh2)"/>
+              <line class="v3" x1="30" y1="225" x2="318" y2="195" marker-end="url(#rgh3)"/>
+              <circle class="o" cx="30" cy="225" r="5"/>
+              <text class="t1" x="205" y="30">Claim</text>
+              <text class="t2" x="296" y="86">DOC_003 · 0.389</text>
+              <text class="t3" x="250" y="180">DOC_004 · 0.091</text>
+            </svg>
+          </div>
+          <div class="rg-stack">
+            <div class="card rg-eq">
+              <!-- <div class="rg-mini">Cosine Similarity</div> -->
+              <div class="math">CosineSim(q, d) = (q · d) / (‖q‖ × ‖d‖)</div>
+              <p>q = claim ရဲ့ vector  ·  d = document တစ်ခုရဲ့ vector</p>
+              <p>1 = ဦးတည်ရာ တူ  ·  0 = ဘာမှ မဆိုင်</p>
+            </div>
+            <div class="card rg-note">
+              <span class="ico"><i data-i="swap"></i></span>
+              <div><div class="rg-mini">မြှားများ</div><p>Pipeline A ရဲ့ TF-IDF vector (ဂဏန်း 2,812 လုံး) ကိုပဲ ပြန်သုံးပါတယ်</p></div>
+            </div>
+            <pre class="rg-code"><span class="file">retriever.py  ·  vector တွေ အရှည် 1 ဖြစ်ပြီးသား</span>S = <span class="f">cosine_similarity</span>(
+        vectorizer.<span class="f">transform</span>(claims), self.D)
+<span class="c"># shape: claims x 35 documents</span></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RAG 5 · Top-K -->
+    <section class="slide" aria-label="RAG · Top-K">
+      <div class="frame">
+        <div class="rg-head">
+          <div>
+            <!-- <span class="kicker"><i data-i="search"></i> Top-K</span> -->
+            <h2 class="title">Document ၃၅ ခုလုံးကို အမှတ်ပေးပြီး အကောင်းဆုံး K ခု ယူပါတယ်</h2>
+            <p class="lead">Google search မှာ ထိပ်ဆုံးရလဒ်တွေ ပြသလိုပဲ အမှတ်အမြင့်ဆုံး document K ခုကို ရွေးပါတယ်</p>
+          </div>
+          <div class="rg-stage"><span>Vector</span><span>Cosine</span><span class="on">Top-K + <span class="tau">τ</span></span><span>RAG</span></div>
+        </div>
+        <div class="rg-two">
+          <div class="card rg-chart">
+            <div class="sec-t">CLM_006: cosine အမှတ် အမြင့်ဆုံး document ၃ ခု</div>
+            <div class="rg-hbars">
+              <div class="rg-hbar top"><span class="pill">DOC_003</span><div class="track"><div class="rg-fill" data-w="100"></div></div><b>0.389</b></div>
+              <div class="rg-hbar"><span class="pill">DOC_007</span><div class="track"><div class="rg-fill" data-w="44.5"></div></div><b>0.173</b></div>
+              <div class="rg-hbar"><span class="pill">DOC_004</span><div class="track"><div class="rg-fill" data-w="23.4"></div></div><b>0.091</b></div>
+            </div>
+            <div class="rg-ok"><i data-i="check"></i> DOC_003 က တကယ့် evidence ဖြစ်ပြီး ပထမနေရာ ရပါတယ်။</div>
+          </div>
+          <div class="rg-stack">
+            <div class="rg-docs">
+              <div class="card rg-doc win"><span class="rk">1</span><div><div class="id">DOC_003</div><p><mark>မင်္ဂလသုတ်</mark>တွင် <mark>မင်္ဂလာ</mark> ၃၈ ပါးကို <mark>ဟောကြားထားသည်</mark>။</p></div></div>
+              <div class="card rg-doc"><span class="rk">2</span><div><div class="id">DOC_007</div><p>… ကုမာရပဉှာ၊ <mark>မင်္ဂလသုတ်</mark>၊ ရတနသုတ်၊ … မေတ္တသုတ် တို့ ဖြစ်သည်။</p></div></div>
+              <div class="card rg-doc"><span class="rk">3</span><div><div class="id">DOC_004</div><p>ပဋ္ဌာန်းတွင် ပစ္စည်း ၂၄ <mark>ပါး</mark> ပါဝင်သည်။ … မဇ္ဈိမပဋိပဒါကို <mark>ဟောကြားထားသည်</mark>။</p></div></div>
+            </div>
+            <pre class="rg-code"><span class="file">retriever.py  ·  search(claims, k=3)</span>order = np.<span class="f">argsort</span>(-S, axis=<span class="n">1</span>)[:, :k]
+<span class="c"># highest score first</span></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RAG 6 · Threshold τ -->
+    <section class="slide" aria-label="RAG · Threshold">
+      <div class="frame">
+        <div class="rg-head">
+          <div>
+            <!-- <span class="kicker"><i data-i="shield"></i> Threshold <span class="tau">τ</span></span> -->
+            <h2 class="title">Threshold <span class="tau">τ</span> အောက်ဆိုရင် evidence မရှိပါ</h2>
+          </div>
+          <div class="rg-stage"><span>Vector</span><span>Cosine</span><span class="on">Top-K + <span class="tau">τ</span></span><span>RAG</span></div>
+        </div>
+        <p class="lead" style="max-width:none;margin:-6px 0 20px"><span class="tau">τ</span> (tau) ဆိုတာ အနိမ့်ဆုံး ဆင်တူမှုမှတ် (threshold) ပါ။ အမြင့်ဆုံး cosine က 0.24 ထက် နိမ့်ရင် <b>NOT ENOUGH INFO</b></p>
+        <div class="rg-why">
+          <div class="card"><span class="ico"><i data-i="check"></i></span><div><div class="rg-mini"><span class="tau">τ</span> ကို ဘယ်လို ရွေးလဲ</div><p>Train claim ၄၉ ခုပေါ်မှာ 0.20 မှ 0.35 အထိ စမ်းပြီး အမှန်အများဆုံးကို ရွေးပါတယ် (empirical)</p></div></div>
+          <div class="card"><span class="ico ref"><i data-i="eye"></i></span><div><div class="rg-mini" style="color:var(--ref)">ကန့်သတ်ချက်</div><p>NEI တချို့က 0.49 အထိ ရလို့ ဆင်တူမှု တစ်ခုတည်းနဲ့ အမြဲ ခွဲလို့ မရပါဘူး</p></div></div>
+        </div>
+        <div class="card rg-line">
+          <div class="rg-zones">
+            <div class="z nei">NOT ENOUGH INFO</div>
+            <div class="z ev">EVIDENCE ကို RULE နဲ့ စစ်</div>
+            <div class="rg-tau"><span><span class="tau">τ</span> = 0.24</span></div>
+            <div class="rg-axis"></div>
+            <div class="rg-pt p1" style="left:42%"><div class="up">မင်းတင်မွန်၊<br>ဘောလုံးနည်းပြ</div><i></i><div class="dn"><b>0.21</b>DOC_011</div></div>
+            <div class="rg-pt p2" style="left:78%"><div class="up">CLM_006 · မင်္ဂလာ ၂၈ ပါး</div><i></i><div class="dn"><b>0.39</b>DOC_003</div></div>
+            <div class="rg-pt p3" style="left:94%"><div class="up" style="transform:translateX(-78%)">အောင်ဆန်း၊<br>ကြက်တောင်ချန်ပီယံ</div><i></i><div class="dn"><b>0.47</b>DOC_013</div></div>
+          </div>
+          <div class="rg-ticks"><span>0.0</span><span>0.1</span><span>0.2</span><span>0.3</span><span>0.4</span><span>0.5</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RAG 7 · Retrieval metrics -->
+    <section class="slide" aria-label="RAG · Retrieval metrics">
+      <div class="frame">
+        <div class="rg-head">
+          <div>
+            <span class="kicker"><i data-i="library"></i> Retrieval quality</span>
+            <h2 class="title">စာကြည့်တိုက်မှူးက မှန်တဲ့စာအုပ်ကို အမြဲနီးပါး ရှာတွေ့ပါတယ်</h2>
+          </div>
+          <div class="rg-stage"><span>Vector</span><span>Cosine</span><span class="on">Top-K + <span class="tau">τ</span></span><span>RAG</span></div>
+        </div>
+        <div class="rg-stats">
+          <div class="card rg-stat lead-card"><div class="k">P@1</div><div class="v">94.3%</div><div class="s">train (claim 35 ခု)</div><p>ထိပ်ဆုံး document က မှန်တာ ဘယ်နှစ်ခါလဲ</p></div>
+          <div class="card rg-stat"><div class="k">R@3</div><div class="v rg-grad">100%</div><div class="s">train (claim 35 ခု)</div><p>Top 3 ထဲမှာ မှန်တဲ့ document ပါတာ ဘယ်နှစ်ခါလဲ</p></div>
+          <div class="card rg-stat"><div class="k">MRR</div><div class="v rg-grad">0.971</div><div class="s">train (claim 35 ခု)</div><p>မှန်တဲ့ document ရဲ့ ပျမ်းမျှ နေရာ (1 နဲ့ နီးလေ ကောင်းလေ)</p></div>
+        </div>
+        <div class="rg-mrr">
+          <div class="card">
+            <div class="rg-mini">MRR ကို ပုံနဲ့ ကြည့်ရင်</div>
+            <div class="rg-ranks">
+              <div><small>အဆင့် 1</small><b>1</b></div>
+              <div><small>အဆင့် 2</small><b>1/2</b></div>
+              <div><small>အဆင့် 3</small><b>1/3</b></div>
+              <div><small>မတွေ့</small><b>0</b></div>
+            </div>
+          </div>
+          <div class="rg-code"><div>MRR = (<span class="n">33</span> × 1 + <span class="n">2</span> × ½) / 35 = 34 / 35 = <span class="s">0.971</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RAG 8 · 02 Augmentation -->
+    <section class="slide" aria-label="RAG · 02 Augmentation">
+      <div class="frame rg-sec solo">
+        <div>
+          <div class="rg-rag"><span>R</span><span class="on">A</span><span>G</span></div><br><br>
+          <div class="num rg-grad">02</div><br>
+          <h2>Augmentation</h2><br>
+          <p class="lead">Claim ကို သက်ဆိုင်တဲ့ စာကြောင်းတွေနဲ့ ဘေးချင်းကပ် ထားပါတယ်။</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- RAG 9 · Claim + evidence -->
+    <section class="slide" aria-label="RAG · Claim + evidence">
+      <div class="frame">
+        <div class="rg-head">
+          <div>
+            <!-- <span class="kicker"><i data-i="compare"></i> Augment</span> -->
+            <h2 class="title" style="font-size:clamp(22px,2.6vw,32px)">အကောင်းဆုံး စာကြောင်း ၂ ကြောင်းကြောင့် rule တွေက တိတိကျကျ နှိုင်းယှဉ်နိုင်ပါတယ်။</h2>
+          </div>
+          <div class="rg-rag"><span>R</span><span class="on">A</span><span>G</span></div>
+        </div>
+        <div class="rg-aug">
+          <div class="card c">
+            <div class="rg-mini" style="color:var(--ref)">Claim · CLM_006</div>
+            <div class="claim">မင်္ဂလသုတ်တွင် မင်္ဂလာ <mark>၂၈ ပါး</mark>ကို ဟောကြားထားသည်။</div>
+          </div>
+          <div class="plus">+</div>
+          <div class="card">
+            <div class="rg-mini">Evidence · DOC_003 · အကောင်းဆုံး စာကြောင်း ၂ ကြောင်း</div>
+            <div class="rg-sent">ခုဒ္ဒကပါဌတွင် မင်္ဂလသုတ်၊ ရတနသုတ်၊ မေတ္တသုတ် စသည်တို့ ပါဝင်သည်။</div>
+            <div class="rg-sent key">မင်္ဂလသုတ်တွင် မင်္ဂလာ <mark class="ok">၃၈ ပါး</mark>ကို ဟောကြားထားသည်။</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RAG 10 · 03 Generation -->
+    <section class="slide" aria-label="RAG · 03 Generation">
+      <div class="frame rg-sec solo">
+        <div>
+          <div class="rg-rag"><span>R</span><span>A</span><span class="on">G</span></div><br><br>
+          <div class="num rg-grad">03</div><br>
+          <h2>Generation</h2><br>
+          <p class="lead">အဖြေထုတ်ပေးခြင်း</p>
+          <div class="rg-formula">
+            <span class="chip">Claim ID</span><span class="op">+</span>
+            <span class="chip">Document ID</span><span class="op">+</span>
+            <span class="chip">Verdict</span><span class="op">+</span>
+            <span class="chip">Confidence</span><span class="op">+</span>
+            <span class="chip">Explanation</span><span class="op">=</span>
+            <span class="chip out">Prediction CSV</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RAG 11 · Six rules -->
+    <section class="slide" aria-label="RAG · Decision rules">
+      <div class="frame">
+        <div class="rg-head">
+          <div>
+            <!-- <span class="kicker"><i data-i="gavel"></i> The judge</span> -->
+            <h2 class="title">Rule ၆ ခုကို အစဉ်လိုက် စစ်ပြီး ဆုံးဖြတ်ပါတယ်</h2>
+          </div>
+          <div class="rg-stage"><span>Vector</span><span>Cosine</span><span>Top-K + <span class="tau">τ</span></span><span class="on">RAG</span></div>
+        </div>
+        <div class="rg-rules">
+          <div class="card rg-table">
+            <table>
+              <thead><tr><th>#</th><th>စစ်တဲ့အချက်</th><th>ဆုံးဖြတ်ချက်</th><th>ကျွန်ုပ်တို့ data ထဲက ဥပမာ</th></tr></thead>
+              <tbody>
+                <tr><td class="n"><span>1</span></td><td>Cosine &lt; <span class="tau">τ</span> (0.24)</td><td><span class="label sm nei">NEI</span></td><td>မင်းတင်မွန် ဘောလုံးနည်းပြ · 0.21</td></tr>
+                <tr class="hit"><td class="n"><span>2</span></td><td>ဂဏန်း မတူ</td><td><span class="label sm ref">REFUTES</span></td><td>၂၈ ပါး vs ၃၈ ပါး</td></tr>
+                <tr><td class="n"><span>3</span></td><td>အမည် မတူ</td><td><span class="label sm ref">REFUTES</span></td><td>Samsung Galaxy vs HTC Dream</td></tr>
+                <tr><td class="n"><span>4</span></td><td>အငြင်း / အဟုတ် မတူ</td><td><span class="label sm ref">REFUTES</span></td><td>မရောက်ရှိခဲ့ပါ vs ရောက်ရှိခဲ့သည်</td></tr>
+                <tr><td class="n"><span>5</span></td><td>Claim စာလုံး 85%+ ပါ</td><td><span class="label sm sup">SUPPORTS</span></td><td>CLM_003 · 87% ကိုက်ညီ</td></tr>
+                <tr><td class="n"><span>6</span></td><td>ကျန်တာ အားလုံး</td><td><span class="label sm ref">REFUTES</span></td><td>အချက်အလက် မကိုက်ညီ</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <pre class="rg-code"><span class="file">rag_verifier.py · _decide()</span><span class="k">if</span> score &lt; tau:
+    <span class="k">return</span> <span class="n">NEI</span>
+<span class="k">if</span> numeric_conflict:
+    <span class="k">return</span> <span class="r">REFUTES</span>
+<span class="k">if</span> entity_conflict:
+    <span class="k">return</span> <span class="r">REFUTES</span>
+<span class="k">if</span> negation_conflict:
+    <span class="k">return</span> <span class="r">REFUTES</span>
+<span class="k">if</span> coverage &gt;= <span class="n">0.85</span>:
+    <span class="k">return</span> <span class="s">SUPPORTS</span>
+<span class="k">return</span> <span class="r">REFUTES</span></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- RAG 12 · Grounded explanation -->
+    <section class="slide" aria-label="RAG · Explanation">
+      <div class="frame">
+        <div class="rg-head">
+          <div>
+            <!-- <span class="kicker"><i data-i="quote"></i> Grounded explanation</span> -->
+            <h2 class="title">System က ထုတ်ပေးတဲ့ ရှင်းလင်းချက်</h2>
+          </div>
+          <div class="rg-stage"><span>Vector</span><span>Cosine</span><span>Top-K + <span class="tau">τ</span></span><span class="on">RAG</span></div>
+        </div>
+        <div class="rg-expl">
+          <div class="card rg-row"><span class="ico"><i data-i="doc"></i></span><div><b>ရင်းမြစ်</b><small>ဘယ် document လဲ</small></div><div class="say">အထောက်အထား DOC_003 (ခုဒ္ဒကပါဌ၊ ဓမ္မပဒ…) တွင်</div></div>
+          <div class="card rg-row"><span class="ico"><i data-i="quote"></i></span><div><b>ကိုးကားချက်</b><small>Evidence ကို တိုက်ရိုက် ကိုးကား</small></div><div class="say">“…မင်္ဂလသုတ်တွင် မင်္ဂလာ <mark class="ok">၃၈ ပါး</mark>ကို ဟောကြားထားသည်။” ဟု ဖော်ပြထားသည်။</div></div>
+          <div class="card rg-row"><span class="ico nei"><i data-i="compare"></i></span><div><b>အကြောင်းပြချက်</b><small>ဘယ်အချက်က မကိုက်လဲ</small></div><div class="say">claim ပါ ‘<mark>၂၈</mark>’ သည် အထောက်အထားပါ ‘<mark class="ok">၃၈</mark>’ နှင့် မကိုက်ညီသဖြင့် claim ကို ဆန့်ကျင်သည်။</div></div>
+          <div class="card rg-row final"><span class="ico ref"><i data-i="gavel"></i></span><div><b>ဆုံးဖြတ်ချက်</b><small>နောက်ဆုံး ဆုံးဖြတ်ချက်</small></div><div class="say">REFUTES  ·  confidence 0.9</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RAG 13 · Naive Bayes vs RAG -->
+    <section class="slide" aria-label="RAG · Naive Bayes vs RAG">
+      <div class="frame">
+        <span class="kicker"><i data-i="compare"></i> Pipeline A vs Pipeline B</span>
+        <h2 class="title" style="margin-bottom:18px">Naive Bayes နဲ့ RAG ကို claim အတူတူပေါ်မှာ နှိုင်းယှဉ်ခြင်း</h2>
+        <div class="rg-cmp">
+          <div class="rg-stack">
+            <div class="card">
+              <div class="sec-t">Accuracy (%)</div>
+              <div class="rg-cols">
+                <div class="rg-grp">
+                  <div class="rg-col"><b>18.4%</b><div class="rg-fill" data-h="18.4"></div></div>
+                  <div class="rg-col rag"><b>73.5%</b><div class="rg-fill" data-h="73.5"></div></div>
+                </div>
+                <div class="rg-grp">
+                  <div class="rg-col"><b>0.0%</b><div class="rg-fill" data-h="0"></div></div>
+                  <div class="rg-col rag"><b>92.3%</b><div class="rg-fill" data-h="92.3"></div></div>
+                </div>
+              </div>
+              <div class="rg-xl"><span>Train (49)</span><span>Test (13)</span></div>
+              <div class="rg-legend"><span>Naive Bayes</span><span class="rag">RAG</span></div>
+            </div>
+            <div class="card">
+              <div class="sec-t" style="margin-bottom:4px">Test confusion matrix (RAG)</div>
+              <table class="rg-cm">
+                <thead><tr><th>True \ Pred</th><th>SUP</th><th>REF</th><th>NEI</th></tr></thead>
+                <tbody>
+                  <tr><th>SUPPORTS</th><td class="d">5</td><td>0</td><td>0</td></tr>
+                  <tr><th>REFUTES</th><td>0</td><td class="d">4</td><td>0</td></tr>
+                  <tr><th>NEI</th><td>0</td><td class="x">1</td><td class="d">3</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card rg-table rg-vs">
+            <table>
+              <thead><tr><th></th><th class="a">Pipeline A · Naive Bayes</th><th class="b">Pipeline B · RAG</th></tr></thead>
+              <tbody>
+                <tr><td>ဘာကို ကြည့်လဲ</td><td class="a">claim စာသား သက်သက်</td><td class="b">claim + corpus ထဲက evidence</td></tr>
+                <tr><td>ဘယ်လို ဆုံးဖြတ်လဲ</td><td class="a">စာလုံး ဖြစ်နိုင်ခြေ (probability)</td><td class="b">evidence နဲ့ ယှဉ်ပြီး rule စစ်</td></tr>
+                <tr><td>၂၈ vs ၃၈ လို အမှား</td><td class="a">မသိ — စာလုံး တူနေလို့</td><td class="b">ဂဏန်း မတူ → REFUTES</td></tr>
+                <tr><td>NOT ENOUGH INFO</td><td class="a">စာလုံးကနေ ခန့်မှန်း</td><td class="b">cosine &lt; <span class="tau">τ</span> (0.24)</td></tr>
+                <tr><td>ရှင်းလင်းချက်</td><td class="a">မပါ</td><td class="b">မြန်မာလို + evidence ကိုးကား</td></tr>
+                <tr><td>Test ရလဒ်</td><td class="a">0 / 13 (0%)</td><td class="b">12 / 13 (92%)</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RAG 14 · Limitations -->
+    <section class="slide" aria-label="RAG · Limitations">
+      <div class="frame">
+        <!-- <span class="kicker"><i data-i="eye"></i> Error analysis</span> -->
+        <h2 class="title" style="margin-bottom:18px">System ရဲ့ ကန့်သတ်ချက်</h2>
+        <div class="rg-fails">
+          <div class="card rg-fail">
+            <div class="rg-flip"><span class="label sm nei">NEI</span><i data-i="arrow"></i><span class="label sm ref">REFUTES</span></div>
+            <div class="claim">ဗိုလ်ချုပ်အောင်ဆန်းသည် တက္ကသိုလ်တွင် ကြက်တောင်ချန်ပီယံ ဖြစ်ခဲ့သည်။</div>
+            <p class="why">ဗိုလ်ချုပ်အောင်ဆန်းရဲ့ ကျောင်းသားဘဝ document (0.47) ကြောင့် threshold ကို ကျော်သွားပေမဲ့ ကြက်တောင်အကြောင်း မပါပါဘူး</p>
+            <div class="rg-lesson"><i data-i="school"></i><span>သင်ခန်းစာ: အကြောင်းအရာ တူတာနဲ့ အထောက်အထား ရှိတာ မတူပါ</span></div>
+          </div>
+          <div class="card rg-fail">
+            <div class="rg-flip"><span class="label sm sup">SUPPORTS</span><i data-i="arrow"></i><span class="label sm ref">REFUTES</span></div>
+            <div class="claim">ဓမ္မပဒကို ဝဂ် ၂၆ ဝဂ်ဖြင့် ဖွဲ့စည်းထားပြီး ဂါထာ ၄၂၃ ပုဒ် ပါဝင်သည်။</div>
+            <p class="why">Evidence မှာ “ခွဲထားသည်” လို့ ရေးလို့ အဓိပ္ပာယ်တူပေမဲ့ စာလုံးမတူတာကြောင့် 85% မပြည့်ပါဘူး</p>
+            <div class="rg-lesson"><i data-i="school"></i><span>သင်ခန်းစာ: စာလုံးကို ယှဉ်တာ၊ အဓိပ္ပာယ်ကို မယှဉ်ပါ</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RAG 15 · Quiz -->
+    <section class="slide" aria-label="RAG · Quiz">
+      <div class="frame">
+        <!-- <span class="kicker"><i data-i="help"></i> Quiz</span> -->
+        <h2 class="title">Quiz</h2>
+        <p class="lead" style="margin-bottom:18px">အဖြေ ၄ ခုထဲက မှန်တာ တစ်ခုကို ရွေးကြည့်ရအောင်</p>
+        <div class="rg-quiz ask">
+          <div class="card rg-q"><div class="qh"><span class="qn">Q1</span><span class="qt">Cosine 1 နဲ့ 0 က ဘာကို ပြောတာလဲ?</span></div><ul class="rg-opts">
+            <li><b>A</b>1 = claim မှန်၊ 0 = claim မှား</li><li><b>B</b>1 = အရမ်းဆင်၊ 0 = လုံးဝ မဆိုင်</li><li><b>C</b>1 = စာလုံး ၁ လုံးပဲ တူ</li><li><b>D</b>1 = SUPPORTS၊ 0 = REFUTES</li></ul></div>
+          <div class="card rg-q"><div class="qh"><span class="qn">Q2</span><span class="qt">အမြင့်ဆုံး cosine 0.21 နဲ့ <span class="tau">τ</span> = 0.24 ဆိုရင်?</span></div><ul class="rg-opts">
+            <li><b>A</b>SUPPORTS</li><li><b>B</b>REFUTES</li><li><b>C</b>NOT ENOUGH INFO</li><li><b>D</b>Top-2 document ကို ယူသုံး</li></ul></div>
+          <div class="card rg-q"><div class="qh"><span class="qn">Q3</span><span class="qt">Evidence က ၃၈ ပါး၊ claim က ၂၈ ပါး ဆိုရင်?</span></div><ul class="rg-opts">
+            <li><b>A</b>REFUTES</li><li><b>B</b>SUPPORTS</li><li><b>C</b>NOT ENOUGH INFO</li><li><b>D</b>Coverage မြင့်လို့ SUPPORTS</li></ul></div>
+          <div class="card rg-q"><div class="qh"><span class="qn">Q4</span><span class="qt">Cosine မြင့်ရင် claim မှန်ပြီလား?</span></div><ul class="rg-opts">
+            <li><b>A</b>မှန်ပြီ — အမြဲ SUPPORTS</li><li><b>B</b>0.5 ကျော်ရင် မှန်</li><li><b>C</b><span class="tau">τ</span> ကျော်ရင် မှန်</li><li><b>D</b>မဟုတ် — အကြောင်းအရာ ဆင်တာပဲ ပြ</li></ul></div>
+          <div class="card rg-q"><div class="qh"><span class="qn">Q5</span><span class="qt">ဒီ system က hallucinate လုပ်နိုင်သလား?</span></div><ul class="rg-opts">
+            <li><b>A</b>လုပ်နိုင် — LLM က စာရေးလို့</li><li><b>B</b>မလုပ်ပါ — evidence ကိုပဲ ကိုးကား</li><li><b>C</b>NEI ဖြေတဲ့အခါ လုပ်</li><li><b>D</b>Cosine မြင့်မှ လုပ်</li></ul></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RAG 16 · Quiz answers -->
+    <section class="slide" aria-label="RAG · Quiz answers">
+      <div class="frame">
+        <!-- <span class="kicker"><i data-i="check"></i> Answers</span> -->
+        <h2 class="title" style="margin-bottom:18px">Quiz အဖြေများ</h2>
+        <div class="rg-quiz">
+          <div class="card rg-q"><div class="qh"><span class="qn">A1</span><span class="qt">Cosine 1 နဲ့ 0 က ဘာကို ပြောတာလဲ?</span></div><ul class="rg-opts">
+            <li><b>A</b>1 = claim မှန်၊ 0 = claim မှား</li><li class="right"><b>B</b>1 = အရမ်းဆင်၊ 0 = လုံးဝ မဆိုင်</li><li><b>C</b>1 = စာလုံး ၁ လုံးပဲ တူ</li><li><b>D</b>1 = SUPPORTS၊ 0 = REFUTES</li></ul>
+            <div class="rg-because"><span>ဘာကြောင့်: ဆင်တူမှုကိုပဲ တိုင်း — မှန်/မှား မဟုတ်</span></div></div>
+          <div class="card rg-q"><div class="qh"><span class="qn">A2</span><span class="qt">အမြင့်ဆုံး cosine 0.21၊ <span class="tau">τ</span> = 0.24 ဆိုရင်?</span></div><ul class="rg-opts">
+            <li><b>A</b>SUPPORTS</li><li><b>B</b>REFUTES</li><li class="right"><b>C</b>NOT ENOUGH INFO</li><li><b>D</b>Top-2 document ကို ယူသုံး</li></ul>
+            <div class="rg-because"><span>ဘာကြောင့်: 0.21 &lt; <span class="tau">τ</span> (0.24) → evidence မရှိ (Rule 1)</span></div></div>
+          <div class="card rg-q"><div class="qh"><span class="qn">A3</span><span class="qt">Evidence က ၃၈ ပါး၊ claim က ၂၈ ပါး ဆိုရင်?</span></div><ul class="rg-opts">
+            <li class="right"><b>A</b>REFUTES</li><li><b>B</b>SUPPORTS</li><li><b>C</b>NOT ENOUGH INFO</li><li><b>D</b>Coverage မြင့်လို့ SUPPORTS</li></ul>
+            <div class="rg-because"><span>ဘာကြောင့်: ဂဏန်း မကိုက် → REFUTES (Rule 2)</span></div></div>
+          <div class="card rg-q"><div class="qh"><span class="qn">A4</span><span class="qt">Cosine မြင့်ရင် claim မှန်ပြီလား?</span></div><ul class="rg-opts">
+            <li><b>A</b>မှန်ပြီ — အမြဲ SUPPORTS</li><li><b>B</b>0.5 ကျော်ရင် မှန်</li><li><b>C</b><span class="tau">τ</span> ကျော်ရင် မှန်</li><li class="right"><b>D</b>မဟုတ် — အကြောင်းအရာ ဆင်တာပဲ ပြ</li></ul>
+            <div class="rg-because"><span>ဘာကြောင့်: CLM_006 က 0.389 ဆင်ပေမဲ့ မှား</span></div></div>
+          <div class="card rg-q"><div class="qh"><span class="qn">A5</span><span class="qt">ဒီ system က hallucinate လုပ်နိုင်သလား?</span></div><ul class="rg-opts">
+            <li><b>A</b>လုပ်နိုင် — LLM က စာရေးလို့</li><li class="right"><b>B</b>မလုပ်ပါ — evidence ကိုပဲ ကိုးကား</li><li><b>C</b>NEI ဖြေတဲ့အခါ လုပ်</li><li><b>D</b>Cosine မြင့်မှ လုပ်</li></ul>
+            <div class="rg-because"><span>ဘာကြောင့်: LLM မပါ — rule + evidence စာကြောင်းပဲ</span></div></div>
+        </div>
+      </div>
+    </section>
+
     <!-- 7 · Data -->
     <section class="slide" aria-label="Data">
       <div class="frame">
@@ -806,7 +1511,7 @@
           <div class="card">
             <div class="sec-t">စည်းမျဉ်း ၅ ခု — ပထမ ကိုက်သည့်အရာ အနိုင်ရ</div>
             <ol class="rules">
-              <li>ဆင်တူမှု &lt; τ 0.24 → NOT ENOUGH INFO</li>
+              <li>ဆင်တူမှု &lt; <span class="tau">τ</span> 0.24 → NOT ENOUGH INFO</li>
               <li>ကိန်းဂဏန်း မတူ → REFUTES</li>
               <li>အမည် မတူ → REFUTES</li>
               <li>‘မဟုတ်’ ငြင်းဆိုချက် → ပြောင်းပြန်</li>
@@ -849,7 +1554,7 @@
     <button class="nav-btn" id="next" aria-label="Next slide"><svg viewBox="0 0 24 24"><path d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></button>
   </nav>
 
-  <script id="notes-data" type="application/json">["[0:00–0:15] မင်္ဂလာပါ။ ကျွန်ုပ်က Ohnmar Nyunt၊ MMDT034 ပါ။ ဒီနေ့ မြန်မာစာ အဆိုတွေကို အထောက်အထားနဲ့ စစ်ဆေးပေးတဲ့ စနစ်အကြောင်း ပြောပါမယ်။ ဒါပေမယ့် မစခင် အရင် မေးခွန်း တစ်ခု မေးပါရစေ။ [0:15–0:45] ဒီ post ကို ကြည့်ပါ။ ‘ဆွန်ဇု၏ စစ်ပညာကျမ်းတွင် အခန်း ၃၀ ပါဝင်သည်’ တဲ့။ အမှန်လို့ ထင်ရင် လက်ထောင်ပါ … အမှားလို့ ထင်ရင် လက်ထောင်ပါ … (ခဏ စောင့်) စိတ်ဝင်စားစရာ ကောင်းတယ်နော်။ ကျွန်ုပ်တို့ အများစုက ဘယ်စာအုပ်ကိုမှ မဖွင့်ကြည့်ဘဲ ခံစားချက်နဲ့ ဖြေလိုက်ကြတာပါ။ အဖြေကို demo မှာ စနစ်က ပြပါလိမ့်မယ်။ (ဒီ post ပုံစံက ဥပမာအဖြစ် ဖန်တီးထားတာပါ — claim ကတော့ test set ထဲက CLM_TEST_008 ပါ။)", "[~0:50] ဇာတ်ကောင်တစ်ယောက်ကို စဉ်းစားကြည့်ပါ — ‘သီတာ’ ဆိုတဲ့ တက္ကသိုလ်ကျောင်းသူလေးပါ။ (ဥပမာ ဇာတ်ကောင်ပါ)။ မနက်ခင်း Facebook ဖွင့်လိုက်တော့ post သုံးခု တွေ့တယ်။ ပထမ — ထောပတ်သီး နေ့တိုင်းစားရင် အသက် ဆယ်နှစ် ပိုရှည်တယ်တဲ့။ ဒုတိယ — quiz page တစ်ခုက ဆွန်ဇုရဲ့ စစ်ပညာကျမ်းမှာ အခန်း ၃၀ ပါတယ်တဲ့။ တတိယ — ဓမ္မ page တစ်ခုက သုတ္တန်ပိဋကမှာ နိကာယ်ငါးရပ် ပါတယ်တဲ့။ သုံးခုစလုံး ယုံကြည်ရလောက်အောင် ရေးထားတယ်။ ဘယ်ဟာ အမှန်လဲ၊ ဘယ်ဟာ အမှားလဲ၊ ဘယ်ဟာကို ဘယ်သူမှ မသိသေးလဲ — သီတာ ဘယ်လို ခွဲခြားမလဲ?", "[~0:50] သီတာ ဘာကြောင့် အခက်တွေ့သလဲ။ ပထမ — မြန်မာ post တွေ မျှဝေမှု များပေမယ့် စစ်ဆေးပေးသူ နည်းပါတယ်။ ဒုတိယ — ကွန်ပျူတာအတွက် မြန်မာစာက ခက်ပါတယ်။ စကားလုံးကြား space မရှိဘူး၊ Zawgyi နဲ့ Unicode နှစ်မျိုး ရှိတယ်၊ fact-check dataset လည်း မရှိသလောက်ပါ။ တတိယ — AI chatbot ကို မေးမယ်ဆိုရင်လည်း မြန်မာစာ နည်းနည်းပဲ သင်ထားလို့ မသိတဲ့အခါ ချောမွေ့ပြီး ယုံရလောက်တဲ့ အဖြေကို လုပ်ကြံပြောတတ်ပါတယ်။ ဒါကို hallucination လို့ ခေါ်ပါတယ်။ ဒါကြောင့် ကျွန်ုပ်တို့ လိုတာက အထောက်အထားကို ပြနိုင်ပြီး မသိရင် မသိဘူးလို့ ဝန်ခံရဲတဲ့ စစ်ဆေးသူ တစ်ယောက်ပါ။", "[~0:40] သီတာလို လူတစ်ယောက်ချင်းစီအတွက် ပြဿနာက ရိုးရိုးလေးပါ — နေ့တိုင်း အဆိုတွေ အများကြီး ထွက်လာပေမယ့် တစ်ခုချင်း စာအုပ်ဖွင့်ပြီး လိုက်စစ်ဖို့ အချိန်နဲ့ လုပ်အား မလုံလောက်ပါဘူး။ ဒါကြောင့် ကျွန်ုပ်ရဲ့ ရည်မှန်းချက်က — အဆိုတစ်ခုကို ထည့်လိုက်တာနဲ့ စာတမ်းစုထဲက အထောက်အထားကို ရှာပြီး မှန်တယ်၊ မှားတယ်၊ ဒါမှမဟုတ် အချက်အလက် မလုံလောက်ဘူး ဆိုတာကို အလိုအလျောက် ခွဲခြားပေးတဲ့ Verification & Evidence Retrieval စနစ် တစ်ခု တည်ဆောက်ဖို့ပါ။", "[~0:50] ဒီစနစ်က ဘယ်သူတွေအတွက် အသုံးဝင်မလဲ။ သတင်းထောက်နဲ့ fact-checker တွေအတွက် — viral ဖြစ်နေတဲ့ post ကို ယုံကြည်ရတဲ့ source နဲ့ မြန်မြန် တိုက်စစ်နိုင်တယ်။ ကျောင်းသားနဲ့ ဆရာတွေအတွက် — assignment ထဲက အချက်အလက်ကို စာအုပ်နဲ့ တိုက်စစ်နိုင်တယ်။ ဓမ္မစာပေ လေ့လာသူတွေအတွက် — ကျွန်ုပ်ရဲ့ corpus မှာ ဘာသာရေး စာတမ်း ၁၃ ခု ပါလို့ ပိဋကတ် အချက်အလက်တွေကို မူရင်းနဲ့ တိုက်နိုင်တယ်။ နောက်ဆုံး — chatbot တွေ အဖြေ မထုတ်ခင် အထောက်အထား ရှိမရှိ စစ်ပေးတဲ့ အကာအကွယ် (guardrail) အဖြစ်လည်း သုံးနိုင်ပါတယ်။", "[0:45–1:45] Fact-checking ဆိုတာ ဘာလဲ။ ကျွန်ုပ်တို့ task မှာ input နှစ်ခု ရှိပါတယ်။ claim ဆိုတာ အချက်အလက် တစ်ခုကို ပြောထားတဲ့ မြန်မာ စာကြောင်း တစ်ကြောင်းပါ။ corpus ဆိုတာ ယုံကြည်ရတဲ့ မြန်မာ စာတမ်း ၃၅ ခု — စနစ် အချက်အလက် ရှာတဲ့ တစ်ခုတည်းသော နေရာပါ။ output က တံဆိပ် သုံးမျိုးထဲက တစ်ခုပါ။ SUPPORTS — အထောက်အထားက claim ကို အတည်ပြုတယ်၊ ဥပမာ သုတ္တန်ပိဋကမှာ နိကာယ်ငါးရပ် ပါတယ်။ REFUTES — အထောက်အထားက claim ကို ဆန့်ကျင်တယ်၊ ဥပမာ အခန်း ၃၀ လို့ ပြောပေမယ့် စာတမ်းက ၁၃ လို့ ပြောတယ်။ NOT ENOUGH INFO — corpus ထဲမှာ အထောက်အထား မရှိဘူး၊ ဥပမာ ထောပတ်သီး စားရင် အသက် ဆယ်နှစ် ရှည်တယ်ဆိုတာ။ အရေးကြီးတာက ‘မှားတယ်’ နဲ့ ‘မသိဘူး’ ကို ခွဲခြားတာပါ။", "[3:30–4:00] ဒီအချိန်မှာ fact-checking ဆိုတာ ဘာလဲ၊ မြန်မာစာ ဘာကြောင့် ခက်လဲ၊ label သုံးမျိုးက ဘာကို ဆိုလိုလဲ ဆိုတာ သိသွားပါပြီ။ ကျန်တဲ့ အချိန်မှာ သုံးဆင့် သွားပါမယ်။ ပထမ — demo၊ claim ကို ရိုက်ထည့်ပြီး label နဲ့ အထောက်အထားကို တိုက်ရိုက် ပြပါမယ်။ ဒုတိယ — Pipeline A၊ claim ထဲက စကားလုံးတွေကိုသာ ကြည့်တဲ့ Naive Bayes။ တတိယ — Pipeline B၊ အထောက်အထား ရှာပြီး နှိုင်းယှဉ်တဲ့ RAG။", "[~0:45] နောက်ကွယ်မှာ ဘာတွေ ရှိသလဲ။ စာကြည့်တိုက်က မြန်မာ e-library တွေကနေ ကျွန်ုပ် ကိုယ်တိုင် စုစည်းထားတဲ့ စာတမ်း ၃၅ ခုပါ။ ဘာသာရေး စာတမ်း ၁၃ ခုက အများဆုံးဖြစ်ပြီး ကျန်တာတွေက စိုက်ပျိုးရေး ၆၊ စာပေ ၄၊ နည်းပညာ ၄၊ သမိုင်း ၃၊ ထင်ရှားသူများ ၃၊ ဘဏ္ဍာရေးနဲ့ သိပ္ပံ တစ်ခုစီ ပါ။ စာမေးပွဲအတွက် အဆို ၆၂ ခု ပြင်ဆင်ပြီး ၄၉ ခုကို လေ့ကျင့်ဖို့၊ ၁၃ ခုကို စနစ် တစ်ခါမှ မမြင်ဖူးတဲ့ စာမေးပွဲအဖြစ် ဖယ်ထားတယ်။ python app.py တစ်ကြောင်းတည်းနဲ့ studentverifier() က data/*.csv ကို ဖတ်ပြီး ခန့်မှန်းချက် CSV ကို ထုတ်ပေးပါတယ်။", "ပထမ ဖိုင်က corpus.csv ပါ။ ဒါကို စာအုပ် တစ်အုပ်လို့ မှတ်ပါ။ ယုံကြည်ရတဲ့ မြန်မာ စာတမ်း ၃၅ ခု ပါတယ်။ စနစ်က အဖြေကို ဒီစာအုပ်ထဲကနေပဲ ရှာပါတယ် — အပြင်က ဘာမှ မယူပါဘူး။", "ဒုတိယ ဖိုင်က claims.csv — မေးခွန်းနဲ့ အဖြေပါ။ စစ်ဆေးရမယ့် အဆို ၆၂ ခု ပါပြီး တစ်ခုချင်းစီမှာ မှန်ကန်တဲ့ အဖြေ (label) နဲ့ အဖြေရှိတဲ့ စာတမ်း (evidence_id) ပါတယ်။", "တတိယ ဖိုင်က train_claims.csv — လေ့ကျင့်ခန်းပါ။ claims ၆၂ ခုထဲက ၄၉ ခုကို အဖြေနဲ့တကွ ပေးထားပြီး စနစ်က ဒါတွေကို ကြည့်ပြီး သင်ယူပါတယ်။", "နောက်ဆုံး ဖိုင်က test_claims.csv — စာမေးပွဲပါ။ ကျန်တဲ့ ၁၃ ခုမှာ အဖြေ မပါပါဘူး။ စနစ် တစ်ခါမှ မမြင်ဖူးတဲ့ မေးခွန်းတွေ ဖြစ်လို့ စနစ်ရဲ့ တကယ့် အမှတ်ကို ဒီကနေ သိရပါတယ်။", "[1:45–2:45] ဒီ task က အင်္ဂလိပ်စာမှာထက် မြန်မာစာမှာ ဘာကြောင့် ပိုခက်သလဲ။ ပထမ — စကားလုံးကြား space မရှိပါဘူး။ အင်္ဂလိပ်မှာ space နဲ့ စကားလုံး ခွဲလို့ရပေမယ့် မြန်မာမှာ ‘ကျမ်းတွင်အခန်း၁၃ခန်းပါဝင်သည်’ က တစ်ဆက်တည်းပါ။ ဒါကြောင့် sylbreak regex နဲ့ ဝဏ္ဏ ခွဲရပါတယ်။ ဒုတိယ — Zawgyi နဲ့ Unicode။ ‘မြန်မာ’ ဆိုတဲ့ စကားလုံးက မျက်စိနဲ့ ကြည့်ရင် တူပေမယ့် ကွန်ပျူတာ အတွက် code တွေ မတူပါဘူး။ Zawgyi မှာ ရရစ် ကို ဗျည်း ရှေ့မှာ ရိုက်ပါတယ်။ ဒါကြောင့် စာတမ်းနဲ့ claim က ကိုက်ညီမှု မရှိနိုင်ပါဘူး။ တတိယ — ပုံစံတူ စာလုံးတွေ။ ဝ (wa) နဲ့ ၀ (သုည) က တူတူပဲ၊ ရ နဲ့ ၇ လည်း ဆင်တယ်။ ေ ကို ဗျည်း ရှေ့မှာ ရိုက်တာမျိုးလည်း ရှိတယ်။ ကျွန်ုပ်ရဲ့ preprocessor က ဒါတွေကို ပထမဆုံး ပြင်ပါတယ်။", "[~1:00] Pipeline A က ရိုးရာ စာရင်းအင်း classifier ပါ။ မြန်မာ စာသားကို ဝဏ္ဏ ခွဲပြီး TF-IDF matrix — claim ၄၉ ခု × term ၂,၈၁၂ ခု — ပြောင်းတယ်။ Multinomial Naive Bayes က Laplace α = 1 နဲ့ ဖြစ်နိုင်ခြေ အမြင့်ဆုံး label ကို ရွေးတယ်။ ပြဿနာက — A က claim ကိုပဲ ကြည့်တယ်။ အောက်က claim နှစ်ခုကို ကြည့်ပါ — တစ်ခုက အမှန်၊ တစ်ခုက အမှား။ ကွာတာ ကိန်းဂဏန်း တစ်ခုပဲ။ စကားလုံးတွေ တူနေတော့ Naive Bayes က ခွဲမရဘူး။ စကားလုံးတွေက ခေါင်းစဉ်ကို ပြတယ်၊ အမှန်ကို မပြဘူး။ ရလဒ် — test ၁၃ ခုမှာ တစ်ခုမှ မမှန်ပါ။", "[~1:10] Pipeline B က အထောက်အထား ထည့်သုံးပါတယ်။ claim ကို စာတမ်းတွေနဲ့ vector space တစ်ခုတည်းမှာ TF-IDF vector ပြောင်းတယ်။ cosine similarity နဲ့ စာတမ်း ၃၅ ခုလုံးကို နှိုင်းယှဉ်ပြီး Top-3 ကို ယူတယ်။ hook ထဲက ဆွန်ဇု claim အတွက် DOC_026 က 0.38 နဲ့ ထင်ထင်ရှားရှား ပထမ ရတယ်။ ကျန်တာတွေက 0.09 ပဲ။ ပြီးရင် RAG reasoning က စည်းမျဉ်း ၅ ခုကို အစဉ်လိုက် စစ်တယ် — ပထမဆုံး ကိုက်တဲ့ စည်းမျဉ်းက အနိုင်ရတယ်။ ဆင်တူမှု τ 0.24 ထက် နိမ့်ရင် NOT ENOUGH INFO၊ ကိန်းဂဏန်း မတူရင် REFUTES၊ အမည် မတူရင် REFUTES၊ မဟုတ် ပါရင် ပြောင်းပြန်၊ claim ဝဏ္ဏ ၈၅% ကျော် ပါရင် SUPPORTS ပါ။ test ၁၃ ခုမှာ ၁၂ ခု မှန်ပါတယ်။", "[~0:50] ဒါကြောင့် ကျွန်ုပ်ရဲ့ စနစ်ကို ဂရုစိုက်တတ်တဲ့ စာကြည့်တိုက်မှူး တစ်ယောက်လို တည်ဆောက်ခဲ့ပါတယ်။ သူ့ကို မေးခွန်း မေးရင် ချက်ချင်း မဖြေပါဘူး။ ပထမ — စာကြည့်တိုက်ထဲက သက်ဆိုင်ရာ စာအုပ်ကို ရှာတယ်။ ကျွန်ုပ်ရဲ့ စာကြည့်တိုက်က မြန်မာ စာတမ်း ၃၅ ခုပါ။ ဒုတိယ — အဆိုနဲ့ အထောက်အထား စာကြောင်းကို ကိန်းဂဏန်း၊ အမည်၊ ငြင်းဆိုချက် စတာတွေနဲ့ နှိုင်းယှဉ်တယ်။ တတိယ — ဆုံးဖြတ်တယ်။ စတုတ္ထ — ဘယ်စာအုပ်က ဘာပြောထားလဲ ဆိုတာကို မြန်မာလို ကိုးကားပြီး ရှင်းပြတယ်။ အရေးကြီးတာက ဒီစနစ်မှာ စာထွင်ရေးတဲ့ LLM မပါဘူး။ ဒါကြောင့် အထောက်အထားမှာ မပါတဲ့ အချက်ကို ထွင်မပြောနိုင်ပါဘူး။"]</script>
+  <script id="notes-data" type="application/json">["[0:00–0:15] မင်္ဂလာပါ။ ကျွန်ုပ်က Ohnmar Nyunt၊ MMDT034 ပါ။ ဒီနေ့ မြန်မာစာ အဆိုတွေကို အထောက်အထားနဲ့ စစ်ဆေးပေးတဲ့ စနစ်အကြောင်း ပြောပါမယ်။ ဒါပေမယ့် မစခင် အရင် မေးခွန်း တစ်ခု မေးပါရစေ။ [0:15–0:45] ဒီ post ကို ကြည့်ပါ။ ‘ဆွန်ဇု၏ စစ်ပညာကျမ်းတွင် အခန်း ၃၀ ပါဝင်သည်’ တဲ့။ အမှန်လို့ ထင်ရင် လက်ထောင်ပါ … အမှားလို့ ထင်ရင် လက်ထောင်ပါ … (ခဏ စောင့်) စိတ်ဝင်စားစရာ ကောင်းတယ်နော်။ ကျွန်ုပ်တို့ အများစုက ဘယ်စာအုပ်ကိုမှ မဖွင့်ကြည့်ဘဲ ခံစားချက်နဲ့ ဖြေလိုက်ကြတာပါ။ အဖြေကို demo မှာ စနစ်က ပြပါလိမ့်မယ်။ (ဒီ post ပုံစံက ဥပမာအဖြစ် ဖန်တီးထားတာပါ — claim ကတော့ test set ထဲက CLM_TEST_008 ပါ။)", "[~0:50] ဇာတ်ကောင်တစ်ယောက်ကို စဉ်းစားကြည့်ပါ — ‘သီတာ’ ဆိုတဲ့ တက္ကသိုလ်ကျောင်းသူလေးပါ။ (ဥပမာ ဇာတ်ကောင်ပါ)။ မနက်ခင်း Facebook ဖွင့်လိုက်တော့ post သုံးခု တွေ့တယ်။ ပထမ — ထောပတ်သီး နေ့တိုင်းစားရင် အသက် ဆယ်နှစ် ပိုရှည်တယ်တဲ့။ ဒုတိယ — quiz page တစ်ခုက ဆွန်ဇုရဲ့ စစ်ပညာကျမ်းမှာ အခန်း ၃၀ ပါတယ်တဲ့။ တတိယ — ဓမ္မ page တစ်ခုက သုတ္တန်ပိဋကမှာ နိကာယ်ငါးရပ် ပါတယ်တဲ့။ သုံးခုစလုံး ယုံကြည်ရလောက်အောင် ရေးထားတယ်။ ဘယ်ဟာ အမှန်လဲ၊ ဘယ်ဟာ အမှားလဲ၊ ဘယ်ဟာကို ဘယ်သူမှ မသိသေးလဲ — သီတာ ဘယ်လို ခွဲခြားမလဲ?", "[~0:50] သီတာ ဘာကြောင့် အခက်တွေ့သလဲ။ ပထမ — မြန်မာ post တွေ မျှဝေမှု များပေမယ့် စစ်ဆေးပေးသူ နည်းပါတယ်။ ဒုတိယ — ကွန်ပျူတာအတွက် မြန်မာစာက ခက်ပါတယ်။ စကားလုံးကြား space မရှိဘူး၊ Zawgyi နဲ့ Unicode နှစ်မျိုး ရှိတယ်၊ fact-check dataset လည်း မရှိသလောက်ပါ။ တတိယ — AI chatbot ကို မေးမယ်ဆိုရင်လည်း မြန်မာစာ နည်းနည်းပဲ သင်ထားလို့ မသိတဲ့အခါ ချောမွေ့ပြီး ယုံရလောက်တဲ့ အဖြေကို လုပ်ကြံပြောတတ်ပါတယ်။ ဒါကို hallucination လို့ ခေါ်ပါတယ်။ ဒါကြောင့် ကျွန်ုပ်တို့ လိုတာက အထောက်အထားကို ပြနိုင်ပြီး မသိရင် မသိဘူးလို့ ဝန်ခံရဲတဲ့ စစ်ဆေးသူ တစ်ယောက်ပါ။", "[~0:40] သီတာလို လူတစ်ယောက်ချင်းစီအတွက် ပြဿနာက ရိုးရိုးလေးပါ — နေ့တိုင်း အဆိုတွေ အများကြီး ထွက်လာပေမယ့် တစ်ခုချင်း စာအုပ်ဖွင့်ပြီး လိုက်စစ်ဖို့ အချိန်နဲ့ လုပ်အား မလုံလောက်ပါဘူး။ ဒါကြောင့် ကျွန်ုပ်ရဲ့ ရည်မှန်းချက်က — အဆိုတစ်ခုကို ထည့်လိုက်တာနဲ့ စာတမ်းစုထဲက အထောက်အထားကို ရှာပြီး မှန်တယ်၊ မှားတယ်၊ ဒါမှမဟုတ် အချက်အလက် မလုံလောက်ဘူး ဆိုတာကို အလိုအလျောက် ခွဲခြားပေးတဲ့ Verification & Evidence Retrieval စနစ် တစ်ခု တည်ဆောက်ဖို့ပါ။", "[~0:50] ဒီစနစ်က ဘယ်သူတွေအတွက် အသုံးဝင်မလဲ။ သတင်းထောက်နဲ့ fact-checker တွေအတွက် — viral ဖြစ်နေတဲ့ post ကို ယုံကြည်ရတဲ့ source နဲ့ မြန်မြန် တိုက်စစ်နိုင်တယ်။ ကျောင်းသားနဲ့ ဆရာတွေအတွက် — assignment ထဲက အချက်အလက်ကို စာအုပ်နဲ့ တိုက်စစ်နိုင်တယ်။ ဓမ္မစာပေ လေ့လာသူတွေအတွက် — ကျွန်ုပ်ရဲ့ corpus မှာ ဘာသာရေး စာတမ်း ၁၃ ခု ပါလို့ ပိဋကတ် အချက်အလက်တွေကို မူရင်းနဲ့ တိုက်နိုင်တယ်။ နောက်ဆုံး — chatbot တွေ အဖြေ မထုတ်ခင် အထောက်အထား ရှိမရှိ စစ်ပေးတဲ့ အကာအကွယ် (guardrail) အဖြစ်လည်း သုံးနိုင်ပါတယ်။", "[0:45–1:45] Fact-checking ဆိုတာ ဘာလဲ။ ကျွန်ုပ်တို့ task မှာ input နှစ်ခု ရှိပါတယ်။ claim ဆိုတာ အချက်အလက် တစ်ခုကို ပြောထားတဲ့ မြန်မာ စာကြောင်း တစ်ကြောင်းပါ။ corpus ဆိုတာ ယုံကြည်ရတဲ့ မြန်မာ စာတမ်း ၃၅ ခု — စနစ် အချက်အလက် ရှာတဲ့ တစ်ခုတည်းသော နေရာပါ။ output က တံဆိပ် သုံးမျိုးထဲက တစ်ခုပါ။ SUPPORTS — အထောက်အထားက claim ကို အတည်ပြုတယ်၊ ဥပမာ သုတ္တန်ပိဋကမှာ နိကာယ်ငါးရပ် ပါတယ်။ REFUTES — အထောက်အထားက claim ကို ဆန့်ကျင်တယ်၊ ဥပမာ အခန်း ၃၀ လို့ ပြောပေမယ့် စာတမ်းက ၁၃ လို့ ပြောတယ်။ NOT ENOUGH INFO — corpus ထဲမှာ အထောက်အထား မရှိဘူး၊ ဥပမာ ထောပတ်သီး စားရင် အသက် ဆယ်နှစ် ရှည်တယ်ဆိုတာ။ အရေးကြီးတာက ‘မှားတယ်’ နဲ့ ‘မသိဘူး’ ကို ခွဲခြားတာပါ။", "[3:30–4:00] ဒီအချိန်မှာ fact-checking ဆိုတာ ဘာလဲ၊ မြန်မာစာ ဘာကြောင့် ခက်လဲ၊ label သုံးမျိုးက ဘာကို ဆိုလိုလဲ ဆိုတာ သိသွားပါပြီ။ ကျန်တဲ့ အချိန်မှာ သုံးဆင့် သွားပါမယ်။ ပထမ — demo၊ claim ကို ရိုက်ထည့်ပြီး label နဲ့ အထောက်အထားကို တိုက်ရိုက် ပြပါမယ်။ ဒုတိယ — Pipeline A၊ claim ထဲက စကားလုံးတွေကိုသာ ကြည့်တဲ့ Naive Bayes။ တတိယ — Pipeline B၊ အထောက်အထား ရှာပြီး နှိုင်းယှဉ်တဲ့ RAG။", "This deck explains the RAG pipeline in the MMDT-P4 Myanmar NLP project: how a Myanmar claim is matched to evidence in our own 35-document corpus and labelled SUPPORTS, REFUTES or NOT ENOUGH INFO.", "[၁ မိနစ်]\nPart 1 မှာ Naive Bayes က စာအုပ်မဖွင့်ဘဲ မှန်းတဲ့သူလိုပဲ ဖြစ်လို့ 18.4% ပဲ ရခဲ့ပါတယ်။\nPart 2 မှာ စာအုပ်ကို ဖွင့်ကြည့်ပါမယ်။ စာကြည့်တိုက်မှူးက သက်ဆိုင်တဲ့ စာအုပ်ကို ရှာပေးတာက Task 4၊ တရားသူကြီးက claim နဲ့ စာအုပ်ထဲကစာကို နှိုင်းယှဉ်ပြီး ဆုံးဖြတ်ကာ အကြောင်းပြချက်ရေးတာက Task 5 ပါ။\nPart 1 ရဲ့ နောက်ဆုံးမှာ ပြခဲ့တဲ့ မင်္ဂလာ ၂၈ ပါး claim ကို အဆင့်တိုင်း ဖြတ်သွားပါမယ်။ တကယ်က ၃၈ ပါး ဖြစ်လို့ ဒီ claim က မှားပါတယ်။", "Retrieval is built from scratch in preprocessor.py, tokenizer.py, vectorizer.py and retriever.py.", "[၁.၅ မိနစ်]\nPart 1 မှာ စာသားကို ဂဏန်း ၂,၈၁၂ လုံးပါတဲ့ တန်းအဖြစ် ပြောင်းခဲ့ပါတယ်။ အဲဒီ ဂဏန်းတန်းကို မြှားတစ်စင်းလို့ မြင်ကြည့်ပါ။\nမြှားနှစ်စင်း တူညီတဲ့ဘက်ကို ညွှန်လေ စာသားနှစ်ခု ဆင်လေပါ။ ဦးတည်ရာ အတူတူဆိုရင် 1၊ ဘာမှမဆိုင်ရင် 0 ပါ။\nClaim နဲ့ DOC_003 က 0.389 နဲ့ ပိုနီးပါတယ်။ DOC_004 က 0.091 ပဲ ရလို့ ဝေးပါတယ်။\nFormula မှာ q က claim ရဲ့ vector၊ d က document တစ်ခုရဲ့ vector ပါ။ အပေါ်ပိုင်းက ဘယ်လောက် ထပ်တူကျလဲ၊ အောက်ပိုင်းက အရှည်ကို ညှိပေးတာပါ။ Vector တွေကို အရှည် 1 ဖြစ်အောင် ကြိုညှိထားလို့ code မှာ မြှောက်ရုံပါပဲ။\nTask က dense embedding သို့မဟုတ် TF-IDF sparse vector ကို ခွင့်ပြုပါတယ်။ Offline run လို့ရပြီး ဂဏန်းနဲ့ အမည်ကို တိတိကျကျ ယှဉ်နိုင်လို့ TF-IDF ကို ရွေးပါတယ်။", "[၁ မိနစ်]\nClaim တစ်ခုကို document ၃၅ ခုလုံးနဲ့ cosine တွက်ပြီး အမှတ်အမြင့်ဆုံး ၃ ခုကို ရွေးပါတယ်။ ဒါကို Top-K လို့ ခေါ်ပြီး K = 3 ကို သုံးပါတယ်။\nCLM_006 မှာ ထိပ်ဆုံးက DOC_003 (0.389) ဖြစ်ပြီး မင်္ဂလသုတ်ပါတဲ့ မှန်ကန်တဲ့ evidence ပါ။\nCode မှာ အမှတ်ကို အကြီးကနေ အငယ် စီပြီး ပထမ ၃ ခုကို ယူတာပါပဲ။", "[၁ မိနစ်]\nτ ကို tau လို့ ဖတ်ပြီး သတ်မှတ်ထားတဲ့ အနိမ့်ဆုံး ဆင်တူမှုမှတ် (threshold) ပါ။ နောက်ပိုင်း threshold လို့ပဲ ခေါ်ပါမယ်။\nအမြင့်ဆုံး cosine က 0.24 ထက် နိမ့်ရင် corpus မှာ ဒီအကြောင်း မရှိဘူးလို့ ယူဆပြီး NOT ENOUGH INFO လို့ ဖြေပါတယ်။\nဒေါက်တာမင်းတင်မွန် ဘောလုံးနည်းပြ claim က 0.21 ပဲ ရလို့ NOT ENOUGH INFO ဖြစ်ပြီး မှန်ပါတယ်။ CLM_006 က 0.389 ရလို့ rule တွေနဲ့ ဆက်စစ်ပါတယ်။\nThreshold ကို ခန့်မှန်းထားတာ မဟုတ်ပါဘူး။ Train claim တွေပေါ်မှာ စမ်းပြီး ရွေးတာပါ။\nကန့်သတ်ချက်: အောင်ဆန်း ကြက်တောင်ချန်ပီယံ claim က corpus မှာ မရှိပေမဲ့ အောင်ဆန်းရဲ့ ကျောင်းသားဘဝ document ကြောင့် 0.47 ရသွားပါတယ်။ ဒီအမှားကို နောက်ပိုင်းမှာ ပြန်ကြည့်ပါမယ်။", "[၁ မိနစ်]\nစာကြည့်တိုက်မှူး ဘယ်လောက်တော်လဲ တိုင်းကြည့်ပါမယ်။ NOT ENOUGH INFO claim တွေမှာ မှန်တဲ့ document မရှိလို့ evidence ရှိတဲ့ claim တွေကိုပဲ စစ်ပါတယ်။\nP@1: ထိပ်ဆုံး document မှန်တာ train မှာ 94.3%၊ test မှာ 100% ပါ။\nR@3: Top 3 ထဲမှာ မှန်တဲ့ document အမြဲ ပါပါတယ်။\nMRR: မှန်တဲ့ document က ပထမနေရာမှာဆိုရင် 1၊ ဒုတိယဆိုရင် ½၊ တတိယဆိုရင် ⅓ ရပြီး ပျမ်းမျှယူတာပါ။ 0.971 ဆိုတော့ အမြဲလိုလို ပထမနေရာမှာ ရှိပါတယ်။\nမေးလာရင်: P@3 က 33% ပဲ ရတာ မကောင်းလို့ မဟုတ်ပါဘူး။ မှန်တဲ့ document ၁ ခုပဲ ရှိလို့ ၃ ခုထဲက ၁ ခုက အမြင့်ဆုံးပါ။", "Whole documents are long. Comparing the claim with just the two most relevant sentences makes the stance checks precise.", "[၁ မိနစ်]\nAugment အဆင့်ပါ။ Retrieve မှာ ရလာတဲ့ DOC_003 တစ်ခုလုံးကို မသုံးဘဲ claim နဲ့ အဆင်တူဆုံး စာကြောင်း ၂ ကြောင်းကိုပဲ ယူပြီး claim ဘေးမှာ ထားပါတယ်။\nClaim က မင်္ဂလာ ၂၈ ပါး လို့ ပြောပေမဲ့ evidence က ၃၈ ပါး လို့ ပြောပါတယ်။ စာကြောင်း ၂ ကြောင်းပဲ ယှဉ်လို့ ဒီ ဂဏန်းကွာတာကို rule က တိတိကျကျ ရှာတွေ့ပြီး နောက် slide မှာ REFUTES လို့ ဆုံးဖြတ်ပါတယ်။", "Instead of asking an LLM, the verifier applies transparent rules to the claim-evidence features and writes the explanation from a Myanmar template that quotes the evidence. ဖော်မြူလာ: claim တစ်ခုစီအတွက် Claim ID + Document ID + Verdict + Confidence + ရှင်းလင်းချက် ကို ခန့်မှန်းချက် CSV ထဲ တစ်ကြောင်း ရေးပါတယ်။ ရှင်းလင်းချက်က Document ID၊ evidence ကိုးကားချက်၊ မကိုက်ညီတဲ့ အချက်နဲ့ verdict ကို ပေါင်းထားတာပါ။", "[၁.၅ မိနစ်]\nဒါက system ရဲ့ တရားသူကြီးပါ။ Rule ၆ ခုကို အစီအစဉ်အတိုင်း စစ်ပြီး ကိုက်တာနဲ့ ရပ်ပါတယ်။\n1. ဆင်တူမှု threshold ထက် နိမ့်ရင် NOT ENOUGH INFO။\n2. ဂဏန်းမတူရင် REFUTES။ CLM_006 က ဒီမှာ ရပ်ပါတယ်။ ၂၈ နဲ့ ၃၈ မတူလို့ပါ။ ငါးကျမ်း နဲ့ ခုနစ်ကျမ်း လို စာနဲ့ရေးတဲ့ ဂဏန်းကိုလည်း ယှဉ်ပါတယ်။\n3. အင်္ဂလိပ်လို အမည်မတူရင် REFUTES။\n4. တစ်ဖက်က ငြင်းပြီး တစ်ဖက်က အတည်ပြုရင် REFUTES။\n5. Claim ထဲက syllable ရဲ့ 85% ကျော် evidence ထဲမှာ ပါရင် SUPPORTS။\n6. ကျန်တာအားလုံး REFUTES။\nThreshold 0.24 နဲ့ 85% နှစ်ခုလုံးကို train claim တွေပေါ်မှာ စမ်းပြီး ရွေးထားတာပါ။\nညာဘက်က code က ဒီဇယားနဲ့ တစ်ကြောင်းချင်း ကိုက်ပါတယ်။", "[၁ မိနစ်]\nဒါက system ထုတ်ပေးတဲ့ ရှင်းလင်းချက်အစစ်ပါ။ အပိုင်း ၄ ပိုင်း ပါပါတယ်။\nSource: ဘယ် document ကနေ ယူလဲ။\nQuote: Evidence စာကြောင်းကို တိုက်ရိုက် ကိုးကားပါတယ်။\nReason: ဘယ်အချက်က မကိုက်လဲ (၂၈ နဲ့ ၃၈)။\nVerdict: REFUTES။\nဒါကြောင့် လူကိုယ်တိုင် DOC_003 ကို ဖွင့်ပြီး ပြန်စစ်နိုင်ပါတယ်။ ဒါကို grounded explanation (အထောက်အထားပေါ် အခြေခံတဲ့ ရှင်းလင်းချက်) လို့ ခေါ်ပါတယ်။", "[၁ မိနစ်]\nစာအုပ်ဖွင့်ကြည့်လိုက်တော့ ရလဒ်က အများကြီး ကွာသွားပါတယ်။\nTrain claim ၄၉ ခုမှာ Naive Bayes 18.4% ကနေ RAG 73.5% ဖြစ်လာပါတယ်။\nTest claim (gold label ရှိတဲ့ ၁၃ ခု) မှာ ၁၂ ခု မှန်လို့ 92.3% ရပြီး Macro-F1 က 0.915 ပါ။\nConfusion matrix မှာ အမှား ၁ ခုပဲ ရှိပါတယ်။ NOT ENOUGH INFO ဖြစ်ရမယ့် claim ကို REFUTES လို့ ဖြေမိတာပါ။\nသတိ: Test claim နည်းလို့ ဒီဂဏန်းကို အလွန်အကျွံ မယုံသင့်ပါဘူး။\nညာဘက် ဇယား: Pipeline A က claim စာသားကိုပဲ ကြည့်လို့ ၂၈ နဲ့ ၃၈ လို ဂဏန်းကွာတာကို မသိပါဘူး။ Pipeline B က corpus ထဲက evidence ကို ရှာပြီး ယှဉ်လို့ CLM_006 ကို REFUTES လို့ မှန်မှန်ဖြေနိုင်ပါတယ်။", "[၁ မိနစ်]\nအမှား ၂ မျိုးကို ကြည့်ပါမယ်။\nပထမ: အောင်ဆန်း ကြက်တောင်ချန်ပီယံ claim။ Corpus မှာ အောင်ဆန်းရဲ့ ကျောင်းသားဘဝ document ရှိလို့ ဆင်တူမှု 0.47 ရပြီး threshold ကို ကျော်သွားပါတယ်။ ဒါပေမဲ့ ကြက်တောင်အကြောင်း မပါလို့ REFUTES လို့ ဖြေမိပါတယ်။ အမှန်က NOT ENOUGH INFO ပါ။ သင်ခန်းစာ: အကြောင်းအရာ တူတာနဲ့ အထောက်အထား ရှိတာ မတူပါဘူး။\nဒုတိယ: ဓမ္မပဒ claim။ ဖွဲ့စည်းထားပြီး နဲ့ ခွဲထားသည် က အဓိပ္ပာယ်တူပေမဲ့ စာလုံးမတူလို့ 85% မပြည့်ပါဘူး။ သင်ခန်းစာ: စာလုံးကို ယှဉ်တာ၊ အဓိပ္ပာယ်ကို မယှဉ်ပါဘူး။\nနောက်တစ်ဆင့်အနေနဲ့ dense embedding model သုံးရင် အဓိပ္ပာယ်ကို ယှဉ်နိုင်ပါတယ်။\nQuiz ပြီးရင် Challenges & Lessons အပိုင်းကို ဆက်ပါမယ်။", "[၄ မိနစ်]\nမေးခွန်းတစ်ခုစီမှာ အဖြေ ၄ ခု ပါပြီး မှန်တာ တစ်ခုပဲ ရှိပါတယ်။ ပရိသတ်ကို လက်ထောင်ပြီး ရွေးခိုင်းပါ။\nအဖြေများ: Q1 = B, Q2 = C, Q3 = A, Q4 = D, Q5 = B", "[၁ မိနစ်]\nQ1 = B: cosine က ဦးတည်ရာ တူမတူကိုပဲ တိုင်းတာပါ။ မှန်/မှား ကို မပြောပါ။\nQ2 = C: 0.21 က τ 0.24 ထက် နိမ့်လို့ evidence မရှိ → NOT ENOUGH INFO (Rule 1)။\nQ3 = A: ဂဏန်း ၂၈ နဲ့ ၃၈ မကိုက်လို့ REFUTES (Rule 2)။ Number rule က coverage မစစ်ခင် အရင် စစ်ပါတယ်။\nQ4 = D: အရေးအကြီးဆုံးပါ။ Cosine မြင့်တာက အကြောင်းအရာ ဆင်တာကိုပဲ ပြပါတယ်။ မင်္ဂလာ ၂၈ ပါး claim (0.389) ဆင်ပေမဲ့ မှားပါတယ်။\nQ5 = B: LLM မပါဘဲ rule နဲ့ ဆုံးဖြတ်ပြီး evidence စာကြောင်းကိုပဲ ကိုးကားလို့ မရှိတဲ့ အချက်ကို လုပ်ကြံ မပြောနိုင်ပါ။\nပြီးရင် Challenges & Lessons အပိုင်းကို ဆက်ပါမယ်။", "[~0:45] နောက်ကွယ်မှာ ဘာတွေ ရှိသလဲ။ စာကြည့်တိုက်က မြန်မာ e-library တွေကနေ ကျွန်ုပ် ကိုယ်တိုင် စုစည်းထားတဲ့ စာတမ်း ၃၅ ခုပါ။ ဘာသာရေး စာတမ်း ၁၃ ခုက အများဆုံးဖြစ်ပြီး ကျန်တာတွေက စိုက်ပျိုးရေး ၆၊ စာပေ ၄၊ နည်းပညာ ၄၊ သမိုင်း ၃၊ ထင်ရှားသူများ ၃၊ ဘဏ္ဍာရေးနဲ့ သိပ္ပံ တစ်ခုစီ ပါ။ စာမေးပွဲအတွက် အဆို ၆၂ ခု ပြင်ဆင်ပြီး ၄၉ ခုကို လေ့ကျင့်ဖို့၊ ၁၃ ခုကို စနစ် တစ်ခါမှ မမြင်ဖူးတဲ့ စာမေးပွဲအဖြစ် ဖယ်ထားတယ်။ python app.py တစ်ကြောင်းတည်းနဲ့ studentverifier() က data/*.csv ကို ဖတ်ပြီး ခန့်မှန်းချက် CSV ကို ထုတ်ပေးပါတယ်။", "ပထမ ဖိုင်က corpus.csv ပါ။ ဒါကို စာအုပ် တစ်အုပ်လို့ မှတ်ပါ။ ယုံကြည်ရတဲ့ မြန်မာ စာတမ်း ၃၅ ခု ပါတယ်။ စနစ်က အဖြေကို ဒီစာအုပ်ထဲကနေပဲ ရှာပါတယ် — အပြင်က ဘာမှ မယူပါဘူး။", "ဒုတိယ ဖိုင်က claims.csv — မေးခွန်းနဲ့ အဖြေပါ။ စစ်ဆေးရမယ့် အဆို ၆၂ ခု ပါပြီး တစ်ခုချင်းစီမှာ မှန်ကန်တဲ့ အဖြေ (label) နဲ့ အဖြေရှိတဲ့ စာတမ်း (evidence_id) ပါတယ်။", "တတိယ ဖိုင်က train_claims.csv — လေ့ကျင့်ခန်းပါ။ claims ၆၂ ခုထဲက ၄၉ ခုကို အဖြေနဲ့တကွ ပေးထားပြီး စနစ်က ဒါတွေကို ကြည့်ပြီး သင်ယူပါတယ်။", "နောက်ဆုံး ဖိုင်က test_claims.csv — စာမေးပွဲပါ။ ကျန်တဲ့ ၁၃ ခုမှာ အဖြေ မပါပါဘူး။ စနစ် တစ်ခါမှ မမြင်ဖူးတဲ့ မေးခွန်းတွေ ဖြစ်လို့ စနစ်ရဲ့ တကယ့် အမှတ်ကို ဒီကနေ သိရပါတယ်။", "[1:45–2:45] ဒီ task က အင်္ဂလိပ်စာမှာထက် မြန်မာစာမှာ ဘာကြောင့် ပိုခက်သလဲ။ ပထမ — စကားလုံးကြား space မရှိပါဘူး။ အင်္ဂလိပ်မှာ space နဲ့ စကားလုံး ခွဲလို့ရပေမယ့် မြန်မာမှာ ‘ကျမ်းတွင်အခန်း၁၃ခန်းပါဝင်သည်’ က တစ်ဆက်တည်းပါ။ ဒါကြောင့် sylbreak regex နဲ့ ဝဏ္ဏ ခွဲရပါတယ်။ ဒုတိယ — Zawgyi နဲ့ Unicode။ ‘မြန်မာ’ ဆိုတဲ့ စကားလုံးက မျက်စိနဲ့ ကြည့်ရင် တူပေမယ့် ကွန်ပျူတာ အတွက် code တွေ မတူပါဘူး။ Zawgyi မှာ ရရစ် ကို ဗျည်း ရှေ့မှာ ရိုက်ပါတယ်။ ဒါကြောင့် စာတမ်းနဲ့ claim က ကိုက်ညီမှု မရှိနိုင်ပါဘူး။ တတိယ — ပုံစံတူ စာလုံးတွေ။ ဝ (wa) နဲ့ ၀ (သုည) က တူတူပဲ၊ ရ နဲ့ ၇ လည်း ဆင်တယ်။ ေ ကို ဗျည်း ရှေ့မှာ ရိုက်တာမျိုးလည်း ရှိတယ်။ ကျွန်ုပ်ရဲ့ preprocessor က ဒါတွေကို ပထမဆုံး ပြင်ပါတယ်။", "[~1:00] Pipeline A က ရိုးရာ စာရင်းအင်း classifier ပါ။ မြန်မာ စာသားကို ဝဏ္ဏ ခွဲပြီး TF-IDF matrix — claim ၄၉ ခု × term ၂,၈၁၂ ခု — ပြောင်းတယ်။ Multinomial Naive Bayes က Laplace α = 1 နဲ့ ဖြစ်နိုင်ခြေ အမြင့်ဆုံး label ကို ရွေးတယ်။ ပြဿနာက — A က claim ကိုပဲ ကြည့်တယ်။ အောက်က claim နှစ်ခုကို ကြည့်ပါ — တစ်ခုက အမှန်၊ တစ်ခုက အမှား။ ကွာတာ ကိန်းဂဏန်း တစ်ခုပဲ။ စကားလုံးတွေ တူနေတော့ Naive Bayes က ခွဲမရဘူး။ စကားလုံးတွေက ခေါင်းစဉ်ကို ပြတယ်၊ အမှန်ကို မပြဘူး။ ရလဒ် — test ၁၃ ခုမှာ တစ်ခုမှ မမှန်ပါ။", "[~1:10] Pipeline B က အထောက်အထား ထည့်သုံးပါတယ်။ claim ကို စာတမ်းတွေနဲ့ vector space တစ်ခုတည်းမှာ TF-IDF vector ပြောင်းတယ်။ cosine similarity နဲ့ စာတမ်း ၃၅ ခုလုံးကို နှိုင်းယှဉ်ပြီး Top-3 ကို ယူတယ်။ hook ထဲက ဆွန်ဇု claim အတွက် DOC_026 က 0.38 နဲ့ ထင်ထင်ရှားရှား ပထမ ရတယ်။ ကျန်တာတွေက 0.09 ပဲ။ ပြီးရင် RAG reasoning က စည်းမျဉ်း ၅ ခုကို အစဉ်လိုက် စစ်တယ် — ပထမဆုံး ကိုက်တဲ့ စည်းမျဉ်းက အနိုင်ရတယ်။ ဆင်တူမှု τ 0.24 ထက် နိမ့်ရင် NOT ENOUGH INFO၊ ကိန်းဂဏန်း မတူရင် REFUTES၊ အမည် မတူရင် REFUTES၊ မဟုတ် ပါရင် ပြောင်းပြန်၊ claim ဝဏ္ဏ ၈၅% ကျော် ပါရင် SUPPORTS ပါ။ test ၁၃ ခုမှာ ၁၂ ခု မှန်ပါတယ်။", "[~0:50] ဒါကြောင့် ကျွန်ုပ်ရဲ့ စနစ်ကို ဂရုစိုက်တတ်တဲ့ စာကြည့်တိုက်မှူး တစ်ယောက်လို တည်ဆောက်ခဲ့ပါတယ်။ သူ့ကို မေးခွန်း မေးရင် ချက်ချင်း မဖြေပါဘူး။ ပထမ — စာကြည့်တိုက်ထဲက သက်ဆိုင်ရာ စာအုပ်ကို ရှာတယ်။ ကျွန်ုပ်ရဲ့ စာကြည့်တိုက်က မြန်မာ စာတမ်း ၃၅ ခုပါ။ ဒုတိယ — အဆိုနဲ့ အထောက်အထား စာကြောင်းကို ကိန်းဂဏန်း၊ အမည်၊ ငြင်းဆိုချက် စတာတွေနဲ့ နှိုင်းယှဉ်တယ်။ တတိယ — ဆုံးဖြတ်တယ်။ စတုတ္ထ — ဘယ်စာအုပ်က ဘာပြောထားလဲ ဆိုတာကို မြန်မာလို ကိုးကားပြီး ရှင်းပြတယ်။ အရေးကြီးတာက ဒီစနစ်မှာ စာထွင်ရေးတဲ့ LLM မပါဘူး။ ဒါကြောင့် အထောက်အထားမှာ မပါတဲ့ အချက်ကို ထွင်မပြောနိုင်ပါဘူး။"]</script>
   <script>
   (() => {
     "use strict";
@@ -915,11 +1620,14 @@
 
     function animate(slide) {
       $$(".fill[data-w]", slide).forEach((f) => (f.style.width = "0"));
+      $$(".rg-fill[data-h]", slide).forEach((f) => (f.style.height = "0"));
       requestAnimationFrame(() => requestAnimationFrame(() => {
         const bars = $$(".bar .fill[data-w]", slide);
         const max = Math.max(...bars.map((b) => +b.dataset.w), 1);
         bars.forEach((b) => (b.style.width = (+b.dataset.w / max) * 100 + "%"));
         $$(".conf .fill[data-w], .topk .fill[data-w]", slide).forEach((b) => (b.style.width = b.dataset.w + "%"));
+        $$(".rg-fill[data-w]", slide).forEach((b) => (b.style.width = b.dataset.w + "%"));
+        $$(".rg-fill[data-h]", slide).forEach((b) => (b.style.height = b.dataset.h + "%"));
       }));
     }
 
@@ -972,6 +1680,8 @@
       x0 = y0 = null;
     });
 
+    // RAG quiz: pick one option per question
+    $$(".rg-quiz.ask .rg-opts li").forEach((li) => (li.onclick = () => $$("li", li.parentElement).forEach((o) => o.classList.toggle("picked", o === li))));
     // slide 1 poll
     $$(".vote").forEach((b) => (b.onclick = () => $$(".vote").forEach((v) => v.classList.toggle("on", v === b))));
 
