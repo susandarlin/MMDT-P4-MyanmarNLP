@@ -714,6 +714,15 @@
     .pa-ba-stat .n { font: 800 clamp(34px, 3.6vw, 46px) Inter; line-height: 1; }
     .pa-ba-stat small { display: block; font: 700 11px Inter; letter-spacing: .1em; color: var(--muted); margin-top: 6px; }
     .pa-ba-stat .pa-arrow { transform: rotate(90deg); }
+    .pa-keep { display: flex; flex-direction: column; }
+    .pa-keep .pa-ba-stat { flex: 1; flex-direction: row; gap: 18px; margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--border); }
+    .pa-keep .pa-ba-stat .pa-arrow { transform: none; }
+    .pa-side { display: grid; gap: 14px; align-content: start; }
+    .pa-side .card { padding: 16px 18px; }
+    .pa-side .grams { font: 15px/1.9 var(--mm); color: var(--text); margin: 0; }
+    .pa-side .hot { background: var(--accent-soft); border-color: transparent; box-shadow: none; }
+    .pa-side .note { font: 15px/1.7 Inter; color: var(--text); margin: 0; }
+    .pa-side .big { font: 800 26px Inter; color: var(--accent); }
 
     .pa-shot { padding: 10px; }
     .pa-head { align-items: center; margin-bottom: 6px; }
@@ -1436,55 +1445,23 @@ text = re.sub(r&quot; {2,}&quot;, &quot; &quot;, text).strip()</pre>
               <li>၏၊ ရဲ့ - ပိုင်ဆိုင်မှုပြပုဒ်</li>
             </ul>
           </div>
-          <div class="card keep">
+          <div class="card keep pa-keep">
             <div class="rg-mini" style="color:var(--sup)">Negative</div>
             <ul>
               <li>အငြင်းစကားလုံး - “မ”</li>
               <li>ကိန်းဂဏန်း</li>
             </ul>
-          </div>
-          <div class="card pa-ba-stat">
-            <div><div class="n">13</div><small>Before · SYLLABLES</small></div>
-            <span class="pa-arrow"><i data-i="arrow"></i></span>
-            <div><div class="n rg-grad">11</div><small>After · TOKENS</small></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- PA 8 · A3 fit & transform -->
-    <section class="slide" aria-label="Pipeline A · A3 Fit and transform">
-      <div class="frame">
-        <div class="rg-head pa-head"><!-- <span class="kicker"><i data-i="doc"></i> A3 TF-IDF</span> --><div class="rg-stage" style="flex:none;margin-left:auto"><span>A1 Clean</span><span>A2 Segmentation</span><span class="on">A3 TF-IDF</span><span>A4 Naive Bayes</span></div></div>
-        <h2 class="title">A3 · TF-IDF Vectorization</h2>
-        <p class="lead" style="max-width:none;margin:-6px 0 18px">Vocabulary နဲ့ IDF ကို corpus ကနေ တစ်ခါပဲ သင်တယ်။ ဒါကြောင့် claim နဲ့ document ကို column တူတူနဲ့ နှိုင်းယှဉ်လို့ ရတယ်</p>
-        <div class="pa-fit">
-          <div class="col">
-            <div class="card"><div class="rg-mini">Unigram – 11 syllables</div><p class="grams">အ, ဘိ, ဓမ္မာ, ပိ, ဋ, ကတ်, ကျမ်း, ၅, ကျမ်း, ပါ, ဝင်</p></div>
-            <div class="card"><div class="rg-mini">Bigram – 10 pairs</div><p class="grams">အ_ဘိ, ဘိ_ဓမ္မာ, ဓမ္မာ_ပိ, ပိ_ဋ, ဋ_ကတ်, ကတ်_ကျမ်း, ကျမ်း_၅, ၅_ကျမ်း, ကျမ်း_ပါ, ပါ_ဝင်</p></div>
-          </div>
-          <div class="col">
-            <div class="card hot"><div class="rg-mini">Fit · once, on the corpus</div><p class="note" style="color:var(--text)">Learn <b class="big">2,812</b> columns (syllables + pairs) and their IDF weights</p></div>
-            <div class="two">
-              <div class="card"><div class="rg-mini">Transform · Corpus</div><p class="note" style="color:var(--text)">Document matrix</p><div class="big">35 × 2,812</div></div>
-              <div class="card"><div class="rg-mini">Transform · Claim</div><p class="note" style="color:var(--text)">Claim vector</p><div class="big">1 × 2,812</div></div>
+            <div class="pa-ba-stat">
+              <div><div class="n">13</div><small>Before · SYLLABLES</small></div>
+              <span class="pa-arrow"><i data-i="arrow"></i></span>
+              <div><div class="n rg-grad">11</div><small>After · TOKENS</small></div>
             </div>
-            <p class="note">Every vector is scaled to length 1, so comparing two vectors later is a simple dot product.</p>
           </div>
-          <div class="card pa-mtx">
-            <div class="rg-mini">TF-IDF Matrix (Vectorization)</div>
-            <table>
-              <thead><tr><th></th><th>အ</th><th>ဘိ</th><th>ဓမ္မာ</th><th>ကတ်</th></tr></thead>
-              <tbody>
-                <tr><td>Doc 1</td><td class="h">0.45</td><td>0.32</td><td>0.18</td><td>0.25</td></tr>
-                <tr><td>Doc 2</td><td>0.32</td><td class="z">0.00</td><td>0.18</td><td class="z">0.00</td></tr>
-                <tr><td>Doc 3</td><td>0.18</td><td class="z">0.00</td><td>0.19</td><td>0.25</td></tr>
-                <tr><td>…</td><td>…</td><td>…</td><td>…</td><td>…</td></tr>
-              </tbody>
-            </table>
+          <div class="pa-side">
+            <div class="card"><div class="rg-mini">Bigram – 10 pairs</div><p class="grams">အ_ဘိ, ဘိ_ဓမ္မာ, ဓမ္မာ_ပိ, ပိ_ဋ, ဋ_ကတ်, ကတ်_ကျမ်း, ကျမ်း_၅, ၅_ကျမ်း, ကျမ်း_ပါ, ပါ_ဝင်</p></div>
+            <div class="card hot"><div class="rg-mini">Fit · once, on the corpus</div><p class="note">Learn <b class="big">2,812</b> columns (syllables + pairs) and their IDF weights</p></div>
           </div>
         </div>
-        <div class="card pa-out"><span class="badge">OUTPUT</span><p>Document matrix + claim vector, in the same columns. <b>Both are reused by Pipeline B.</b></p></div>
       </div>
     </section>
 
