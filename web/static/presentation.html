@@ -28,6 +28,7 @@
       --radius: 18px;
       --mm: "Noto Sans Myanmar", "Myanmar Text", "Padauk", sans-serif;
       --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+      --mono-mm: "JetBrains Mono", "Noto Sans Myanmar", "Myanmar Text", "Padauk", ui-monospace, Consolas, monospace;
       color-scheme: light;
     }
     @media (prefers-color-scheme: dark) {
@@ -682,10 +683,10 @@
     .pa-ba td:nth-child(3) { color: var(--sup); font-weight: 600; }
     .pa-ba td:nth-child(2), .pa-ba td:nth-child(3) { font-size: 17px; white-space: nowrap; }
     .pa-ba td:first-child { font-family: Inter, var(--mm); font-size: 14px; }
-    .pa-nfc { background: var(--accent-soft); border-color: transparent; box-shadow: none; font: 13.5px/1.85 var(--mono), var(--mm); }
+    .pa-nfc { background: var(--accent-soft); border-color: transparent; box-shadow: none; font: 13.5px/1.85 var(--mono-mm); }
     .pa-nfc ol { margin: 6px 0 8px; padding-left: 20px; }
     .pa-nfc .warn { color: var(--ref); font-weight: 700; }
-    .pa-nfc code { font-family: var(--mono), var(--mm); font-size: 12.5px; display: block; overflow-x: auto; white-space: nowrap; color: var(--muted); }
+    .pa-nfc code { font-family: var(--mono-mm); font-size: 12.5px; display: block; overflow-x: auto; white-space: nowrap; color: var(--muted); }
 
     .pa-toks { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
     .pa-tok { font: 500 17px/1.8 var(--mm); padding: 4px 14px; border-radius: 10px; background: var(--surface); border: 1px solid var(--border); box-shadow: 0 1px 2px rgba(15, 23, 42, .05); }
@@ -891,7 +892,7 @@
     .tn-calc { padding: 16px 18px; }
     .tn-calc .h { font: 700 16px/1.8 var(--mm); color: var(--accent); }
     .tn-calc .h small { font: 600 13px Inter; color: var(--muted); margin-left: 6px; }
-    .tn-calc .m { font: 500 15px/1.9 var(--mono), var(--mm); white-space: pre-line; }
+    .tn-calc .m { font: 500 15px/1.9 var(--mono-mm); white-space: pre-line; }
     .tn-calc .m b { color: var(--accent); }
     .tn-calc.hot { background: linear-gradient(135deg, var(--accent), var(--accent-2)); border-color: transparent; color: #fff; }
     .tn-calc.hot .h, .tn-calc.hot .m b { color: #fff; }
@@ -957,7 +958,7 @@
 
     /* tables */
     .tn-tbl table { font-variant-numeric: tabular-nums; }
-    .tn-tbl td { font-family: var(--mono), var(--mm); font-size: 13.5px; padding: 6px 12px; line-height: 1.7; }
+    .tn-tbl td { font-family: var(--mono-mm); font-size: 13.5px; padding: 6px 12px; line-height: 1.7; }
     .tn-tbl td:first-child { font: 600 15px/1.7 var(--mm); }
     .tn-tbl tr.hit td { background: var(--accent-soft); color: var(--accent); font-weight: 700; }
     .tn-tbl tr.sum td { font-weight: 800; border-top: 2px solid var(--border); background: var(--surface-2); }
@@ -1355,52 +1356,6 @@
       </div>
     </section>
 
-    <!-- PA 2 · Corpus & claims (data files) -->
-    <section class="slide" aria-label="Pipeline A · Corpus and claims">
-      <div class="frame">
-        <div class="rg-head pa-head"><span class="kicker"><i data-i="library"></i> Concept Model</span><span class="dd-files"><span class="pill">corpus.csv</span><span class="pill">claims.csv</span><span class="pill">train_claims.csv</span><span class="pill">test_claims.csv</span></span></div>
-        <h2 class="title">Build Custom Corpus &amp; Curate <span class="rg-grad">Myanmar Claims</span></h2>
-        <div class="dd">
-          <article class="card dd-file dd-corpus">
-            <header><span class="dd-ico"><i data-i="book"></i></span><div><span class="pill fn">corpus.csv</span><b>စာအုပ်</b></div><span class="dd-n">၃၅<small>စာတမ်း</small></span></header>
-            <p class="dd-lead">ယုံကြည်ရသော မြန်မာ စာတမ်းများကို စုထားသော စာအုပ်</p>
-            <ul class="dd-pts"><li><i data-i="check"></i><span>စနစ်က အဖြေကို ဒီစာအုပ်ထဲကနေ<b>သာ</b> ရှာသည်</span></li><li><i data-i="check"></i><span>စာတမ်း တစ်ခုစီတွင် နံပါတ် (doc_id) ပါသည်</span></li></ul>
-            <div class="dd-shelf" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-            <div class="dd-row"><div class="sec-t">ဥပမာ — ဖိုင်ထဲမှ တစ်ကြောင်း</div>
-              <dl><dt>doc_id</dt><dd class="id">DOC_001</dd><dt>title</dt><dd>ပါဠိတော်မြန်မာပြန်ကျမ်းများ၏ ကျမ်းဦးမှတ်ဖွယ်</dd><dt>text</dt><dd>ပိဋကတ်သုံးပုံတွင် ဝိနည်းပိဋက၊ သုတ္တန်ပိဋက … ပါဝင်သည်။</dd></dl></div>
-          </article>
-
-          <div class="dd-right">
-            <article class="card dd-file">
-              <header><span class="dd-ico"><i data-i="chat"></i></span><div><span class="pill fn">claims.csv</span><b>မေးခွန်း + အဖြေ</b></div><span class="dd-n">၆၂<small>အဆို</small></span></header>
-              <p class="dd-lead">စစ်ဆေးရမည့် အဆို (claim) အားလုံးနှင့် အဖြေ။</p>
-              <ul class="dd-pts"><li><i data-i="check"></i><span>အဆိုတိုင်းတွင် အဖြေ (<b>label</b>) ပါသည် — SUPPORTS / REFUTES / NOT ENOUGH INFO</span></li><li><i data-i="check"></i><span>အဖြေ ရှိသော စာတမ်း (<b>evidence_id</b>) ကိုလည်း ဖော်ပြထားသည်</span></li></ul>
-              <div class="dd-ex"><span class="id">CLM_001</span><span class="t">သုတ္တန်ပိဋကတွင် နိကာယ်ငါးရပ် ပါဝင်သည်။</span><span class="id">DOC_001</span><span class="label sup sm">SUPPORTS</span></div>
-            </article>
-
-            <div class="dd-split" aria-label="62 claims split into 49 train and 13 test">
-              <div class="tr" style="flex:49">၄၉</div><div class="te" style="flex:13">၁၃</div>
-            </div>
-
-            <div class="dd-pair">
-              <article class="card dd-file sup">
-                <header><span class="dd-ico"><i data-i="school"></i></span><div><span class="pill fn">train_claims.csv</span><b>လေ့ကျင့်ခန်း</b></div><span class="dd-n">၄၉<small>အဆို</small></span></header>
-                <p class="dd-lead">claims ၆၂ ခုထဲမှ ၄၉ ခု — အဖြေ ပါသည်။</p>
-                <ul class="dd-pts"><li><i data-i="check"></i><span>စနစ်က ဒီအဖြေများကို ကြည့်ပြီး <b>သင်ယူ</b>သည်</span></li><li><i data-i="check"></i><span>ကျောင်းသား လေ့ကျင့်ခန်း လုပ်သလို</span></li></ul>
-                <div class="dd-ex"><span class="id">CLM_003</span><span class="t">ပါတိမောက်သိက္ခာပုဒ်မှာ ၂၂၇ သွယ် ဖြစ်သည်။</span><span class="id">DOC_002</span><span class="label sup sm">SUPPORTS</span></div>
-              </article>
-              <article class="card dd-file ref">
-                <header><span class="dd-ico"><i data-i="help"></i></span><div><span class="pill fn">test_claims.csv</span><b>စာမေးပွဲ</b></div><span class="dd-n">၁၃<small>အဆို</small></span></header>
-                <p class="dd-lead">claims ၆၂ ခုထဲမှ ကျန် ၁၃ ခု — အဖြေ <b>မပါ</b>။</p>
-                <ul class="dd-pts"><li><i data-i="check"></i><span>စနစ်က ကိုယ်တိုင် ဖြေရသည်</span></li><li><i data-i="check"></i><span>တစ်ခါမှ မမြင်ဖူးသော မေးခွန်း ဖြစ်၍ တကယ့် အမှတ်ကို သိနိုင်သည်</span></li></ul>
-                <div class="dd-ex"><span class="id">CLM_TEST_001</span><span class="t">သုတ္တန်ပိဋကတွင် နိကာယ်ငါးရပ် ပါဝင်သည်။</span><span class="q">?</span></div>
-              </article>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- PA 3 · A1 cleaning -->
     <section class="slide" aria-label="Pipeline A · A1 Cleaning">
       <div class="frame">
@@ -1428,7 +1383,7 @@ text = unicodedata.normalize(&quot;NFC&quot;, text)
 text = _INVISIBLE.sub(&quot;&quot;, text)
 text = _fix_typing_order(text)
 text = re.sub(r&quot; {2,}&quot;, &quot; &quot;, text).strip()</pre>
-            <div class="card pa-nfc"><div class="rg-mini">Unicode NFC</div><ol><li>Composition (Shift+M ဦ -&gt; ဥ + ီ = ဦ)</li><li>Canonical Reordering (င+်+့ -&gt; င+့+် = င့်)</li></ol><div>် = U103A, ့ = U1037</div><div class="warn">*** Can’t Do NFC (နုိ vs နို)</div><code>Eg: text = re.sub(r&quot;([ုူ])([ိီဲ])&quot;, r&quot;\2\1&quot;, text)</code></div>
+            <div class="card pa-nfc"><div class="rg-mini">Unicode NFC</div><ol><li>Composition (Shift+M ဦ -&gt; ဥ + ◌ီ = ဦ)</li><li>Canonical Reordering (င+◌်+◌့ -&gt; င+◌့+◌် = င့်)</li></ol><div>◌် = U103A, ◌့ = U1037</div><div class="warn">*** Can’t Do NFC (နုိ vs နို)</div><code>Eg: text = re.sub(r&quot;([ုူ])([ိီဲ])&quot;, r&quot;\2\1&quot;, text)</code></div>
           </div>
         </div>
       </div>
@@ -1494,6 +1449,42 @@ text = re.sub(r&quot; {2,}&quot;, &quot; &quot;, text).strip()</pre>
             <div><div class="n rg-grad">11</div><small>After · TOKENS</small></div>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- PA 8 · A3 fit & transform -->
+    <section class="slide" aria-label="Pipeline A · A3 Fit and transform">
+      <div class="frame">
+        <div class="rg-head pa-head"><!-- <span class="kicker"><i data-i="doc"></i> A3 TF-IDF</span> --><div class="rg-stage" style="flex:none;margin-left:auto"><span>A1 Clean</span><span>A2 Segmentation</span><span class="on">A3 TF-IDF</span><span>A4 Naive Bayes</span></div></div>
+        <h2 class="title">A3 · TF-IDF Vectorization</h2>
+        <p class="lead" style="max-width:none;margin:-6px 0 18px">Vocabulary နဲ့ IDF ကို corpus ကနေ တစ်ခါပဲ သင်တယ်။ ဒါကြောင့် claim နဲ့ document ကို column တူတူနဲ့ နှိုင်းယှဉ်လို့ ရတယ်</p>
+        <div class="pa-fit">
+          <div class="col">
+            <div class="card"><div class="rg-mini">Unigram – 11 syllables</div><p class="grams">အ, ဘိ, ဓမ္မာ, ပိ, ဋ, ကတ်, ကျမ်း, ၅, ကျမ်း, ပါ, ဝင်</p></div>
+            <div class="card"><div class="rg-mini">Bigram – 10 pairs</div><p class="grams">အ_ဘိ, ဘိ_ဓမ္မာ, ဓမ္မာ_ပိ, ပိ_ဋ, ဋ_ကတ်, ကတ်_ကျမ်း, ကျမ်း_၅, ၅_ကျမ်း, ကျမ်း_ပါ, ပါ_ဝင်</p></div>
+          </div>
+          <div class="col">
+            <div class="card hot"><div class="rg-mini">Fit · once, on the corpus</div><p class="note" style="color:var(--text)">Learn <b class="big">2,812</b> columns (syllables + pairs) and their IDF weights</p></div>
+            <div class="two">
+              <div class="card"><div class="rg-mini">Transform · Corpus</div><p class="note" style="color:var(--text)">Document matrix</p><div class="big">35 × 2,812</div></div>
+              <div class="card"><div class="rg-mini">Transform · Claim</div><p class="note" style="color:var(--text)">Claim vector</p><div class="big">1 × 2,812</div></div>
+            </div>
+            <p class="note">Every vector is scaled to length 1, so comparing two vectors later is a simple dot product.</p>
+          </div>
+          <div class="card pa-mtx">
+            <div class="rg-mini">TF-IDF Matrix (Vectorization)</div>
+            <table>
+              <thead><tr><th></th><th>အ</th><th>ဘိ</th><th>ဓမ္မာ</th><th>ကတ်</th></tr></thead>
+              <tbody>
+                <tr><td>Doc 1</td><td class="h">0.45</td><td>0.32</td><td>0.18</td><td>0.25</td></tr>
+                <tr><td>Doc 2</td><td>0.32</td><td class="z">0.00</td><td>0.18</td><td class="z">0.00</td></tr>
+                <tr><td>Doc 3</td><td>0.18</td><td class="z">0.00</td><td>0.19</td><td>0.25</td></tr>
+                <tr><td>…</td><td>…</td><td>…</td><td>…</td><td>…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card pa-out"><span class="badge">OUTPUT</span><p>Document matrix + claim vector, in the same columns. <b>Both are reused by Pipeline B.</b></p></div>
       </div>
     </section>
 
