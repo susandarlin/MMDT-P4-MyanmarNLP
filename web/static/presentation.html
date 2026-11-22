@@ -587,6 +587,11 @@
     .rg-cmp.eq .rg-stack { align-content: stretch; }
     .rg-cmp.eq .rg-stack .card { display: flex; flex-direction: column; }
     .rg-cmp.eq .rg-cm { flex: 1; }
+    .rg-cm-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
+    .rg-cm-head .sec-t { margin: 0; }
+    .rg-cm-score { text-align: right; flex: none; }
+    .rg-cm-score b { display: block; font: 800 clamp(28px, 3vw, 38px) Inter; line-height: 1; }
+    .rg-cm-score span { display: block; margin-top: 4px; font: 600 12px Inter; color: var(--muted); }
     .rg-cm { width: 100%; border-collapse: separate; border-spacing: 4px; margin-top: 4px; }
     .rg-cm th { font: 700 11px Inter; color: var(--muted); letter-spacing: .04em; padding: 4px; text-align: center; }
     .rg-cm th:first-child { text-align: left; }
@@ -1995,12 +2000,15 @@ IDF = 2.485 + 1 = <b>3.485</b></div></div>
     <!-- RAG 13 · Naive Bayes vs RAG -->
     <section class="slide" aria-label="RAG · Naive Bayes vs RAG">
       <div class="frame">
-        <span class="kicker"><i data-i="compare"></i> Pipeline A vs Pipeline B</span>
-        <h2 class="title" style="margin-bottom:18px">Naive Bayes နဲ့ RAG ကို claim အတူတူပေါ်မှာ နှိုင်းယှဉ်ခြင်း</h2>
+        <!-- <span class="kicker"><i data-i="compare"></i> Pipeline A vs Pipeline B</span> -->
+        <h2 class="title" style="margin-bottom:18px">Evaluation Metrics</h2>
         <div class="rg-cmp eq">
           <div class="rg-stack">
             <div class="card">
-              <div class="sec-t" style="margin-bottom:4px">Test confusion matrix (RAG)</div>
+              <div class="rg-cm-head">
+                <div class="sec-t">Test confusion matrix (RAG)</div>
+                <div class="rg-cm-score"><b class="rg-grad">92.3%</b><span>12 / 13 test claims correct</span></div>
+              </div>
               <table class="rg-cm">
                 <thead><tr><th>True \ Pred</th><th>SUP</th><th>REF</th><th>NEI</th></tr></thead>
                 <tbody>
