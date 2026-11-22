@@ -583,6 +583,10 @@
     .rg-legend { display: flex; gap: 16px; justify-content: center; margin-top: 10px; font: 500 12.5px Inter; color: var(--muted); }
     .rg-legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; background: color-mix(in srgb, var(--muted) 45%, transparent); }
     .rg-legend span.rag::before { background: var(--accent); }
+    .rg-cmp.eq { align-items: stretch; }
+    .rg-cmp.eq .rg-stack { align-content: stretch; }
+    .rg-cmp.eq .rg-stack .card { display: flex; flex-direction: column; }
+    .rg-cmp.eq .rg-cm { flex: 1; }
     .rg-cm { width: 100%; border-collapse: separate; border-spacing: 4px; margin-top: 4px; }
     .rg-cm th { font: 700 11px Inter; color: var(--muted); letter-spacing: .04em; padding: 4px; text-align: center; }
     .rg-cm th:first-child { text-align: left; }
@@ -1258,7 +1262,6 @@
             <span class="kicker">Pipeline A · Traditional statistical NLP classifier</span>
             <h2 class="title">Pipeline A — စကားလုံးသာ ကြည့်သည်</h2>
           </div>
-          <div class="score bad"><div class="big">0 / 13</div><div class="meta">test claims correct</div></div>
         </div>
         <div class="flow">
           <div class="node"><b>Myanmar Text</b><span>မြန်မာ စာသား</span></div><div class="arrow"><i data-i="arrow"></i></div>
@@ -1994,23 +1997,8 @@ IDF = 2.485 + 1 = <b>3.485</b></div></div>
       <div class="frame">
         <span class="kicker"><i data-i="compare"></i> Pipeline A vs Pipeline B</span>
         <h2 class="title" style="margin-bottom:18px">Naive Bayes နဲ့ RAG ကို claim အတူတူပေါ်မှာ နှိုင်းယှဉ်ခြင်း</h2>
-        <div class="rg-cmp">
+        <div class="rg-cmp eq">
           <div class="rg-stack">
-            <div class="card">
-              <div class="sec-t">Accuracy (%)</div>
-              <div class="rg-cols">
-                <div class="rg-grp">
-                  <div class="rg-col"><b>18.4%</b><div class="rg-fill" data-h="18.4"></div></div>
-                  <div class="rg-col rag"><b>73.5%</b><div class="rg-fill" data-h="73.5"></div></div>
-                </div>
-                <div class="rg-grp">
-                  <div class="rg-col"><b>0.0%</b><div class="rg-fill" data-h="0"></div></div>
-                  <div class="rg-col rag"><b>92.3%</b><div class="rg-fill" data-h="92.3"></div></div>
-                </div>
-              </div>
-              <div class="rg-xl"><span>Train (49)</span><span>Test (13)</span></div>
-              <div class="rg-legend"><span>Naive Bayes</span><span class="rag">RAG</span></div>
-            </div>
             <div class="card">
               <div class="sec-t" style="margin-bottom:4px">Test confusion matrix (RAG)</div>
               <table class="rg-cm">
@@ -2032,7 +2020,6 @@ IDF = 2.485 + 1 = <b>3.485</b></div></div>
                 <tr><td>၂၈ vs ၃၈ လို အမှား</td><td class="a">မသိ — စာလုံး တူနေလို့</td><td class="b">ဂဏန်း မတူ → REFUTES</td></tr>
                 <tr><td>NOT ENOUGH INFO</td><td class="a">စာလုံးကနေ ခန့်မှန်း</td><td class="b">cosine &lt; <span class="tau">τ</span> (0.24)</td></tr>
                 <tr><td>ရှင်းလင်းချက်</td><td class="a">မပါ</td><td class="b">မြန်မာလို + evidence ကိုးကား</td></tr>
-                <tr><td>Test ရလဒ်</td><td class="a">0 / 13 (0%)</td><td class="b">12 / 13 (92%)</td></tr>
               </tbody>
             </table>
           </div>
